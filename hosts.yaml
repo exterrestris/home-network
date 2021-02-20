@@ -1,2 +1,5 @@
 all:
   hosts:
+    spacedock:
+      ansible_host: 192.168.5.128
+      ansible_user: root

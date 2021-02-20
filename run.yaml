@@ -1,2 +1,6 @@
 ---
   - hosts: all
+
+  - hosts: spacedock
+    roles:
+      - role: ironicbadger.ansible_role_proxmox_nag_removal

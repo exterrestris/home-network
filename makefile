@@ -1,3 +1,6 @@
+spacedock:
+	ansible-playbook -b run.yaml --limit spacedock
+
 reqs:
 	ansible-galaxy install -r requirements.yaml
 
