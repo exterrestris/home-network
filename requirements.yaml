@@ -2,9 +2,11 @@
 # Required Galaxy Collections
 collections:
   - ansible.posix
+  - community.general
 
 # Required Galaxy Roles
 roles:
+  - name: bertvv.samba
   - name: ironicbadger.ansible_role_proxmox_nag_removal
     src: https://github.com/IronicBadger/ansible-role-proxmox-nag-removal
   - name: sprat.ansible_role_mergerfs

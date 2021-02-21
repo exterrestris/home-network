@@ -36,3 +36,39 @@ mergerfs_mounts:
     branches:
       - /mnt/ntfs/transient*/PoolPart.*
     options: allow_other,use_ino,cache.files=off,dropcacheonclose=true,category.create=mfs
+
+# bertvv.samba
+samba_workgroup: FEDERATION
+samba_preferred_master: true
+
+samba_users: "{{ vault_samba_users }}"
+
+samba_shares:
+  - name: Archive
+    path: /mnt/storage/Archive
+    read_only: no
+    guest_ok: yes
+  - name: Backups
+    path: /mnt/storage/Backups
+    read_only: no
+    guest_ok: yes
+  - name: Media
+    path: /mnt/storage/Media
+    read_only: no
+    guest_ok: yes
+  - name: Resources
+    path: /mnt/storage/Resources
+    read_only: no
+    guest_ok: yes
+  - name: Compressed Files
+    path: /mnt/transient/Compressed Files
+    read_only: no
+    guest_ok: yes
+  - name: Downloads
+    path: /mnt/transient/Downloads
+    read_only: no
+    guest_ok: yes
+  - name: Scans
+    path: /mnt/transient/Scans
+    read_only: no
+    guest_ok: yes

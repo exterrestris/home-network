@@ -4,3 +4,8 @@
   include: disks.yaml
   tags:
     - disks
+    
+- name: firewall
+  include: firewall.yaml
+  tags:
+    - firewall

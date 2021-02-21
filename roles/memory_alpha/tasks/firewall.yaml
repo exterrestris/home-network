@@ -1,0 +1,6 @@
+---
+
+- name: allow samba
+  community.general.ufw:
+    rule: allow
+    name: samba

@@ -10,3 +10,4 @@
       - role: proxmox_vm
       - role: memory_alpha
       - role: sprat.ansible_role_mergerfs
+      - role: bertvv.samba
