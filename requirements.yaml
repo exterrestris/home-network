@@ -1,2 +1,6 @@
+---
+# Required Galaxy Collections
+collections:
 # Required Galaxy Roles
+roles:
 - src: ironicbadger.ansible_role_proxmox_nag_removal

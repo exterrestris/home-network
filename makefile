@@ -5,7 +5,9 @@ memory-alpha:
 	ansible-playbook -b run.yaml --limit memory_alpha --ask-become-pass
 
 reqs:
-	ansible-galaxy install -r requirements.yaml
+	ansible-galaxy role install -r requirements.yaml
+	ansible-galaxy collection install -r requirements.yaml
 
 forcereqs:
-	ansible-galaxy install -r requirements.yaml --force
+	ansible-galaxy role install -r requirements.yaml --force
+	ansible-galaxy collection install -r requirements.yaml --force
