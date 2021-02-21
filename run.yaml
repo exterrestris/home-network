@@ -8,3 +8,4 @@
   - hosts: memory_alpha
     roles:
       - role: proxmox_vm
+      - role: memory_alpha

@@ -1,0 +1,6 @@
+---
+
+- name: disks
+  include: disks.yaml
+  tags:
+    - disks

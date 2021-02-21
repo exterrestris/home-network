@@ -1,0 +1,26 @@
+---
+target_os: ubuntu
+
+parity_disks:
+
+data_disks:
+
+ntfs_opts: nls=utf8,umask=0222
+
+ntfs_data_disks:
+  - { path: /mnt/ntfs/data1, diskbyid: /dev/disk/by-uuid/01D5A8BCC7A78420, fs: ntfs, opts: "{{ ntfs_opts}}" }
+  - { path: /mnt/ntfs/data2, diskbyid: /dev/disk/by-uuid/01D639B01A6E6C80, fs: ntfs, opts: "{{ ntfs_opts}}" }
+  - { path: /mnt/ntfs/data3, diskbyid: /dev/disk/by-uuid/F272F02672EFED73, fs: ntfs, opts: "{{ ntfs_opts}}" }
+  - { path: /mnt/ntfs/data4, diskbyid: /dev/disk/by-uuid/01D59719F9C065D0, fs: ntfs, opts: "{{ ntfs_opts}}" }
+  - { path: /mnt/ntfs/data5, diskbyid: /dev/disk/by-uuid/01D59697B6B37520, fs: ntfs, opts: "{{ ntfs_opts}}" }
+  - { path: /mnt/ntfs/data6, diskbyid: /dev/disk/by-uuid/01D59697BB0913A0, fs: ntfs, opts: "{{ ntfs_opts}}" }
+  - { path: /mnt/ntfs/data7, diskbyid: /dev/disk/by-uuid/01D5B354FC866AB0, fs: ntfs, opts: "{{ ntfs_opts}}" }
+  - { path: /mnt/ntfs/data8, diskbyid: /dev/disk/by-uuid/01D5C5BB4A22AB80, fs: ntfs, opts: "{{ ntfs_opts}}" }
+
+ntfs_other_disks:
+  - { path: /mnt/ntfs/landing1, diskbyid: /dev/disk/by-uuid/01D703D1F7C72270, fs: ntfs, opts: "{{ ntfs_opts}}" }
+  - { path: /mnt/ntfs/landing2, diskbyid: /dev/disk/by-uuid/01D703D220BC3620, fs: ntfs, opts: "{{ ntfs_opts}}" }
+  - { path: /mnt/ntfs/transient1, diskbyid: /dev/disk/by-uuid/01D703DF4EA1B5D0, fs: ntfs, opts: "{{ ntfs_opts}}" }
+  - { path: /mnt/ntfs/transient2, diskbyid: /dev/disk/by-uuid/01D5B354FF026730, fs: ntfs, opts: "{{ ntfs_opts}}" }
+  - { path: /mnt/ntfs/transient3, diskbyid: /dev/disk/by-uuid/01D5C5BB4E0A9410, fs: ntfs, opts: "{{ ntfs_opts}}" }
+  - { path: /mnt/ntfs/transient4, diskbyid: /dev/disk/by-uuid/01D703D85BFBB200, fs: ntfs, opts: "{{ ntfs_opts}}" }
