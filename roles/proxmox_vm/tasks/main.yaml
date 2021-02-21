@@ -1,0 +1,10 @@
+- name: install qemu-guest-agent
+  package:
+    name: qemu-guest-agent
+    state: present
+
+- name: start qemu-guest-agent
+  service:
+    name: qemu-guest-agent
+    state: started
+    enabled: yes
