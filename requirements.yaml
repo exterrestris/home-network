@@ -5,4 +5,5 @@ collections:
 
 # Required Galaxy Roles
 roles:
-- src: ironicbadger.ansible_role_proxmox_nag_removal
+  - name: ironicbadger.ansible_role_proxmox_nag_removal
+    src: https://github.com/IronicBadger/ansible-role-proxmox-nag-removal
