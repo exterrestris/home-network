@@ -24,3 +24,15 @@ ntfs_other_disks:
   - { path: /mnt/ntfs/transient2, diskbyid: /dev/disk/by-uuid/01D5B354FF026730, fs: ntfs, opts: "{{ ntfs_opts}}" }
   - { path: /mnt/ntfs/transient3, diskbyid: /dev/disk/by-uuid/01D5C5BB4E0A9410, fs: ntfs, opts: "{{ ntfs_opts}}" }
   - { path: /mnt/ntfs/transient4, diskbyid: /dev/disk/by-uuid/01D703D85BFBB200, fs: ntfs, opts: "{{ ntfs_opts}}" }
+
+# sprat.ansible-role-mergerfs
+mergerfs_mounts:
+  - path: /mnt/storage
+    branches:
+      - /mnt/ntfs/data*/PoolPart.*/PoolPart.*
+      - /mnt/ntfs/landing*/PoolPart.*/PoolPart.*
+    options: allow_other,use_ino,cache.files=off,dropcacheonclose=true,category.create=mfs
+  - path: /mnt/transient
+    branches:
+      - /mnt/ntfs/transient*/PoolPart.*
+    options: allow_other,use_ino,cache.files=off,dropcacheonclose=true,category.create=mfs

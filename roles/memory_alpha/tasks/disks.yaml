@@ -16,6 +16,7 @@
     #- "{{ data_disks }}"
     - "{{ ntfs_data_disks }}"
     - "{{ ntfs_other_disks }}"
+    - "{{ mergerfs_mounts }}"
     #- "{{ extra_mountpoints }}"
 
 - name: mount disks

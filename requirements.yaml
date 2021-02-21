@@ -7,3 +7,5 @@ collections:
 roles:
   - name: ironicbadger.ansible_role_proxmox_nag_removal
     src: https://github.com/IronicBadger/ansible-role-proxmox-nag-removal
+  - name: sprat.ansible_role_mergerfs
+    src: https://github.com/sprat/ansible-role-mergerfs
