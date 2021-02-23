@@ -11,3 +11,4 @@
       - role: memory_alpha
       - role: sprat.ansible_role_mergerfs
       - role: bertvv.samba
+      - role: exterrestris.ansible_role_wsdd

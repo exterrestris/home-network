@@ -72,3 +72,5 @@ samba_shares:
     path: /mnt/transient/Scans
     read_only: no
     guest_ok: yes
+
+wsdd_workgroup: "{{ samba_workgroup }}"
