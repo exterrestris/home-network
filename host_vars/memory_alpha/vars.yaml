@@ -50,30 +50,32 @@ samba_shares:
   - name: Archive
     path: /mnt/storage/Archive
     read_only: no
-    guest_ok: yes
+    guest_ok: 'yes'
   - name: Backups
     path: /mnt/storage/Backups
     read_only: no
-    guest_ok: yes
+    guest_ok: 'yes'
   - name: Media
     path: /mnt/storage/Media
     read_only: no
-    guest_ok: yes
+    guest_ok: 'yes'
   - name: Resources
     path: /mnt/storage/Resources
     read_only: no
-    guest_ok: yes
+    guest_ok: 'yes'
   - name: Compressed Files
     path: /mnt/transient/Compressed Files
     read_only: no
-    guest_ok: yes
+    guest_ok: 'yes'
   - name: Downloads
     path: /mnt/transient/Downloads
     read_only: no
-    guest_ok: yes
+    guest_ok: 'yes'
+    browseable: 'yes'
   - name: Scans
     path: /mnt/transient/Scans
     read_only: no
-    guest_ok: yes
+    guest_ok: 'yes'
+    browseable: 'yes'
 
 wsdd_workgroup: "{{ samba_workgroup }}"
