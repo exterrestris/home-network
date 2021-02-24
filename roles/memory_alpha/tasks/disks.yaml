@@ -1,8 +1,11 @@
 ---
 - name: install filesystem packages
   package:
-    name: ntfs-3g
+    name: "{{ item.name }}"
     state: present
+  with_items: 
+    - name: ntfs-3g
+    - name: zfsutils-linux
 
 - name: create /mnt points
   file:
