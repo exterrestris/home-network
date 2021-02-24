@@ -4,6 +4,7 @@ main_uid: "1000"
 main_gid: "{{ main_uid }}"
 
 common_packages:
+  - name: htop
   - name: ncdu
   - name: python3
   - name: python3-pip
