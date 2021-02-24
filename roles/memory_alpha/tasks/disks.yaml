@@ -35,17 +35,3 @@
     #- "{{ data_disks }}"
     - "{{ ntfs_data_disks }}"
     - "{{ ntfs_other_disks }}"
-    #- "{{ extra_mountpoints }}"
-  #when: item.path != '/mnt/storage'
-
-
-#- name: mount mergerfs array
-#  mount:
-#    name: "{{ item.mountpoint }}"
-#    src: "{{ item.source }}"
-#    opts: "{{ item.opts }}"
-#    fstype: "{{ item.fs }}"
-#    # change to 'mounted' to auto mount
-#    state: present
-#  with_items:
-#    - "{{ fstab_mergerfs }}"
