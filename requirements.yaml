@@ -6,6 +6,7 @@ collections:
 
 # Required Galaxy Roles
 roles:
+  - name: mrlesmithjr.zfs
   - name: bertvv.samba
   - name: exterrestris.ansible_role_wsdd
     src: https://github.com/exterrestris/ansible-role-wsdd

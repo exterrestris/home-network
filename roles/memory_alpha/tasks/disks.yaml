@@ -5,7 +5,6 @@
     state: present
   with_items: 
     - name: ntfs-3g
-    - name: zfsutils-linux
 
 - name: create /mnt points
   file:
@@ -21,7 +20,7 @@
     - "{{ ntfs_data_disks }}"
     - "{{ ntfs_other_disks }}"
     - "{{ mergerfs_mounts }}"
-    #- "{{ extra_mountpoints }}"
+    - "{{ other_mounts }}"
 
 - name: mount disks
   ansible.posix.mount:

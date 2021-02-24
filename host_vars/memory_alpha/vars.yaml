@@ -1,6 +1,50 @@
 ---
 target_os: ubuntu
 
+zfs_create_pools: true
+
+zfs_pools:
+  - name: pool1
+    action: 'create'
+    compression: 'lz4'
+    devices:
+      - 'scsi-SATA_WDC_WD120EMAZ-11_8CKANMKF'
+      - 'scsi-SATA_WDC_WD120EMAZ-11_8CKATPYE'
+    type: 'mirror'
+    state: 'present'
+
+zfs_create_filesystems: true
+
+zfs_filesystems:
+  - name: backups
+    pool: pool1
+    compression: lz4
+    mountpoint: /mnt/zfs/backups
+    state: present
+  - name: backups/computers
+    pool: pool1
+    compression: lz4
+    recordsize: 1M
+    mountpoint: /mnt/zfs/backups/computers
+    state: present
+  - name: backups/drives
+    pool: pool1
+    compression: lz4
+    recordsize: 1M
+    mountpoint: /mnt/zfs/backups/drives
+    state: present
+  - name: backups/files
+    pool: pool1
+    compression: lz4
+    recordsize: 1M
+    mountpoint: /mnt/zfs/backups/files
+    state: present
+  - name: archive
+    pool: pool1
+    compression: lz4
+    mountpoint: /mnt/zfs/archive
+    state: present
+
 parity_disks:
 
 data_disks:
@@ -14,16 +58,15 @@ ntfs_data_disks:
   - { path: /mnt/ntfs/data4, diskbyid: /dev/disk/by-uuid/01D59719F9C065D0, fs: ntfs, opts: "{{ ntfs_opts}}" }
   - { path: /mnt/ntfs/data5, diskbyid: /dev/disk/by-uuid/01D59697B6B37520, fs: ntfs, opts: "{{ ntfs_opts}}" }
   - { path: /mnt/ntfs/data6, diskbyid: /dev/disk/by-uuid/01D59697BB0913A0, fs: ntfs, opts: "{{ ntfs_opts}}" }
-  - { path: /mnt/ntfs/data7, diskbyid: /dev/disk/by-uuid/01D5B354FC866AB0, fs: ntfs, opts: "{{ ntfs_opts}}" }
-  - { path: /mnt/ntfs/data8, diskbyid: /dev/disk/by-uuid/01D5C5BB4A22AB80, fs: ntfs, opts: "{{ ntfs_opts}}" }
 
 ntfs_other_disks:
   - { path: /mnt/ntfs/landing1, diskbyid: /dev/disk/by-uuid/01D703D1F7C72270, fs: ntfs, opts: "{{ ntfs_opts}}" }
   - { path: /mnt/ntfs/landing2, diskbyid: /dev/disk/by-uuid/01D703D220BC3620, fs: ntfs, opts: "{{ ntfs_opts}}" }
   - { path: /mnt/ntfs/transient1, diskbyid: /dev/disk/by-uuid/01D703DF4EA1B5D0, fs: ntfs, opts: "{{ ntfs_opts}}" }
-  - { path: /mnt/ntfs/transient2, diskbyid: /dev/disk/by-uuid/01D5B354FF026730, fs: ntfs, opts: "{{ ntfs_opts}}" }
-  - { path: /mnt/ntfs/transient3, diskbyid: /dev/disk/by-uuid/01D5C5BB4E0A9410, fs: ntfs, opts: "{{ ntfs_opts}}" }
   - { path: /mnt/ntfs/transient4, diskbyid: /dev/disk/by-uuid/01D703D85BFBB200, fs: ntfs, opts: "{{ ntfs_opts}}" }
+
+other_mounts:
+  - path: /mnt/zfs
 
 # sprat.ansible-role-mergerfs
 mergerfs_mounts:
