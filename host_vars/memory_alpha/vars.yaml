@@ -128,3 +128,9 @@ samba_shares:
     browseable: 'yes'
 
 wsdd_workgroup: "{{ samba_workgroup }}"
+
+ufw_rules:
+  - rule: allow
+    name: OpenSSH
+  - rule: allow
+    name: Samba

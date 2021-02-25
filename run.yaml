@@ -18,4 +18,5 @@
       - role: mrlesmithjr.zfs
       - role: sprat.ansible_role_mergerfs
       - role: bertvv.samba
+      - role: weareinteractive.ufw
       - role: exterrestris.ansible_role_wsdd
