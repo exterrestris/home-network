@@ -68,6 +68,12 @@ ntfs_other_disks:
 other_mounts:
   - path: /mnt/zfs
 
+remove_mounts:
+  - path: /mnt/ntfs/data7
+  - path: /mnt/ntfs/data8
+  - path: /mnt/ntfs/transient2
+  - path: /mnt/ntfs/transient3
+
 # sprat.ansible-role-mergerfs
 mergerfs_mounts:
   - path: /mnt/storage

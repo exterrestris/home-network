@@ -35,3 +35,10 @@
     #- "{{ data_disks }}"
     - "{{ ntfs_data_disks }}"
     - "{{ ntfs_other_disks }}"
+
+- name: unmount disks
+  ansible.posix.mount:
+    name: "{{ item.path }}"
+    state: absent
+  with_items:
+    - "{{ remove_mounts }}"
