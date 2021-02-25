@@ -1,6 +1,19 @@
 ---
 target_os: ubuntu
 
+users:
+  - username: sean
+    name: Sean Ellingham
+    groups:
+      - 'sudo'
+      - 'backups'
+    github_username: exterrestris
+    password: $6$CVT.SP2GSSu/sbE7$KioDey0lx2KQ3KLoTuylnCwoIFnTkO9gc169sSOn1MePHjs6MBzI/E38qkJ6Hq0mYtYODrcLvZM8iqnkhbGh01
+    update_password: on_create
+
+groups_to_create:
+  - name: backups
+
 zfs_create_pools: true
 
 zfs_pools:
