@@ -110,11 +110,11 @@ samba_mitigate_cve_2017_7494: false
 
 samba_shares:
   - name: Archive
-    path: /mnt/storage/Archive
+    path: /mnt/zfs/archive
     read_only: no
     guest_ok: 'yes'
   - name: Backups
-    path: /mnt/storage/Backups
+    path: /mnt/zfs/backups
     read_only: no
     guest_ok: 'yes'
   - name: Media
