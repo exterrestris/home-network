@@ -11,3 +11,7 @@ reqs:
 forcereqs:
 	ansible-galaxy role install -r requirements.yaml --force
 	ansible-galaxy collection install -r requirements.yaml --force
+
+install-git-hooks:
+	@./install-git-hooks.sh
+	@echo "ansible vault pre-commit hook installed"
