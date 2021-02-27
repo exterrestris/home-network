@@ -111,7 +111,6 @@ mergerfs_mounts:
   - path: /mnt/storage
     branches:
       - /mnt/ntfs/data*/PoolPart.*/PoolPart.*
-      - /mnt/ntfs/landing*/PoolPart.*/PoolPart.*
       - /mnt/btrfs/data*/data
     options: allow_other,use_ino,cache.files=off,dropcacheonclose=true,category.create=mfs,x-systemd.requires=/mnt/ntfs/data1,x-systemd.requires=/mnt/ntfs/landing1
   - path: /mnt/transient
