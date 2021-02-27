@@ -5,6 +5,8 @@
     state: present
   with_items: 
     - name: ntfs-3g
+  tags:
+    - disks
 
 - name: create /mnt points
   file:
@@ -21,6 +23,9 @@
     - "{{ ntfs_other_disks }}"
     - "{{ mergerfs_mounts }}"
     - "{{ other_mounts }}"
+  tags:
+    - mounts
+    - disks
 
 - name: mount disks
   ansible.posix.mount:
@@ -35,6 +40,9 @@
     #- "{{ data_disks }}"
     - "{{ ntfs_data_disks }}"
     - "{{ ntfs_other_disks }}"
+  tags:
+    - mounts
+    - disks
 
 - name: unmount disks
   ansible.posix.mount:
@@ -42,3 +50,6 @@
     state: absent
   with_items:
     - "{{ remove_mounts }}"
+  tags:
+    - mounts
+    - disks

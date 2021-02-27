@@ -14,10 +14,20 @@
   - hosts: memory_alpha
     roles:
       - role: ironicbadger.ansible_users
+        tags:
+          - users
       - role: proxmox_vm
       - role: memory_alpha
       - role: mrlesmithjr.zfs
+        tags:
+          - disks
+          - zfs
       - role: sprat.ansible_role_mergerfs
+        tags:
+          - disks
+          - mergerfs
       - role: bertvv.samba
+        tags:
+          - samba
       - role: weareinteractive.ufw
       - role: exterrestris.ansible_role_wsdd
