@@ -21,7 +21,6 @@
     - "{{ parity_disks }}"
     - "{{ data_disks }}"
     - "{{ ntfs_data_disks }}"
-    - "{{ ntfs_other_disks }}"
     - "{{ mergerfs_mounts }}"
     - "{{ other_mounts }}"
   tags:
@@ -40,7 +39,6 @@
     - "{{ parity_disks }}"
     - "{{ data_disks }}"
     - "{{ ntfs_data_disks }}"
-    - "{{ ntfs_other_disks }}"
   tags:
     - mounts
     - disks
