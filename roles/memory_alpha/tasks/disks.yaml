@@ -5,6 +5,7 @@
     state: present
   with_items: 
     - name: ntfs-3g
+    - name: btrfs-progs
   tags:
     - disks
 
