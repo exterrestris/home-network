@@ -13,7 +13,7 @@
 
   - hosts: memory_alpha
     roles:
-      - role: ironicbadger.ansible_users
+      - role: exterrestris.ansible_users
         tags:
           - users
       - role: proxmox_vm
