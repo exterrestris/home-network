@@ -10,6 +10,8 @@
   - hosts: spacedock
     roles:
       - role: ironicbadger.ansible_role_proxmox_nag_removal
+      - role: exterrestris.proxmox_ssl
+        tags: ssl
 
   - hosts: memory_alpha
     roles:

@@ -10,6 +10,8 @@ roles:
   - name: bertvv.samba
   - name: exterrestris.ansible_role_wsdd
     src: https://github.com/exterrestris/ansible-role-wsdd
+  - name: exterrestris.proxmox_ssl
+    src: https://github.com/exterrestris/ansible-role-proxmox-ssl
   - name: ironicbadger.ansible_role_proxmox_nag_removal
     src: https://github.com/IronicBadger/ansible-role-proxmox-nag-removal
   - name: exterrestris.ansible_users
