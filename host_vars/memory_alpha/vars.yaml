@@ -27,6 +27,14 @@ zfs_pools:
       - 'scsi-SATA_WDC_WD120EMAZ-11_8CKATPYE'
     type: 'mirror'
     state: 'present'
+  - name: pool2
+    action: 'create'
+    compression: 'lz4'
+    devices:
+      - 'scsi-SATA_WDC_WD60EZRZ-00G_WD-WX41D95A2NJL'
+      - 'scsi-SATA_WDC_WD60EZRZ-00R_WD-WX11DB56ZP10'
+    type: 'mirror'
+    state: 'present'
 
 zfs_create_filesystems: true
 
@@ -59,6 +67,11 @@ zfs_filesystems:
     compression: lz4
     mountpoint: /mnt/zfs/archive
     state: present
+  - name: resources
+    pool: pool2
+    compression: lz4
+    mountpoint: /mnt/zfs/resources
+    state: present
 
 btrfs_data_opts: compress=zstd
 
@@ -72,9 +85,7 @@ ntfs_opts: nls=utf8,umask=0022,uid=1000
 ntfs_data_disks:
   - { path: /mnt/ntfs/data1, diskbyid: /dev/disk/by-uuid/01D5A8BCC7A78420, fs: ntfs, opts: "{{ ntfs_opts}}" }
   - { path: /mnt/ntfs/data2, diskbyid: /dev/disk/by-uuid/01D639B01A6E6C80, fs: ntfs, opts: "{{ ntfs_opts}}" }
-  - { path: /mnt/ntfs/data3, diskbyid: /dev/disk/by-uuid/F272F02672EFED73, fs: ntfs, opts: "{{ ntfs_opts}}" }
   - { path: /mnt/ntfs/data5, diskbyid: /dev/disk/by-uuid/01D59697B6B37520, fs: ntfs, opts: "{{ ntfs_opts}}" }
-  - { path: /mnt/ntfs/data6, diskbyid: /dev/disk/by-uuid/01D59697BB0913A0, fs: ntfs, opts: "{{ ntfs_opts}}" }
 
 ntfs_other_disks:
   - { path: /mnt/ntfs/landing1, diskbyid: /dev/disk/by-uuid/01D703D1F7C72270, fs: ntfs, opts: "{{ ntfs_opts}}" }
@@ -86,7 +97,9 @@ other_mounts:
   - path: /mnt/zfs
 
 remove_mounts:
+  - path: /mnt/ntfs/data3
   - path: /mnt/ntfs/data4
+  - path: /mnt/ntfs/data6
   - path: /mnt/ntfs/data7
   - path: /mnt/ntfs/data8
   - path: /mnt/ntfs/transient2
