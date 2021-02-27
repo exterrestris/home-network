@@ -141,32 +141,50 @@ samba_mitigate_cve_2017_7494: false
 samba_shares:
   - name: Archive
     path: /mnt/zfs/archive
-    read_only: no
+    owner: sean
+    group: archive
+    mode: '2775'
+    writable: 'yes'
     guest_ok: 'yes'
   - name: Backups
     path: /mnt/zfs/backups
-    read_only: no
+    owner: sean
+    group: backups
+    mode: '2775'
+    writable: 'yes'
     guest_ok: 'yes'
   - name: Media
     path: /mnt/storage/Media
-    read_only: no
+    owner: sean
+    group: media
+    mode: '2775'
+    writable: 'yes'
     guest_ok: 'yes'
   - name: Resources
     path: /mnt/zfs/resources
-    read_only: no
+    owner: sean
+    group: resources
+    mode: '2775'
+    writable: 'yes'
     guest_ok: 'yes'
   - name: Compressed Files
     path: /mnt/transient/Compressed Files
-    read_only: no
+    writable: 'yes'
     guest_ok: 'yes'
   - name: Downloads
     path: /mnt/transient/Downloads
-    read_only: no
+    owner: sean
+    group: downloads
+    mode: '2775'
+    writable: 'yes'
     guest_ok: 'yes'
     browseable: 'yes'
   - name: Scans
     path: /mnt/transient/Scans
-    read_only: no
+    owner: scans
+    group: scans
+    mode: '2775'
+    writable: 'yes'
     guest_ok: 'yes'
     browseable: 'yes'
 
