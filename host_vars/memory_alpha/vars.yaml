@@ -141,7 +141,7 @@ samba_shares:
     read_only: no
     guest_ok: 'yes'
   - name: Resources
-    path: /mnt/storage/Resources
+    path: /mnt/zfs/resources
     read_only: no
     guest_ok: 'yes'
   - name: Compressed Files
