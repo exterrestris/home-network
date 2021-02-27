@@ -18,7 +18,7 @@
     mode: 0777
   when: ansible_mounts | selectattr('mount', 'equalto', item.path) | list | length == 0
   with_items: 
-    #- "{{ parity_disks }}"
+    - "{{ parity_disks }}"
     - "{{ data_disks }}"
     - "{{ ntfs_data_disks }}"
     - "{{ ntfs_other_disks }}"
@@ -37,7 +37,7 @@
     # change to 'mounted' to auto mount
     state: mounted
   with_items:
-    #- "{{ parity_disks }}"
+    - "{{ parity_disks }}"
     - "{{ data_disks }}"
     - "{{ ntfs_data_disks }}"
     - "{{ ntfs_other_disks }}"

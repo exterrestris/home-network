@@ -76,6 +76,7 @@ zfs_filesystems:
 btrfs_data_opts: compress=zstd
 
 parity_disks:
+  - { path: /mnt/btrfs/parity1, diskbyid: /dev/disk/by-uuid/8f19d4c7-6246-4f0e-aa91-22bb85a9617c, fs: btrfs, opts: defaults }
 
 data_disks:
   - { path: /mnt/btrfs/data4, diskbyid: /dev/disk/by-uuid/da970999-ae30-49ca-a8b9-51cd8d187e00, fs: btrfs, opts: "{{ btrfs_data_opts }}" }
