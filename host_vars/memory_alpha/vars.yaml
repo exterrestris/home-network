@@ -60,9 +60,12 @@ zfs_filesystems:
     mountpoint: /mnt/zfs/archive
     state: present
 
+btrfs_data_opts: compress=zstd
+
 parity_disks:
 
 data_disks:
+  - { path: /mnt/btrfs/data4, diskbyid: /dev/disk/by-uuid/da970999-ae30-49ca-a8b9-51cd8d187e00, fs: btrfs, opts: "{{ btrfs_data_opts }}" }
 
 ntfs_opts: nls=utf8,umask=0022,uid=1000
 
@@ -70,7 +73,6 @@ ntfs_data_disks:
   - { path: /mnt/ntfs/data1, diskbyid: /dev/disk/by-uuid/01D5A8BCC7A78420, fs: ntfs, opts: "{{ ntfs_opts}}" }
   - { path: /mnt/ntfs/data2, diskbyid: /dev/disk/by-uuid/01D639B01A6E6C80, fs: ntfs, opts: "{{ ntfs_opts}}" }
   - { path: /mnt/ntfs/data3, diskbyid: /dev/disk/by-uuid/F272F02672EFED73, fs: ntfs, opts: "{{ ntfs_opts}}" }
-  - { path: /mnt/ntfs/data4, diskbyid: /dev/disk/by-uuid/01D59719F9C065D0, fs: ntfs, opts: "{{ ntfs_opts}}" }
   - { path: /mnt/ntfs/data5, diskbyid: /dev/disk/by-uuid/01D59697B6B37520, fs: ntfs, opts: "{{ ntfs_opts}}" }
   - { path: /mnt/ntfs/data6, diskbyid: /dev/disk/by-uuid/01D59697BB0913A0, fs: ntfs, opts: "{{ ntfs_opts}}" }
 
@@ -84,6 +86,7 @@ other_mounts:
   - path: /mnt/zfs
 
 remove_mounts:
+  - path: /mnt/ntfs/data4
   - path: /mnt/ntfs/data7
   - path: /mnt/ntfs/data8
   - path: /mnt/ntfs/transient2
@@ -95,6 +98,7 @@ mergerfs_mounts:
     branches:
       - /mnt/ntfs/data*/PoolPart.*/PoolPart.*
       - /mnt/ntfs/landing*/PoolPart.*/PoolPart.*
+      - /mnt/btrfs/data*/data
     options: allow_other,use_ino,cache.files=off,dropcacheonclose=true,category.create=mfs,x-systemd.requires=/mnt/ntfs/data1,x-systemd.requires=/mnt/ntfs/landing1
   - path: /mnt/transient
     branches:

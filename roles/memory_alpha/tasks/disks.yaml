@@ -19,7 +19,7 @@
   when: ansible_mounts | selectattr('mount', 'equalto', item.path) | list | length == 0
   with_items: 
     #- "{{ parity_disks }}"
-    #- "{{ data_disks }}"
+    - "{{ data_disks }}"
     - "{{ ntfs_data_disks }}"
     - "{{ ntfs_other_disks }}"
     - "{{ mergerfs_mounts }}"
@@ -38,7 +38,7 @@
     state: mounted
   with_items:
     #- "{{ parity_disks }}"
-    #- "{{ data_disks }}"
+    - "{{ data_disks }}"
     - "{{ ntfs_data_disks }}"
     - "{{ ntfs_other_disks }}"
   tags:
