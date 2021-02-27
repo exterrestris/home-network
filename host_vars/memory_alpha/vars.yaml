@@ -88,8 +88,6 @@ ntfs_data_disks:
   - { path: /mnt/ntfs/data5, diskbyid: /dev/disk/by-uuid/01D59697B6B37520, fs: ntfs, opts: "{{ ntfs_opts}}" }
 
 ntfs_other_disks:
-  - { path: /mnt/ntfs/landing1, diskbyid: /dev/disk/by-uuid/01D703D1F7C72270, fs: ntfs, opts: "{{ ntfs_opts}}" }
-  - { path: /mnt/ntfs/landing2, diskbyid: /dev/disk/by-uuid/01D703D220BC3620, fs: ntfs, opts: "{{ ntfs_opts}}" }
   - { path: /mnt/ntfs/transient1, diskbyid: /dev/disk/by-uuid/01D703DF4EA1B5D0, fs: ntfs, opts: "{{ ntfs_opts}}" }
   - { path: /mnt/ntfs/transient4, diskbyid: /dev/disk/by-uuid/01D703D85BFBB200, fs: ntfs, opts: "{{ ntfs_opts}}" }
 
@@ -102,6 +100,8 @@ remove_mounts:
   - path: /mnt/ntfs/data6
   - path: /mnt/ntfs/data7
   - path: /mnt/ntfs/data8
+  - path: /mnt/ntfs/landing1
+  - path: /mnt/ntfs/landing2
   - path: /mnt/ntfs/transient2
   - path: /mnt/ntfs/transient3
 
