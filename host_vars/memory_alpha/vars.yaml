@@ -79,6 +79,8 @@ parity_disks:
   - { path: /mnt/btrfs/parity1, diskbyid: /dev/disk/by-uuid/8f19d4c7-6246-4f0e-aa91-22bb85a9617c, fs: btrfs, opts: defaults }
 
 data_disks:
+  - { path: /mnt/btrfs/data1, diskbyid: /dev/disk/by-uuid/ac0898f8-e754-4f92-945a-ebae71f53d86, fs: btrfs, opts: "{{ btrfs_data_opts }}" }
+  - { path: /mnt/btrfs/data2, diskbyid: /dev/disk/by-uuid/b17dcbe1-285d-41dd-ba47-7cd380f960df, fs: btrfs, opts: "{{ btrfs_data_opts }}" }
   - { path: /mnt/btrfs/data4, diskbyid: /dev/disk/by-uuid/da970999-ae30-49ca-a8b9-51cd8d187e00, fs: btrfs, opts: "{{ btrfs_data_opts }}" }
 
 ntfs_opts: nls=utf8,umask=0022,uid=1000
@@ -117,6 +119,7 @@ mergerfs_mounts:
   - path: /mnt/transient
     branches:
       - /mnt/ntfs/transient*/PoolPart.*
+      - /mnt/btrfs/*/transient
     options: allow_other,use_ino,cache.files=off,dropcacheonclose=true,category.create=mfs,x-systemd.requires=/mnt/ntfs/transient1
 
 # bertvv.samba
