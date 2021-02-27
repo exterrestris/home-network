@@ -7,12 +7,14 @@ users:
     groups:
       - 'sudo'
       - 'backups'
+      - 'media'
     github_username: exterrestris
     password: $6$CVT.SP2GSSu/sbE7$KioDey0lx2KQ3KLoTuylnCwoIFnTkO9gc169sSOn1MePHjs6MBzI/E38qkJ6Hq0mYtYODrcLvZM8iqnkhbGh01
     update_password: on_create
 
 groups_to_create:
   - name: backups
+  - name: media
 
 zfs_create_pools: true
 
