@@ -132,15 +132,16 @@ other_mounts:
 remove_mounts:
 
 # sprat.ansible-role-mergerfs
+mergerfs_opts: allow_other,use_ino,cache.files=off,dropcacheonclose=true,category.create=mfs
+
 mergerfs_mounts:
   - path: /mnt/storage
     branches:
-      - /mnt/btrfs/data*/data
-    options: allow_other,use_ino,cache.files=off,dropcacheonclose=true,category.create=mfs,x-systemd.requires=/mnt/btrfs/data1
+    options: "{{ mergerfs_opts }},x-systemd.requires=/mnt/btrfs/data1"
   - path: /mnt/transient
     branches:
       - /mnt/btrfs/*/transient
-    options: allow_other,use_ino,cache.files=off,dropcacheonclose=true,category.create=mfs,x-systemd.requires=/mnt/btrfs/parity1
+    options: "{{ mergerfs_opts }},x-systemd.requires=/mnt/btrfs/parity1"
 
 # bertvv.samba
 samba_workgroup: FEDERATION
