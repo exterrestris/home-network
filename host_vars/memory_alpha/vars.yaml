@@ -97,12 +97,12 @@ data_disks:
 ntfs_opts: nls=utf8,umask=0022,uid=1000
 
 ntfs_data_disks:
-  - { path: /mnt/ntfs/data1, diskbyid: /dev/disk/by-uuid/01D5A8BCC7A78420, fs: ntfs, opts: "{{ ntfs_opts}}" }
 
 other_mounts:
   - path: /mnt/zfs
 
 remove_mounts:
+  - path: /mnt/ntfs/data1
   - path: /mnt/ntfs/data2
   - path: /mnt/ntfs/data3
   - path: /mnt/ntfs/data4
@@ -121,7 +121,6 @@ remove_mounts:
 mergerfs_mounts:
   - path: /mnt/storage
     branches:
-      - /mnt/ntfs/data*/PoolPart.*/PoolPart.*
       - /mnt/btrfs/data*/data
     options: allow_other,use_ino,cache.files=off,dropcacheonclose=true,category.create=mfs,x-systemd.requires=/mnt/ntfs/data1,x-systemd.requires=/mnt/ntfs/landing1
   - path: /mnt/transient
