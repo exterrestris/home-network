@@ -111,6 +111,8 @@ data_disks:
     diskbyid: /dev/disk/by-uuid/1f8969dd-f715-4f08-bc64-179162d0fb20
     fs: btrfs
     opts: "{{ btrfs_data_opts }}"
+
+other_disks:
   - path: /mnt/btrfs/transient1
     diskbyid: /dev/disk/by-uuid/037cc6ff-80e9-4de1-9b7c-6b7ec7fff069
     fs: btrfs

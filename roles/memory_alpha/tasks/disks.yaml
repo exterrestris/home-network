@@ -20,6 +20,7 @@
   with_items: 
     - "{{ parity_disks }}"
     - "{{ data_disks }}"
+    - "{{ other_disks }}"
     - "{{ mergerfs_mounts }}"
     - "{{ other_mounts }}"
   tags:
@@ -37,6 +38,7 @@
   with_items:
     - "{{ parity_disks }}"
     - "{{ data_disks }}"
+    - "{{ other_disks }}"
   tags:
     - mounts
     - disks
