@@ -137,6 +137,7 @@ mergerfs_opts: allow_other,use_ino,cache.files=off,dropcacheonclose=true,categor
 mergerfs_mounts:
   - path: /mnt/storage
     branches:
+      - /mnt/btrfs/*/data
     options: "{{ mergerfs_opts }},x-systemd.requires=/mnt/btrfs/data1"
   - path: /mnt/transient
     branches:
