@@ -104,20 +104,6 @@ other_mounts:
   - path: /mnt/zfs
 
 remove_mounts:
-  - path: /mnt/ntfs/data1
-  - path: /mnt/ntfs/data2
-  - path: /mnt/ntfs/data3
-  - path: /mnt/ntfs/data4
-  - path: /mnt/ntfs/data5
-  - path: /mnt/ntfs/data6
-  - path: /mnt/ntfs/data7
-  - path: /mnt/ntfs/data8
-  - path: /mnt/ntfs/landing1
-  - path: /mnt/ntfs/landing2
-  - path: /mnt/ntfs/transient1
-  - path: /mnt/ntfs/transient2
-  - path: /mnt/ntfs/transient3
-  - path: /mnt/ntfs/transient4
 
 # sprat.ansible-role-mergerfs
 mergerfs_mounts:
