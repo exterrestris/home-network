@@ -47,6 +47,7 @@
     state: absent
   with_items:
     - "{{ remove_mounts }}"
+  when: remove_mounts is iterable
   tags:
     - mounts
     - disks
