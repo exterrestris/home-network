@@ -138,7 +138,7 @@ mergerfs_mounts:
   - path: /mnt/storage
     branches:
       - /mnt/btrfs/*/data
-    options: "{{ mergerfs_opts }},x-systemd.requires=/mnt/btrfs/data1"
+    options: "{{ mergerfs_opts }},x-systemd.requires=/mnt/btrfs/data1,x-systemd.requires=/mnt/btrfs/data2,x-systemd.requires=/mnt/btrfs/data3"
   - path: /mnt/transient
     branches:
       - /mnt/btrfs/*/transient
