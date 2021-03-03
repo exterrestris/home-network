@@ -1,4 +1,0 @@
-main_username: sean
-main_groupname: "{{ main_username }}"
-main_uid: "1000"
-main_gid: "{{ main_uid }}"

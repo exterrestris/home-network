@@ -1,10 +1,37 @@
 ---
   - hosts: all
+    tasks:
+      - name: install common packages
+        package:
+          name: "{{ item.name }}"
+          state: present
+        with_items: "{{ common_packages }}"
 
   - hosts: spacedock
     roles:
       - role: ironicbadger.ansible_role_proxmox_nag_removal
+      - role: proxmox_host
+        tags: proxmox
+      - role: exterrestris.proxmox_ssl
+        tags: ssl
 
   - hosts: memory_alpha
     roles:
+      - role: exterrestris.ansible_users
+        tags:
+          - users
       - role: proxmox_vm
+      - role: memory_alpha
+      - role: mrlesmithjr.zfs
+        tags:
+          - disks
+          - zfs
+      - role: sprat.ansible_role_mergerfs
+        tags:
+          - disks
+          - mergerfs
+      - role: bertvv.samba
+        tags:
+          - samba
+      - role: weareinteractive.ufw
+      - role: exterrestris.ansible_role_wsdd

@@ -1,2 +1,21 @@
+---
+# Required Galaxy Collections
+collections:
+  - ansible.posix
+  - community.general
+
 # Required Galaxy Roles
-- src: ironicbadger.ansible_role_proxmox_nag_removal
+roles:
+  - name: mrlesmithjr.zfs
+  - name: bertvv.samba
+  - name: exterrestris.ansible_role_wsdd
+    src: https://github.com/exterrestris/ansible-role-wsdd
+  - name: exterrestris.proxmox_ssl
+    src: https://github.com/exterrestris/ansible-role-proxmox-ssl
+  - name: ironicbadger.ansible_role_proxmox_nag_removal
+    src: https://github.com/IronicBadger/ansible-role-proxmox-nag-removal
+  - name: exterrestris.ansible_users
+    src: https://github.com/exterrestris/ansible-users
+  - name: sprat.ansible_role_mergerfs
+    src: https://github.com/sprat/ansible-role-mergerfs
+  - name: weareinteractive.ufw

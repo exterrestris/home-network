@@ -1,0 +1,17 @@
+---
+# Protects against SSD wear
+- name: disable cluster services
+  service:
+    name: "{{ item.name }}"
+    state: stopped
+    enabled: no
+  with_items: "{{ cluster_services }}"
+  when: not cluster_services_enabled
+
+- name: enable cluster services
+  service:
+    name: "{{ item.name }}"
+    state: started
+    enabled: yes
+  with_items: "{{ cluster_services }}"
+  when: cluster_services_enabled

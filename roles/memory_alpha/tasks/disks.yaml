@@ -1,0 +1,55 @@
+---
+- name: install filesystem packages
+  package:
+    name: "{{ item.name }}"
+    state: present
+  with_items: 
+    - name: ntfs-3g
+    - name: btrfs-progs
+  tags:
+    - disks
+
+- name: create /mnt points
+  file:
+    dest: "{{ item.path }}"
+    state: directory
+    owner: nobody
+    group: nogroup
+    mode: 0777
+  when: ansible_mounts | selectattr('mount', 'equalto', item.path) | list | length == 0
+  with_items: 
+    - "{{ parity_disks }}"
+    - "{{ data_disks }}"
+    - "{{ other_disks }}"
+    - "{{ mergerfs_mounts }}"
+    - "{{ other_mounts }}"
+  tags:
+    - mounts
+    - disks
+
+- name: mount disks
+  ansible.posix.mount:
+    name: "{{ item.path }}"
+    src: "{{ item.diskbyid }}"
+    fstype: "{{ item.fs }}"
+    opts: "{{ item.opts }}"
+    # change to 'mounted' to auto mount
+    state: mounted
+  with_items:
+    - "{{ parity_disks }}"
+    - "{{ data_disks }}"
+    - "{{ other_disks }}"
+  tags:
+    - mounts
+    - disks
+
+- name: unmount disks
+  ansible.posix.mount:
+    name: "{{ item.path }}"
+    state: absent
+  with_items:
+    - "{{ remove_mounts }}"
+  when: remove_mounts is iterable
+  tags:
+    - mounts
+    - disks

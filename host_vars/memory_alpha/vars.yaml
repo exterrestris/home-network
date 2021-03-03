@@ -1,0 +1,212 @@
+---
+target_os: ubuntu
+
+users:
+  - username: sean
+    name: Sean Ellingham
+    groups:
+      - 'sudo'
+      - 'backups'
+      - 'media'
+      - 'scans'
+      - 'archive'
+      - 'resources'
+    github_username: exterrestris
+    password: $6$CVT.SP2GSSu/sbE7$KioDey0lx2KQ3KLoTuylnCwoIFnTkO9gc169sSOn1MePHjs6MBzI/E38qkJ6Hq0mYtYODrcLvZM8iqnkhbGh01
+    update_password: on_create
+  - username: scans
+    group: scans
+
+groups_to_create:
+  - name: backups
+  - name: media
+  - name: archive
+  - name: downloads
+  - name: resources
+  - name: scans
+
+zfs_create_pools: true
+
+zfs_pools:
+  - name: pool1
+    action: 'create'
+    compression: 'lz4'
+    devices:
+      - 'scsi-SATA_WDC_WD120EMAZ-11_8CKANMKF'
+      - 'scsi-SATA_WDC_WD120EMAZ-11_8CKATPYE'
+    type: 'mirror'
+    state: 'present'
+  - name: pool2
+    action: 'create'
+    compression: 'lz4'
+    devices:
+      - 'scsi-SATA_WDC_WD60EZRZ-00G_WD-WX41D95A2NJL'
+      - 'scsi-SATA_WDC_WD60EZRZ-00R_WD-WX11DB56ZP10'
+    type: 'mirror'
+    state: 'present'
+
+zfs_create_filesystems: true
+
+zfs_filesystems:
+  - name: backups
+    pool: pool1
+    compression: lz4
+    mountpoint: /mnt/zfs/backups
+    state: present
+  - name: backups/computers
+    pool: pool1
+    compression: lz4
+    recordsize: 1M
+    mountpoint: /mnt/zfs/backups/computers
+    state: present
+  - name: backups/drives
+    pool: pool1
+    compression: lz4
+    recordsize: 1M
+    mountpoint: /mnt/zfs/backups/drives
+    state: present
+  - name: backups/files
+    pool: pool1
+    compression: lz4
+    recordsize: 1M
+    mountpoint: /mnt/zfs/backups/files
+    state: present
+  - name: archive
+    pool: pool1
+    compression: lz4
+    mountpoint: /mnt/zfs/archive
+    state: present
+  - name: resources
+    pool: pool2
+    compression: lz4
+    mountpoint: /mnt/zfs/resources
+    state: present
+
+btrfs_data_opts: compress=zstd
+
+parity_disks:
+  - path: /mnt/btrfs/parity1
+    diskbyid: /dev/disk/by-uuid/8f19d4c7-6246-4f0e-aa91-22bb85a9617c
+    fs: btrfs
+    opts: defaults
+
+data_disks:
+  - path: /mnt/btrfs/data1
+    diskbyid: /dev/disk/by-uuid/ac0898f8-e754-4f92-945a-ebae71f53d86
+    fs: btrfs
+    opts: "{{ btrfs_data_opts }}"
+  - path: /mnt/btrfs/data2
+    diskbyid: /dev/disk/by-uuid/b17dcbe1-285d-41dd-ba47-7cd380f960df
+    fs: btrfs
+    opts: "{{ btrfs_data_opts }}"
+  - path: /mnt/btrfs/data3
+    diskbyid: /dev/disk/by-uuid/ef6cc0e9-03cc-4e42-9efd-2a00b248e16d
+    fs: btrfs
+    opts: "{{ btrfs_data_opts }}"
+  - path: /mnt/btrfs/data4
+    diskbyid: /dev/disk/by-uuid/da970999-ae30-49ca-a8b9-51cd8d187e00
+    fs: btrfs
+    opts: "{{ btrfs_data_opts }}"
+  - path: /mnt/btrfs/data5
+    diskbyid: /dev/disk/by-uuid/1f8969dd-f715-4f08-bc64-179162d0fb20
+    fs: btrfs
+    opts: "{{ btrfs_data_opts }}"
+
+other_disks:
+  - path: /mnt/btrfs/transient1
+    diskbyid: /dev/disk/by-uuid/037cc6ff-80e9-4de1-9b7c-6b7ec7fff069
+    fs: btrfs
+    opts: "{{ btrfs_data_opts }}"
+  - path: /mnt/btrfs/transient2
+    diskbyid: /dev/disk/by-uuid/6be7a406-89a3-462c-aee4-1c3036ab1cf2
+    fs: btrfs
+    opts: "{{ btrfs_data_opts }}"
+
+ntfs_opts: nls=utf8,umask=0022,uid=1000
+
+ntfs_data_disks:
+
+other_mounts:
+  - path: /mnt/zfs
+
+remove_mounts:
+
+# sprat.ansible-role-mergerfs
+mergerfs_opts: allow_other,use_ino,cache.files=off,dropcacheonclose=true,category.create=mfs
+
+mergerfs_mounts:
+  - path: /mnt/storage
+    branches:
+      - /mnt/btrfs/*/data
+    options: "{{ mergerfs_opts }},x-systemd.requires=/mnt/btrfs/data1"
+  - path: /mnt/transient
+    branches:
+      - /mnt/btrfs/*/transient
+    options: "{{ mergerfs_opts }},x-systemd.requires=/mnt/btrfs/parity1"
+
+# bertvv.samba
+samba_workgroup: FEDERATION
+samba_preferred_master: true
+
+samba_users: "{{ vault_samba_users }}"
+
+# Handle Windows not being able to browse shares due to incorrectly applied mitigation (https://github.com/bertvv/ansible-role-samba/issues/62)
+samba_mitigate_cve_2017_7494: false
+
+samba_shares:
+  - name: Archive
+    path: /mnt/zfs/archive
+    owner: sean
+    group: archive
+    mode: '2775'
+    writable: 'yes'
+    guest_ok: 'yes'
+  - name: Backups
+    path: /mnt/zfs/backups
+    owner: sean
+    group: backups
+    mode: '2775'
+    writable: 'yes'
+    guest_ok: 'yes'
+  - name: Media
+    path: /mnt/storage/Media
+    owner: sean
+    group: media
+    mode: '2775'
+    writable: 'yes'
+    guest_ok: 'yes'
+  - name: Resources
+    path: /mnt/zfs/resources
+    owner: sean
+    group: resources
+    mode: '2775'
+    writable: 'yes'
+    guest_ok: 'yes'
+  - name: Compressed Files
+    path: /mnt/transient/Compressed Files
+    writable: 'yes'
+    guest_ok: 'yes'
+  - name: Downloads
+    path: /mnt/transient/Downloads
+    owner: sean
+    group: downloads
+    mode: '2775'
+    writable: 'yes'
+    guest_ok: 'yes'
+    browseable: 'yes'
+  - name: Scans
+    path: /mnt/transient/Scans
+    owner: scans
+    group: scans
+    mode: '2775'
+    writable: 'yes'
+    guest_ok: 'yes'
+    browseable: 'yes'
+
+wsdd_workgroup: "{{ samba_workgroup }}"
+
+ufw_rules:
+  - rule: allow
+    name: OpenSSH
+  - rule: allow
+    name: Samba

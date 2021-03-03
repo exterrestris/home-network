@@ -1,0 +1,8 @@
+---
+target_os: debian #proxmox
+
+proxmox_ssl_ssh_host: "midas-array.{{ internal_domain }}"
+proxmox_ssl_ssh_user: admin
+proxmox_ssl_ssh_cert_path: "/conf/acme/{{ internal_domain }}-wildcard.fullchain"
+proxmox_ssl_ssh_key_path: "/conf/acme/{{ internal_domain }}-wildcard.key"
+proxmox_ssl_run_now: yes

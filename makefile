@@ -1,11 +1,17 @@
 spacedock:
-	ansible-playbook -b run.yaml --limit spacedock
+	ansible-playbook -b run.yaml --limit spacedock --ask-become-pass --vault-password-file .vault-password
 
 memory-alpha:
-	ansible-playbook -b run.yaml --limit memory_alpha --ask-become-pass
+	ansible-playbook -b run.yaml --limit memory_alpha --ask-become-pass --vault-password-file .vault-password
 
 reqs:
-	ansible-galaxy install -r requirements.yaml
+	ansible-galaxy role install -r requirements.yaml
+	ansible-galaxy collection install -r requirements.yaml
 
 forcereqs:
-	ansible-galaxy install -r requirements.yaml --force
+	ansible-galaxy role install -r requirements.yaml --force
+	ansible-galaxy collection install -r requirements.yaml --force
+
+install-git-hooks:
+	@./install-git-hooks.sh
+	@echo "ansible vault pre-commit hook installed"
