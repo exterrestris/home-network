@@ -35,3 +35,9 @@
           - samba
       - role: weareinteractive.ufw
       - role: exterrestris.ansible_role_wsdd
+
+  - hosts: memory_beta
+    roles:
+      - role: exterrestris.ansible_users
+        tags:
+          - users
