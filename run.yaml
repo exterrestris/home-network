@@ -46,3 +46,7 @@
         tags:
           - disks
           - zfs
+      - role: sprat.ansible_role_mergerfs
+        tags:
+          - disks
+          - mergerfs

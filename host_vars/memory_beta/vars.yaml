@@ -92,5 +92,10 @@ other_mounts:
 remove_mounts:
 
 # sprat.ansible-role-mergerfs
+mergerfs_opts: allow_other,use_ino,cache.files=off,dropcacheonclose=true,category.create=mfs
 
 mergerfs_mounts:
+  - path: /mnt/backups
+    branches:
+      - /mnt/ext4/backups*/data
+    options: "{{ mergerfs_opts }},x-systemd.requires=/mnt/ext4/backups1,x-systemd.requires=/mnt/ext4/backups2"
