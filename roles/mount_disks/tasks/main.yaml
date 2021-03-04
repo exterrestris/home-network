@@ -16,7 +16,9 @@
     owner: nobody
     group: nogroup
     mode: 0777
-  when: ansible_mounts | selectattr('mount', 'equalto', item.path) | list | length == 0
+  when: 
+    - item
+    - ansible_mounts | selectattr('mount', 'equalto', item.path) | list | length == 0
   with_items: 
     - "{{ parity_disks }}"
     - "{{ data_disks }}"
@@ -35,6 +37,7 @@
     opts: "{{ item.opts }}"
     # change to 'mounted' to auto mount
     state: mounted
+  when: item
   with_items:
     - "{{ parity_disks }}"
     - "{{ data_disks }}"
