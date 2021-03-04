@@ -22,5 +22,9 @@ roles:
   - name: exterrestris.ansible_users
     src: https://github.com/exterrestris/ansible-users
   - name: sprat.ansible_role_mergerfs
-    src: https://github.com/sprat/ansible-role-mergerfs
+    # Default version does not work on Ubuntu on Raspberry Pi (as of 04/03/2021)
+    # Using own fork instead that includes support
+    # see https://github.com/sprat/ansible-role-mergerfs/pull/3
+    src: https://github.com/exterrestris/ansible-role-mergerfs
+    version: raspberry-pi
   - name: weareinteractive.ufw
