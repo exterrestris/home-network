@@ -7,4 +7,3 @@ all:
       ansible_host: 192.168.5.132
     memory_beta:
       ansible_host: 192.168.5.148
-      ansible_user: ubuntu
