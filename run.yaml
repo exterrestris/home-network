@@ -21,7 +21,7 @@
         tags:
           - users
       - role: proxmox_vm
-      - role: memory_alpha
+      - role: mount_disks
       - role: mrlesmithjr.zfs
         tags:
           - disks
