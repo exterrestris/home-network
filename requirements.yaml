@@ -7,6 +7,11 @@ collections:
 # Required Galaxy Roles
 roles:
   - name: mrlesmithjr.zfs
+    # Default version does not work on Ubuntu on Raspberry Pi (as of 04/03/2021)
+    # Using third-party fork instead that allows for override
+    # see https://github.com/mrlesmithjr/ansible-zfs/pull/14
+    src: https://github.com/alexrashed/ansible-zfs
+    version: feature/universe-repo
   - name: bertvv.samba
   - name: exterrestris.ansible_role_wsdd
     src: https://github.com/exterrestris/ansible-role-wsdd
