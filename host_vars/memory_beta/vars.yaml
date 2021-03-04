@@ -115,14 +115,14 @@ samba_shares:
     owner: sean
     group: backups
     mode: '2775'
-    writable: 'yes'
+    writable: 'no'
     guest_ok: 'yes'
   - name: Old Backups
     path: /mnt/backups
     owner: sean
     group: backups
     mode: '2775'
-    writable: 'yes'
+    writable: 'no'
     guest_ok: 'yes'
 
 wsdd_workgroup: "{{ samba_workgroup }}"
