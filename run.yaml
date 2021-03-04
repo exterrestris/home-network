@@ -41,3 +41,8 @@
       - role: exterrestris.ansible_users
         tags:
           - users
+      - role: mount_disks
+      - role: mrlesmithjr.zfs
+        tags:
+          - disks
+          - zfs

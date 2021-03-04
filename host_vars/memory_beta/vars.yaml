@@ -24,3 +24,59 @@ groups_to_create:
   - name: downloads
   - name: resources
   - name: scans
+
+zfs_create_pools: true
+
+zfs_pools:
+  - name: backup1
+    action: 'create'
+    compression: 'lz4'
+    devices:
+      # USB dock doesn't expose disk IDs - using partition UUIDs
+      - '1d63c541-3a7b-45ce-a2a2-dc96cecf8d11'
+      - 'c2101a06-81ad-4194-b32f-3962b92b9b00'
+    type: 'mirror'
+    state: 'present'
+
+zfs_create_filesystems: true
+
+zfs_filesystems:
+  - name: backups
+    pool: backup1
+    compression: lz4
+    mountpoint: /mnt/zfs/backups
+    state: present
+  - name: backups/computers
+    pool: backup1
+    compression: lz4
+    recordsize: 1M
+    mountpoint: /mnt/zfs/backups/computers
+    state: present
+  - name: backups/drives
+    pool: backup1
+    compression: lz4
+    recordsize: 1M
+    mountpoint: /mnt/zfs/backups/drives
+    state: present
+  - name: archive
+    pool: backup1
+    compression: lz4
+    mountpoint: /mnt/zfs/archive
+    state: present
+
+parity_disks:
+
+data_disks:
+
+other_disks:
+
+ntfs_data_disks:
+
+other_mounts:
+  - path: /mnt/zfs
+
+remove_mounts:
+
+# sprat.ansible-role-mergerfs
+
+mergerfs_mounts:
