@@ -50,3 +50,8 @@
         tags:
           - disks
           - mergerfs
+      - role: bertvv.samba
+        tags:
+          - samba
+      - role: weareinteractive.ufw
+      - role: exterrestris.ansible_role_wsdd
