@@ -1,4 +1,6 @@
 ---
+ansible_host: 192.168.5.128
+ansible_user: root
 target_os: debian #proxmox
 
 proxmox_ssl_ssh_host: "midas-array.{{ internal_domain }}"
