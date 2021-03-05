@@ -1,4 +1,5 @@
 ---
+# Everything
   - hosts: all
     tasks:
       - name: install common packages
@@ -7,6 +8,29 @@
           state: present
         with_items: "{{ common_packages }}"
 
+# Groups
+  - hosts: vm
+    roles:
+      - role: proxmox_vm
+
+  - hosts: nas
+    roles:
+      - role: mount_disks
+      - role: mrlesmithjr.zfs
+        tags:
+          - disks
+          - zfs
+      - role: sprat.ansible_role_mergerfs
+        tags:
+          - disks
+          - mergerfs
+      - role: bertvv.samba
+        tags:
+          - samba
+      - role: weareinteractive.ufw
+      - role: exterrestris.ansible_role_wsdd
+
+# Host Specific
   - hosts: spacedock
     roles:
       - role: ironicbadger.ansible_role_proxmox_nag_removal
@@ -20,38 +44,9 @@
       - role: exterrestris.ansible_users
         tags:
           - users
-      - role: proxmox_vm
-      - role: mount_disks
-      - role: mrlesmithjr.zfs
-        tags:
-          - disks
-          - zfs
-      - role: sprat.ansible_role_mergerfs
-        tags:
-          - disks
-          - mergerfs
-      - role: bertvv.samba
-        tags:
-          - samba
-      - role: weareinteractive.ufw
-      - role: exterrestris.ansible_role_wsdd
 
   - hosts: memory_beta
     roles:
       - role: exterrestris.ansible_users
         tags:
           - users
-      - role: mount_disks
-      - role: mrlesmithjr.zfs
-        tags:
-          - disks
-          - zfs
-      - role: sprat.ansible_role_mergerfs
-        tags:
-          - disks
-          - mergerfs
-      - role: bertvv.samba
-        tags:
-          - samba
-      - role: weareinteractive.ufw
-      - role: exterrestris.ansible_role_wsdd
