@@ -1,5 +1,14 @@
 all:
   hosts:
     spacedock:
-    memory_alpha:
-    memory_beta:
+  children:
+    nas:
+      hosts:
+        memory_alpha:
+        memory_beta:
+    vm:
+      hosts:
+        memory_alpha:
+    raspberry_pi:
+      hosts:
+        memory_beta:
