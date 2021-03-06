@@ -154,6 +154,8 @@ snapraid_gmail_pass: "{{ vault_snapraid_email_password }}"
 snapraid_email_address_to: "{{ vault_snapraid_email_to }}"
 snapraid_email_sendon: "success,error"
 
+snapraid_content: ''
+
 snapraid_smtp_host: smtp.migadu.com
 
 snapraid_run_command: "python3 {{ snapraid_run_bin }} -c {{ snapraid_run_conf}} > /dev/null"
