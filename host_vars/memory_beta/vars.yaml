@@ -71,16 +71,21 @@ parity_disks:
     diskbyid: /dev/disk/by-uuid/a8a450d1-c9cd-4a9d-a904-138b793e5135
     fs: ext4
     opts: defaults
+    content: true
 
 data_disks:
   - path: /mnt/ext4/backups1
+    data_path: /data
     diskbyid: /dev/disk/by-uuid/e5a631ba-6896-46d8-a947-aec2a745e697
     fs: ext4
     opts: defaults
+    content: true
   - path: /mnt/ext4/backups2
+    data_path: /data
     diskbyid: /dev/disk/by-uuid/e9585a85-0247-4d0d-ae2c-cb5e83fea1eb
     fs: ext4
     opts: defaults
+    content: true
 
 other_disks:
 
@@ -139,3 +144,15 @@ ufw_rules:
     name: OpenSSH
   - rule: allow
     name: Samba
+
+# ironicbadger.ansible_role_snapraid
+snapraid_email_address: "memory-beta@{{ internal_domain }}"
+snapraid_gmail_pass: "{{ vault_snapraid_email_password }}"
+snapraid_email_address_to: "{{ vault_snapraid_email_to }}"
+snapraid_email_sendon: "success,error"
+
+snapraid_smtp_host: smtp.migadu.com
+
+snapraid_run_command: "python3 {{ snapraid_run_bin }} -c {{ snapraid_run_conf}} > /dev/null"
+snapraid_run_scrub_percent: 25
+snapraid_run_scrub_age: 10
