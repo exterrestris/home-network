@@ -145,6 +145,9 @@ ufw_rules:
   - rule: allow
     name: Samba
 
+# geerlingguy.docker
+docker_apt_arch: arm64
+
 # ironicbadger.ansible_role_snapraid
 snapraid_email_address: "memory-beta@{{ internal_domain }}"
 snapraid_gmail_pass: "{{ vault_snapraid_email_password }}"
