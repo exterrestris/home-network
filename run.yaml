@@ -33,6 +33,12 @@
       - role: bertvv.samba
         tags:
           - samba
+      - role: geerlingguy.docker
+        tags:
+          - docker
+      - role: ironicbadger.ansible_role_snapraid
+        tags:
+          - snapraid
       - role: weareinteractive.ufw
       - role: exterrestris.ansible_role_wsdd
 

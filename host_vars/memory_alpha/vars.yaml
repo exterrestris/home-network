@@ -89,28 +89,39 @@ parity_disks:
     diskbyid: /dev/disk/by-uuid/8f19d4c7-6246-4f0e-aa91-22bb85a9617c
     fs: btrfs
     opts: defaults
+    content: true
 
 data_disks:
   - path: /mnt/btrfs/data1
+    data_path: /data
     diskbyid: /dev/disk/by-uuid/ac0898f8-e754-4f92-945a-ebae71f53d86
     fs: btrfs
     opts: "{{ btrfs_data_opts }}"
+    content: true
   - path: /mnt/btrfs/data2
+    data_path: /data
     diskbyid: /dev/disk/by-uuid/b17dcbe1-285d-41dd-ba47-7cd380f960df
     fs: btrfs
     opts: "{{ btrfs_data_opts }}"
+    content: true
   - path: /mnt/btrfs/data3
+    data_path: /data
     diskbyid: /dev/disk/by-uuid/ef6cc0e9-03cc-4e42-9efd-2a00b248e16d
     fs: btrfs
     opts: "{{ btrfs_data_opts }}"
+    content: true
   - path: /mnt/btrfs/data4
+    data_path: /data
     diskbyid: /dev/disk/by-uuid/da970999-ae30-49ca-a8b9-51cd8d187e00
     fs: btrfs
     opts: "{{ btrfs_data_opts }}"
+    content: true
   - path: /mnt/btrfs/data5
+    data_path: /data
     diskbyid: /dev/disk/by-uuid/1f8969dd-f715-4f08-bc64-179162d0fb20
     fs: btrfs
     opts: "{{ btrfs_data_opts }}"
+    content: true
 
 other_disks:
   - path: /mnt/btrfs/transient1
@@ -210,3 +221,15 @@ ufw_rules:
     name: OpenSSH
   - rule: allow
     name: Samba
+
+# ironicbadger.ansible_role_snapraid
+snapraid_email_address: "memory-alpha@{{ internal_domain }}"
+snapraid_gmail_pass: "{{ vault_snapraid_email_password }}"
+snapraid_email_address_to: "{{ vault_snapraid_email_to }}"
+snapraid_email_sendon: "success,error"
+
+snapraid_smtp_host: smtp.migadu.com
+
+snapraid_run_command: "python3 {{ snapraid_run_bin }} -c {{ snapraid_run_conf}} > /dev/null"
+snapraid_run_scrub_percent: 25
+snapraid_run_scrub_age: 10
