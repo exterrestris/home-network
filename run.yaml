@@ -21,6 +21,11 @@
         tags:
           - users
       - role: proxmox_vm
+      # Update kernel to HWE (5.8) to add support for Renesas USB controller
+      - role: alvistack.kernel
+        vars:
+          kernel_release: "mainline"
+        tags: kernel
       - role: mount_disks
       - role: mrlesmithjr.zfs
         tags:
