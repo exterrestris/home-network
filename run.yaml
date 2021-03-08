@@ -27,6 +27,12 @@
       - role: bertvv.samba
         tags:
           - samba
+      - role: geerlingguy.docker
+        tags:
+          - docker
+      - role: ironicbadger.ansible_role_snapraid
+        tags:
+          - snapraid
       - role: weareinteractive.ufw
       - role: exterrestris.ansible_role_wsdd
 
@@ -44,6 +50,11 @@
       - role: exterrestris.ansible_users
         tags:
           - users
+      # Update kernel to HWE (5.8) to add support for Renesas USB controller
+      - role: alvistack.kernel
+        vars:
+          kernel_release: "mainline"
+        tags: kernel
 
   - hosts: memory_beta
     roles:

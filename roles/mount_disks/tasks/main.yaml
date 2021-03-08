@@ -46,7 +46,7 @@
     - mounts
     - disks
 
-- name: unmount disks
+- name: remove mount points
   ansible.posix.mount:
     name: "{{ item.path }}"
     state: absent

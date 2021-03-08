@@ -86,32 +86,38 @@ zfs_filesystems:
 btrfs_data_opts: compress=zstd
 
 parity_disks:
-  - path: /mnt/btrfs/parity1
-    diskbyid: /dev/disk/by-uuid/8f19d4c7-6246-4f0e-aa91-22bb85a9617c
-    fs: btrfs
+  - path: /mnt/ext4/parity1
+    diskbyid: /dev/disk/by-uuid/13a02c9d-1344-4523-9238-a6757142f6ae
+    fs: ext4
     opts: defaults
+    content: true
 
 data_disks:
-  - path: /mnt/btrfs/data1
-    diskbyid: /dev/disk/by-uuid/ac0898f8-e754-4f92-945a-ebae71f53d86
-    fs: btrfs
-    opts: "{{ btrfs_data_opts }}"
-  - path: /mnt/btrfs/data2
-    diskbyid: /dev/disk/by-uuid/b17dcbe1-285d-41dd-ba47-7cd380f960df
-    fs: btrfs
-    opts: "{{ btrfs_data_opts }}"
-  - path: /mnt/btrfs/data3
-    diskbyid: /dev/disk/by-uuid/ef6cc0e9-03cc-4e42-9efd-2a00b248e16d
-    fs: btrfs
-    opts: "{{ btrfs_data_opts }}"
-  - path: /mnt/btrfs/data4
-    diskbyid: /dev/disk/by-uuid/da970999-ae30-49ca-a8b9-51cd8d187e00
-    fs: btrfs
-    opts: "{{ btrfs_data_opts }}"
-  - path: /mnt/btrfs/data5
-    diskbyid: /dev/disk/by-uuid/1f8969dd-f715-4f08-bc64-179162d0fb20
-    fs: btrfs
-    opts: "{{ btrfs_data_opts }}"
+  - path: /mnt/ext4/data1
+    diskbyid: /dev/disk/by-uuid/3eee8a73-449f-4680-ac95-a88226b27d79
+    fs: ext4
+    opts: defaults
+    content: true
+  - path: /mnt/ext4/data2
+    diskbyid: /dev/disk/by-uuid/7f6e6993-8f06-4cf4-8f59-ec0ba5771bea
+    fs: ext4
+    opts: defaults
+    content: true
+  - path: /mnt/ext4/data3
+    diskbyid: /dev/disk/by-uuid/f4ca6d24-5142-4583-adc4-ae791f25b4ca
+    fs: ext4
+    opts: defaults
+    content: true
+  - path: /mnt/ext4/data4
+    diskbyid: /dev/disk/by-uuid/56eb9377-2ddc-4fc3-8409-d7549d4a0dab
+    fs: ext4
+    opts: defaults
+    content: true
+  - path: /mnt/ext4/data5
+    diskbyid: /dev/disk/by-uuid/e0e41243-f51b-4730-a9c7-c001279a7315
+    fs: ext4
+    opts: defaults
+    content: true
 
 other_disks:
   - path: /mnt/btrfs/transient1
@@ -138,8 +144,8 @@ mergerfs_opts: allow_other,use_ino,cache.files=off,dropcacheonclose=true,categor
 mergerfs_mounts:
   - path: /mnt/storage
     branches:
-      - /mnt/btrfs/*/data
-    options: "{{ mergerfs_opts }},x-systemd.requires=/mnt/btrfs/data1,x-systemd.requires=/mnt/btrfs/data2,x-systemd.requires=/mnt/btrfs/data3"
+      - /mnt/ext4/data*
+    options: "{{ mergerfs_opts }},x-systemd.requires=/mnt/ext4/data1,x-systemd.requires=/mnt/ext4/data2,x-systemd.requires=/mnt/ext4/data3"
   - path: /mnt/transient
     branches:
       - /mnt/btrfs/*/transient
@@ -211,3 +217,15 @@ ufw_rules:
     name: OpenSSH
   - rule: allow
     name: Samba
+
+# ironicbadger.ansible_role_snapraid
+snapraid_email_address: "memory-alpha@{{ internal_domain }}"
+snapraid_gmail_pass: "{{ vault_snapraid_email_password }}"
+snapraid_email_address_to: "{{ vault_snapraid_email_to }}"
+snapraid_email_sendon: "success,error"
+
+snapraid_smtp_host: smtp.migadu.com
+
+snapraid_run_command: "python3 {{ snapraid_run_bin }} -c {{ snapraid_run_conf}} > /dev/null"
+snapraid_run_scrub_percent: 25
+snapraid_run_scrub_age: 10
