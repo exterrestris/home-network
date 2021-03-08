@@ -136,12 +136,6 @@ other_mounts:
   - path: /mnt/zfs
 
 remove_mounts:
-  - path: /mnt/btrfs/data1
-  - path: /mnt/btrfs/data2
-  - path: /mnt/btrfs/data3
-  - path: /mnt/btrfs/data4
-  - path: /mnt/btrfs/data5
-  - path: /mnt/btrfs/parity1
 
 # sprat.ansible-role-mergerfs
 mergerfs_opts: allow_other,use_ino,cache.files=off,dropcacheonclose=true,category.create=mfs
