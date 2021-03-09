@@ -41,7 +41,7 @@
 # Main - Host Specific
 
 # Main - Groups
-  - hosts: vm
+  - hosts: proxmox_vm
     roles:
       - role: proxmox_vm
 

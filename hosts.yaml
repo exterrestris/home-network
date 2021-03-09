@@ -6,7 +6,7 @@ all:
       hosts:
         memory_alpha:
         memory_beta:
-    vm:
+    proxmox_vm:
       hosts:
         memory_alpha:
     raspberry_pi:
