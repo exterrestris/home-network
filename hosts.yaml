@@ -1,11 +1,12 @@
 all:
-  hosts:
-    spacedock:
   children:
     nas:
       hosts:
         memory_alpha:
         memory_beta:
+    proxmox_host:
+      hosts:
+        spacedock:
     proxmox_vm:
       hosts:
         memory_alpha:
