@@ -1,5 +1,5 @@
 ---
-# Everything
+# Setup - Common
   - hosts: all
     tasks:
       - name: install common packages
@@ -8,7 +8,39 @@
           state: present
         with_items: "{{ common_packages }}"
 
-# Groups
+# Setup - Host Specific
+  - hosts: spacedock
+    roles:
+      - role: ironicbadger.ansible_role_proxmox_nag_removal
+      - role: proxmox_host
+        tags: proxmox
+      - role: exterrestris.proxmox_ssl
+        tags: ssl
+
+  - hosts: memory_alpha
+    roles:
+      - role: exterrestris.ansible_users
+        tags:
+          - users
+      # Update kernel to HWE (5.8) to add support for Renesas USB controller
+      - role: alvistack.kernel
+        vars:
+          kernel_release: "mainline"
+        tags: kernel
+
+  - hosts: memory_beta
+    roles:
+      - role: exterrestris.ansible_users
+        tags:
+          - users
+
+# Setup - Groups
+
+# Main - Common
+
+# Main - Host Specific
+
+# Main - Groups
   - hosts: vm
     roles:
       - role: proxmox_vm
@@ -36,28 +68,8 @@
       - role: weareinteractive.ufw
       - role: exterrestris.ansible_role_wsdd
 
-# Host Specific
-  - hosts: spacedock
-    roles:
-      - role: ironicbadger.ansible_role_proxmox_nag_removal
-      - role: proxmox_host
-        tags: proxmox
-      - role: exterrestris.proxmox_ssl
-        tags: ssl
+# Final - Common
 
-  - hosts: memory_alpha
-    roles:
-      - role: exterrestris.ansible_users
-        tags:
-          - users
-      # Update kernel to HWE (5.8) to add support for Renesas USB controller
-      - role: alvistack.kernel
-        vars:
-          kernel_release: "mainline"
-        tags: kernel
+# Final - Host Specific
 
-  - hosts: memory_beta
-    roles:
-      - role: exterrestris.ansible_users
-        tags:
-          - users
+# Final - Groups
