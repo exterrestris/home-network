@@ -26,10 +26,7 @@ groups_to_create:
   - name: resources
   - name: scans
 
-zfs_ubuntu_universe_repo_url: http://ports.ubuntu.com/ubuntu-ports
-
-zfs_create_pools: true
-
+### mrlesmithjr.zfs
 zfs_pools:
   - name: backup1
     action: 'create'
@@ -40,8 +37,6 @@ zfs_pools:
       - 'c2101a06-81ad-4194-b32f-3962b92b9b00'
     type: 'mirror'
     state: 'present'
-
-zfs_create_filesystems: true
 
 zfs_filesystems:
   - name: backups
@@ -67,6 +62,7 @@ zfs_filesystems:
     mountpoint: /mnt/zfs/archive
     state: present
 
+### mount_disks
 parity_disks:
   - path: /mnt/ext4/parity1
     diskbyid: /dev/disk/by-uuid/a8a450d1-c9cd-4a9d-a904-138b793e5135
@@ -97,24 +93,14 @@ other_mounts:
 
 remove_mounts:
 
-# sprat.ansible-role-mergerfs
-mergerfs_opts: allow_other,use_ino,cache.files=off,dropcacheonclose=true,category.create=mfs
-
+### sprat.ansible-role-mergerfs
 mergerfs_mounts:
   - path: /mnt/backups
     branches:
       - /mnt/ext4/backups*/data
     options: "{{ mergerfs_opts }},x-systemd.requires=/mnt/ext4/backups1,x-systemd.requires=/mnt/ext4/backups2"
 
-# bertvv.samba
-samba_workgroup: FEDERATION
-samba_preferred_master: true
-
-samba_users: "{{ vault_samba_users }}"
-
-# Handle Windows not being able to browse shares due to incorrectly applied mitigation (https://github.com/bertvv/ansible-role-samba/issues/62)
-samba_mitigate_cve_2017_7494: false
-
+### bertvv.samba
 samba_shares:
   - name: Archive
     path: /mnt/zfs/archive
@@ -138,27 +124,7 @@ samba_shares:
     writable: 'no'
     guest_ok: 'yes'
 
-wsdd_workgroup: "{{ samba_workgroup }}"
 
-ufw_rules:
-  - rule: allow
-    name: OpenSSH
-  - rule: allow
-    name: Samba
-
-# geerlingguy.docker
-docker_apt_arch: arm64
-
-# ironicbadger.ansible_role_snapraid
+### ironicbadger.ansible_role_snapraid
 snapraid_email_address: "memory-beta@{{ internal_domain }}"
-snapraid_gmail_pass: "{{ vault_snapraid_email_password }}"
-snapraid_email_address_to: "{{ vault_snapraid_email_to }}"
-snapraid_email_sendon: "success,error"
-
 snapraid_content: ''
-
-snapraid_smtp_host: smtp.migadu.com
-
-snapraid_run_command: "python3 {{ snapraid_run_bin }} -c {{ snapraid_run_conf}} > /dev/null"
-snapraid_run_scrub_percent: 25
-snapraid_run_scrub_age: 10
