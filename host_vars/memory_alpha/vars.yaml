@@ -148,7 +148,7 @@ mergerfs_mounts:
   - path: /mnt/transient
     branches:
       - /mnt/btrfs/*/transient
-    options: "{{ mergerfs_opts }},x-systemd.requires=/mnt/btrfs/parity1"
+    options: "{{ mergerfs_opts }},x-systemd.requires=/mnt/btrfs/transient1"
 
 # bertvv.samba
 samba_workgroup: FEDERATION
