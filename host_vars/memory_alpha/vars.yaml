@@ -188,10 +188,6 @@ samba_shares:
     mode: '2775'
     writable: 'yes'
     guest_ok: 'yes'
-  - name: Compressed Files
-    path: /mnt/transient/Compressed Files
-    writable: 'yes'
-    guest_ok: 'yes'
   - name: Downloads
     path: /mnt/transient/Downloads
     owner: sean
