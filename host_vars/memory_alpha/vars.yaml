@@ -136,8 +136,6 @@ other_mounts:
   - path: /mnt/zfs
 
 remove_mounts:
-  - path: /mnt/btrfs/transient1
-  - path: /mnt/btrfs/transient2
 
 # sprat.ansible-role-mergerfs
 mergerfs_opts: allow_other,use_ino,cache.files=off,dropcacheonclose=true,category.create=mfs
