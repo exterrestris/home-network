@@ -18,6 +18,12 @@ forcereqs:
 	ansible-galaxy role install -r requirements.yaml --force
 	ansible-galaxy collection install -r requirements.yaml --force
 
+decrypt-all:
+	find . -name 'vault.yaml' -exec ansible-vault decrypt {} --vault-password .vault-password \;
+
+encrypt-all:
+	find . -name 'vault.yaml' -exec ansible-vault encrypt {} --vault-password .vault-password \;
+
 install-git-hooks:
 	@./install-git-hooks.sh
 	@echo "ansible vault pre-commit hook installed"
