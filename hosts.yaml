@@ -1,6 +1,4 @@
 all:
-  vars:
-    ansible_user: ansible
   children:
     nas:
       hosts:
