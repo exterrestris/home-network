@@ -7,6 +7,9 @@ memory-alpha:
 memory-beta:
 	ansible-playbook -b run.yaml --limit memory_beta --ask-become-pass --vault-password-file .vault-password
 
+setup:
+	ansible-playbook -b run.yaml --tags "setup" --ask-become-pass --vault-password-file .vault-password
+
 reqs:
 	ansible-galaxy role install -r requirements.yaml
 	ansible-galaxy collection install -r requirements.yaml
