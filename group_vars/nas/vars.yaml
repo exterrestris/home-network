@@ -1,4 +1,11 @@
 ---
+nas_groups:
+  - name: backups
+  - name: media
+  - name: archive
+  - name: downloads
+  - name: resources
+
 ### mrlesmithjr.zfs
 zfs_create_pools: true
 zfs_create_filesystems: true
@@ -14,7 +21,6 @@ mergerfs_opts: allow_other,use_ino,cache.files=off,dropcacheonclose=true
 ### bertvv.samba
 samba_workgroup: FEDERATION
 samba_preferred_master: true
-samba_users: "{{ vault_samba_users }}"
 # Handle Windows not being able to browse shares due to incorrectly applied mitigation (https://github.com/bertvv/ansible-role-samba/issues/62)
 samba_mitigate_cve_2017_7494: false
 
