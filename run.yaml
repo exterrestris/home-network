@@ -13,6 +13,20 @@
         tags: setup
 
 # Setup - Host Specific
+  - hosts: spacedock
+    tasks:
+      - name: prevent automatic kernel updates
+        dpkg_selections:
+          name: "{{ item }}"
+          selection: hold
+        loop:
+          - pve-kernel-5.4
+          - pve-kernel-helper
+          - pve-kernel-libc-dev
+        tags:
+          - kernel
+          - setup
+
   - hosts: memory_alpha
     roles:
       # Update kernel to HWE (5.8) to add support for Renesas USB controller
