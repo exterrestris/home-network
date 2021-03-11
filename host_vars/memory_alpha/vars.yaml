@@ -2,29 +2,13 @@
 ansible_host: 192.168.5.132
 target_os: ubuntu
 
-users:
-  - username: sean
-    name: Sean Ellingham
-    groups:
-      - 'sudo'
-      - 'backups'
-      - 'media'
-      - 'scans'
-      - 'archive'
-      - 'resources'
-    github_username: exterrestris
-    password: $6$CVT.SP2GSSu/sbE7$KioDey0lx2KQ3KLoTuylnCwoIFnTkO9gc169sSOn1MePHjs6MBzI/E38qkJ6Hq0mYtYODrcLvZM8iqnkhbGh01
-    update_password: on_create
-  - username: scans
-    group: scans
-
-groups_to_create:
-  - name: backups
-  - name: media
-  - name: archive
-  - name: downloads
-  - name: resources
-  - name: scans
+scans_user:
+  username: scans
+  password: "{{ vault_scans_user_password | password_hash('sha512', 65534 | random(seed=inventory_hostname) | string) }}"
+  group: scans
+  samba:
+    username: Scans
+    password: "{{ vault_scans_user_password }}"
 
 ### mrlesmithjr.zfs
 zfs_pools:

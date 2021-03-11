@@ -67,6 +67,23 @@
   - hosts: memory_alpha
     roles:
       - role: exterrestris.ansible_users
+        vars:
+          users:
+            - "{{ scans_user }}"
+        tags:
+          - users
+      - role: bertvv.samba
+        vars:
+          samba_users:
+            - name: "{{ scans_user.samba.username }}"
+              password: "{{ scans_user.samba.password }}"
+        tags: samba
+    tasks:
+      - name: additional groups for main user
+        user:
+          name: "{{ main_user.username }}"
+          groups: "{{ scans_user.group }}"
+          append: yes
         tags:
           - users
 
@@ -103,6 +120,10 @@
           - disks
           - mergerfs
       - role: bertvv.samba
+        vars:
+          samba_users:
+            - name: "{{ main_user.samba.username }}"
+              password: "{{ main_user.samba.password }}"
         tags:
           - samba
       - role: geerlingguy.docker
