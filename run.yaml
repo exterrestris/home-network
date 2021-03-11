@@ -91,6 +91,11 @@
 
   - hosts: nas
     roles:
+      - role: exterrestris.ansible_users
+        vars:
+          groups_to_create: "{{ nas_groups }}"
+        tags:
+          - users
       - role: mount_disks
       - role: mrlesmithjr.zfs
         tags:
@@ -111,3 +116,11 @@
           - snapraid
       - role: weareinteractive.ufw
       - role: exterrestris.ansible_role_wsdd
+    tasks:
+      - name: additional groups for main user
+        user:
+          name: "{{ main_user.username }}"
+          groups: "{{ nas_groups | map(attribute='name') }}"
+          append: yes
+        tags:
+          - users

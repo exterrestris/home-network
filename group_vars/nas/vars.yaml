@@ -1,4 +1,11 @@
 ---
+nas_groups:
+  - name: backups
+  - name: media
+  - name: archive
+  - name: downloads
+  - name: resources
+
 ### mrlesmithjr.zfs
 zfs_create_pools: true
 zfs_create_filesystems: true
