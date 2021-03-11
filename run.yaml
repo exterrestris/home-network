@@ -97,7 +97,7 @@
         tags:
           - snapraid
       - role: weareinteractive.ufw
-      - role: exterrestris.ansible_role_wsdd
+      - role: exterrestris.wsdd
     tasks:
       - name: additional groups for main user
         user:

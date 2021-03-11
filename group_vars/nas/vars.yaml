@@ -24,7 +24,7 @@ samba_preferred_master: true
 # Handle Windows not being able to browse shares due to incorrectly applied mitigation (https://github.com/bertvv/ansible-role-samba/issues/62)
 samba_mitigate_cve_2017_7494: false
 
-### exterrestris.ansible_role_wsdd
+### exterrestris.wsdd
 wsdd_workgroup: "{{ samba_workgroup }}"
 
 ### weareinteractive.ufw

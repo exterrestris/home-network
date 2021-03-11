@@ -13,7 +13,7 @@ roles:
     src: https://github.com/alexrashed/ansible-zfs
     version: feature/universe-repo
   - name: bertvv.samba
-  - name: exterrestris.ansible_role_wsdd
+  - name: exterrestris.wsdd
     src: https://github.com/exterrestris/ansible-role-wsdd
   - name: exterrestris.proxmox_ssl
     src: https://github.com/exterrestris/ansible-role-proxmox-ssl
