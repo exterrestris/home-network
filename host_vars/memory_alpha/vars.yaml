@@ -7,7 +7,7 @@ scans_user:
   password: "{{ vault_scans_user_password | password_hash('sha512', 65534 | random(seed=inventory_hostname) | string) }}"
   group: scans
   samba:
-    username: Scans
+    name: Scans
     password: "{{ vault_scans_user_password }}"
 
 ### mrlesmithjr.zfs

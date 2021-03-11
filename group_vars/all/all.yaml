@@ -13,7 +13,7 @@ main_user:
   uid: "1000"
   gid: "1000"
   samba:
-    username: Sean
+    name: Sean
     password: "{{ vault_main_user_password }}"
 
 common_packages:
