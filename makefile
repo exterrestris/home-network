@@ -1,14 +1,14 @@
 spacedock:
-	ansible-playbook -b run.yaml --limit spacedock --skip-tags "setup" --ask-become-pass --vault-password-file .vault-password
+	ansible-playbook -b run.yaml --limit spacedock --skip-tags "setup" --vault-password-file .vault-password
 
 memory-alpha:
-	ansible-playbook -b run.yaml --limit memory_alpha --skip-tags "setup" --ask-become-pass --vault-password-file .vault-password
+	ansible-playbook -b run.yaml --limit memory_alpha --skip-tags "setup" --vault-password-file .vault-password
 
 memory-beta:
-	ansible-playbook -b run.yaml --limit memory_beta --skip-tags "setup" --ask-become-pass --vault-password-file .vault-password
+	ansible-playbook -b run.yaml --limit memory_beta --skip-tags "setup" --vault-password-file .vault-password
 
 setup:
-	ansible-playbook -b run.yaml --tags "setup" --ask-become-pass --vault-password-file .vault-password
+	ansible-playbook -b run.yaml --tags "setup" --vault-password-file .vault-password
 
 reqs:
 	ansible-galaxy role install -r requirements.yaml
