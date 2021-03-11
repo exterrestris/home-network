@@ -117,6 +117,8 @@
         vars:
           users:
             - "{{ scans_user }}"
+          groups_to_create:
+            - name: "{{ scans_user.group }}"
         tags:
           - users
       - role: bertvv.samba
