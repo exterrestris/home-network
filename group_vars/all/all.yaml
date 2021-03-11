@@ -1,5 +1,7 @@
 ---
-ansible_user: ansible
+ansible_user: "{{ vault_ansible_user }}"
+ansible_password: "{{ vault_ansible_password }}"
+ansible_become_password: "{{ vault_ansible_password }}"
 
 main_username: sean
 main_groupname: "{{ main_username }}"

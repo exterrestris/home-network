@@ -1,6 +1,11 @@
 ---
 # Setup - Common
   - hosts: all
+    gather_facts: no
+    serial: 1
+    tasks:
+      - include_tasks: tasks/setup-ansible-user.yaml
+        tags: setup
 
 # Setup - Host Specific
   - hosts: memory_alpha

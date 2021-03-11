@@ -1,0 +1,48 @@
+- name: check ansible user exists
+  command: ssh -o User={{ ansible_user }} -o ConnectTimeout=10 -o PreferredAuthentications=publickey -o PubkeyAuthentication=yes {{ ansible_host }} echo "Worked"
+  register: remote
+  connection: local
+  ignore_errors: yes
+  become: false
+  changed_when: False
+  tags: setup
+- name: collect credentials
+  block:
+    - name: collect username
+      pause:
+          prompt: "Username for {{ inventory_hostname }} ({{ ansible_host }})"
+          echo: yes
+      register: username_result
+    - name: collect password
+      pause:
+          prompt: "Password for {{ username_result.user_input }}"
+          echo: no
+      register: password_result
+    - name: update creds
+      set_fact:
+        ansible_user: "{{ username_result.user_input }}"
+        ansible_password: "{{ password_result.user_input }}"
+        ansible_become_password: "{{ password_result.user_input }}"
+  when: remote.failed
+  tags: setup
+- name: install sudo
+  package:
+    name: sudo
+    state: present
+  tags: setup
+- name: create ansible group
+  group:
+    name: "{{ vault_ansible_user_group }}"
+  tags: setup
+- name: create ansible user
+  user:
+    name: "{{ vault_ansible_user }}"
+    group: "{{ vault_ansible_user_group }}"
+    groups: "sudo"
+    password: "{{ vault_ansible_password | password_hash('sha512', 65534 | random(seed=inventory_hostname) | string) }}"
+  tags: setup
+- name: add SSH authorized_keys from github
+  authorized_key:
+    user: "{{ vault_ansible_user }}"
+    key: "https://github.com/{{ vault_ansible_user_github_user }}.keys"
+  tags: setup
