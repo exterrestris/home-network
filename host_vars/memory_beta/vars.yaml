@@ -2,27 +2,6 @@
 ansible_host: 192.168.5.148
 target_os: ubuntu
 
-users:
-  - username: sean
-    name: Sean Ellingham
-    groups:
-      - 'sudo'
-      - 'backups'
-      - 'media'
-      - 'scans'
-      - 'archive'
-      - 'resources'
-    github_username: exterrestris
-    password: $6$CVT.SP2GSSu/sbE7$KioDey0lx2KQ3KLoTuylnCwoIFnTkO9gc169sSOn1MePHjs6MBzI/E38qkJ6Hq0mYtYODrcLvZM8iqnkhbGh01
-    update_password: on_create
-
-groups_to_create:
-  - name: backups
-  - name: media
-  - name: archive
-  - name: downloads
-  - name: resources
-
 ### mrlesmithjr.zfs
 zfs_pools:
   - name: backup1
@@ -95,27 +74,27 @@ mergerfs_mounts:
   - path: /mnt/backups
     branches:
       - /mnt/ext4/backups*/data
-    options: "{{ mergerfs_opts }},x-systemd.requires=/mnt/ext4/backups1,x-systemd.requires=/mnt/ext4/backups2"
+    options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }},x-systemd.requires=/mnt/ext4/backups1,x-systemd.requires=/mnt/ext4/backups2"
 
 ### bertvv.samba
 samba_shares:
   - name: Archive
     path: /mnt/zfs/archive
-    owner: sean
+    owner: "{{ main_user.username }}"
     group: archive
     mode: '2775'
     writable: 'no'
     guest_ok: 'yes'
   - name: Backups
     path: /mnt/zfs/backups
-    owner: sean
+    owner: "{{ main_user.username }}"
     group: backups
     mode: '2775'
     writable: 'no'
     guest_ok: 'yes'
   - name: Old Backups
     path: /mnt/backups
-    owner: sean
+    owner: "{{ main_user.username }}"
     group: backups
     mode: '2775'
     writable: 'no'

@@ -3,10 +3,19 @@ ansible_user: "{{ vault_ansible_user }}"
 ansible_password: "{{ vault_ansible_password }}"
 ansible_become_password: "{{ vault_ansible_password }}"
 
-main_username: sean
-main_groupname: "{{ main_username }}"
-main_uid: "1000"
-main_gid: "{{ main_uid }}"
+main_user:
+  username: sean
+  name: Sean Ellingham
+  password: "{{ vault_main_user_password | password_hash('sha512', 65534 | random(seed=inventory_hostname) | string) }}"
+  update_password: on_create
+  groups:
+    - 'sudo'
+  github_username: exterrestris
+  uid: "1000"
+  gid: "1000"
+  samba:
+    name: Sean
+    password: "{{ vault_main_user_password }}"
 
 common_packages:
   - name: htop

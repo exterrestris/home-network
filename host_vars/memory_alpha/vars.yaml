@@ -2,29 +2,13 @@
 ansible_host: 192.168.5.132
 target_os: ubuntu
 
-users:
-  - username: sean
-    name: Sean Ellingham
-    groups:
-      - 'sudo'
-      - 'backups'
-      - 'media'
-      - 'scans'
-      - 'archive'
-      - 'resources'
-    github_username: exterrestris
-    password: $6$CVT.SP2GSSu/sbE7$KioDey0lx2KQ3KLoTuylnCwoIFnTkO9gc169sSOn1MePHjs6MBzI/E38qkJ6Hq0mYtYODrcLvZM8iqnkhbGh01
-    update_password: on_create
-  - username: scans
-    group: scans
-
-groups_to_create:
-  - name: backups
-  - name: media
-  - name: archive
-  - name: downloads
-  - name: resources
-  - name: scans
+scans_user:
+  username: scans
+  password: "{{ vault_scans_user_password | password_hash('sha512', 65534 | random(seed=inventory_hostname) | string) }}"
+  group: scans
+  samba:
+    name: Scans
+    password: "{{ vault_scans_user_password }}"
 
 ### mrlesmithjr.zfs
 zfs_pools:
@@ -137,45 +121,45 @@ mergerfs_mounts:
   - path: /mnt/storage
     branches:
       - /mnt/ext4/data*
-    options: "{{ mergerfs_opts }},x-systemd.requires=/mnt/ext4/data1,x-systemd.requires=/mnt/ext4/data2,x-systemd.requires=/mnt/ext4/data3"
+    options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }},x-systemd.requires=/mnt/ext4/data1,x-systemd.requires=/mnt/ext4/data2,x-systemd.requires=/mnt/ext4/data3"
   - path: /mnt/transient
     branches:
       - /mnt/ext4/transient*
-    options: "{{ mergerfs_opts }},x-systemd.requires=/mnt/ext4/transient1"
+    options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }},x-systemd.requires=/mnt/ext4/transient1"
 
 ### bertvv.samba
 samba_shares:
   - name: Archive
     path: /mnt/zfs/archive
-    owner: sean
+    owner: "{{ main_user.username }}"
     group: archive
     mode: '2775'
     writable: 'yes'
     guest_ok: 'yes'
   - name: Backups
     path: /mnt/zfs/backups
-    owner: sean
+    owner: "{{ main_user.username }}"
     group: backups
     mode: '2775'
     writable: 'yes'
     guest_ok: 'yes'
   - name: Media
     path: /mnt/storage/Media
-    owner: sean
+    owner: "{{ main_user.username }}"
     group: media
     mode: '2775'
     writable: 'yes'
     guest_ok: 'yes'
   - name: Resources
     path: /mnt/zfs/resources
-    owner: sean
+    owner: "{{ main_user.username }}"
     group: resources
     mode: '2775'
     writable: 'yes'
     guest_ok: 'yes'
   - name: Downloads
     path: /mnt/transient/Downloads
-    owner: sean
+    owner: "{{ main_user.username }}"
     group: downloads
     mode: '2775'
     writable: 'yes'
@@ -183,8 +167,8 @@ samba_shares:
     browseable: 'yes'
   - name: Scans
     path: /mnt/transient/Scans
-    owner: scans
-    group: scans
+    owner: "{{ scans_user.username }}"
+    group: "{{ scans_user.group }}"
     mode: '2775'
     writable: 'yes'
     guest_ok: 'yes'
