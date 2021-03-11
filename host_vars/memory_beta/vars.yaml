@@ -80,21 +80,21 @@ mergerfs_mounts:
 samba_shares:
   - name: Archive
     path: /mnt/zfs/archive
-    owner: sean
+    owner: "{{ main_user.username }}"
     group: archive
     mode: '2775'
     writable: 'no'
     guest_ok: 'yes'
   - name: Backups
     path: /mnt/zfs/backups
-    owner: sean
+    owner: "{{ main_user.username }}"
     group: backups
     mode: '2775'
     writable: 'no'
     guest_ok: 'yes'
   - name: Old Backups
     path: /mnt/backups
-    owner: sean
+    owner: "{{ main_user.username }}"
     group: backups
     mode: '2775'
     writable: 'no'

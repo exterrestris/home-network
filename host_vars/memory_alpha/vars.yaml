@@ -131,35 +131,35 @@ mergerfs_mounts:
 samba_shares:
   - name: Archive
     path: /mnt/zfs/archive
-    owner: sean
+    owner: "{{ main_user.username }}"
     group: archive
     mode: '2775'
     writable: 'yes'
     guest_ok: 'yes'
   - name: Backups
     path: /mnt/zfs/backups
-    owner: sean
+    owner: "{{ main_user.username }}"
     group: backups
     mode: '2775'
     writable: 'yes'
     guest_ok: 'yes'
   - name: Media
     path: /mnt/storage/Media
-    owner: sean
+    owner: "{{ main_user.username }}"
     group: media
     mode: '2775'
     writable: 'yes'
     guest_ok: 'yes'
   - name: Resources
     path: /mnt/zfs/resources
-    owner: sean
+    owner: "{{ main_user.username }}"
     group: resources
     mode: '2775'
     writable: 'yes'
     guest_ok: 'yes'
   - name: Downloads
     path: /mnt/transient/Downloads
-    owner: sean
+    owner: "{{ main_user.username }}"
     group: downloads
     mode: '2775'
     writable: 'yes'
@@ -167,8 +167,8 @@ samba_shares:
     browseable: 'yes'
   - name: Scans
     path: /mnt/transient/Scans
-    owner: scans
-    group: scans
+    owner: "{{ scans_user.username }}"
+    group: "{{ scans_user.group }}"
     mode: '2775'
     writable: 'yes'
     guest_ok: 'yes'
