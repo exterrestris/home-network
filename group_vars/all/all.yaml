@@ -6,10 +6,11 @@ ansible_become_password: "{{ vault_ansible_password }}"
 main_user:
   username: sean
   name: Sean Ellingham
-  password: "{{ vault_main_user_password }}"
+  password: "{{ vault_main_user_password | password_hash('sha512', 65534 | random(seed=inventory_hostname) | string) }}"
+  update_password: on_create
   groups:
     - 'sudo'
-  github: exterrestris
+  github_username: exterrestris
   uid: "1000"
   gid: "1000"
   samba:
