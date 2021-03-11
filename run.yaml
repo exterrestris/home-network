@@ -21,6 +21,7 @@
           kernel_release: "mainline"
         tags:
           - kernel
+          - setup
 
 # Setup - Groups
 
