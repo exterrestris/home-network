@@ -48,6 +48,11 @@
             - "{{ main_user }}"
         tags:
           - users
+      - role: exterrestris.powerline
+        vars:
+          powerline_global: yes
+        tags:
+          - bash
     tasks:
       - name: install common packages
         package:

@@ -32,3 +32,6 @@ roles:
     src: https://github.com/exterrestris/ansible-role-snapraid
     version: main
   - name: alvistack.kernel
+  - name: exterrestris.powerline
+    src: https://github.com/exterrestris/ansible-role-powerline
+    version: main
