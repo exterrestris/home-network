@@ -41,6 +41,18 @@
 
 # Main - Common
   - hosts: all
+    roles:
+      - role: exterrestris.ansible_users
+        vars:
+          users:
+            - username: "{{ main_user.username }}"
+              name: "{{ main_user.name }}"
+              groups: "{{ main_user.groups }}"
+              github_username: "{{ main_user.github }}"
+              password: "{{ main_user.password | password_hash('sha512', 65534 | random(seed=inventory_hostname) | string) }}"
+              update_password: on_create
+        tags:
+          - users
     tasks:
       - name: install common packages
         package:
