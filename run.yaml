@@ -72,9 +72,6 @@
 
   - hosts: memory_beta
     roles:
-      - role: exterrestris.ansible_users
-        tags:
-          - users
 
 # Main - Groups
   - hosts: proxmox_host
