@@ -95,7 +95,7 @@ mergerfs_mounts:
   - path: /mnt/backups
     branches:
       - /mnt/ext4/backups*/data
-    options: "{{ mergerfs_opts }},x-systemd.requires=/mnt/ext4/backups1,x-systemd.requires=/mnt/ext4/backups2"
+    options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }},x-systemd.requires=/mnt/ext4/backups1,x-systemd.requires=/mnt/ext4/backups2"
 
 ### bertvv.samba
 samba_shares:

@@ -8,7 +8,8 @@ btrfs_data_opts: compress=zstd
 ntfs_opts: nls=utf8,umask=0022,uid=1000
 
 ### sprat.ansible-role-mergerfs
-mergerfs_opts: allow_other,use_ino,cache.files=off,dropcacheonclose=true,category.create=mfs
+mergerfs_policy: mfs
+mergerfs_opts: allow_other,use_ino,cache.files=off,dropcacheonclose=true
 
 ### bertvv.samba
 samba_workgroup: FEDERATION
