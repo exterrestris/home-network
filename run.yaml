@@ -4,7 +4,12 @@
     gather_facts: no
     serial: 1
     tasks:
-      - include_tasks: tasks/setup-ansible-user.yaml
+      - include_tasks: tasks/check-ansible-user.yaml
+        tags: setup
+
+  - hosts: all
+    tasks:
+      - include_tasks: tasks/setup.yaml
         tags: setup
 
 # Setup - Host Specific
