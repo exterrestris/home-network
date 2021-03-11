@@ -30,4 +30,5 @@ roles:
     # - https://github.com/IronicBadger/ansible-role-snapraid/pull/5
     # - https://github.com/IronicBadger/ansible-role-snapraid/pull/6
     src: https://github.com/exterrestris/ansible-role-snapraid
+    version: main
   - name: alvistack.kernel
