@@ -7,8 +7,8 @@ memory-alpha:
 memory-beta:
 	ansible-playbook -b run.yaml --limit memory_beta --skip-tags "setup" --vault-password-file .vault-password
 
-test:
-	ansible-playbook -b run.yaml --limit test --skip-tags "setup" --vault-password-file .vault-password
+test-machines:
+	ansible-playbook -b run.yaml --limit test_machines --skip-tags "setup" --vault-password-file .vault-password
 
 holosuite-1:
 	ansible-playbook -b run.yaml --limit holosuite_1 --skip-tags "setup" --vault-password-file .vault-password

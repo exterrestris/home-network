@@ -15,6 +15,6 @@ all:
       hosts:
         memory_beta:
         holosuite_2:
-    test:
+    test_machines:
       hosts:
         holosuite_1:
