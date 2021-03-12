@@ -15,28 +15,6 @@ zfs_pools:
     state: 'present'
 
 zfs_filesystems:
-  - name: backups
-    pool: backup1
-    compression: lz4
-    mountpoint: /mnt/zfs/backups
-    state: present
-  - name: backups/computers
-    pool: backup1
-    compression: lz4
-    recordsize: 1M
-    mountpoint: /mnt/zfs/backups/computers
-    state: present
-  - name: backups/drives
-    pool: backup1
-    compression: lz4
-    recordsize: 1M
-    mountpoint: /mnt/zfs/backups/drives
-    state: present
-  - name: archive
-    pool: backup1
-    compression: lz4
-    mountpoint: /mnt/zfs/archive
-    state: present
 
 ### exterrestris.sanoid
 sanoid_datasets:
