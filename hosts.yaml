@@ -18,3 +18,4 @@ all:
     test_machines:
       hosts:
         holosuite_1:
+        holosuite_2:
