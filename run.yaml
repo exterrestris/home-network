@@ -97,6 +97,7 @@
         tags:
           - snapraid
       - role: weareinteractive.ufw
+        tags: firewall
       - role: exterrestris.wsdd
     tasks:
       - name: additional groups for main user
