@@ -82,16 +82,16 @@ sanoid_datasets:
 syncoid_syncs:
   - src: pool1/backups
     dest: backup1/backups
-    dest_host: memory-beta
+    dest_host: "memory-beta.{{ internal_domain }}"
   - src: pool1/backups/computers
     dest: backup1/backups/computers
-    dest_host: memory-beta
+    dest_host: "memory-beta.{{ internal_domain }}"
   - src: pool1/backups/drives
     dest: backup1/backups/drives
-    dest_host: memory-beta
+    dest_host: "memory-beta.{{ internal_domain }}"
   - src: pool1/archive
     dest: backup1/archive
-    dest_host: memory-beta
+    dest_host: "memory-beta.{{ internal_domain }}"
 
 ### mount_disks
 parity_disks:
