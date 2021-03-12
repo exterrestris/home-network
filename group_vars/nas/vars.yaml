@@ -57,3 +57,16 @@ cockpit_packages:
   - cockpit-storaged
   - cockpit-dashboard
   - cockpit-doc
+
+### exterrestris.sanoid
+sanoid_templates:
+  - name: local
+    autoprune: 'yes'
+    autosnap: 'yes'
+  - name: backups
+    autoprune: 'yes'
+    autosnap: 'no'
+  - name: ignore
+    autoprune: 'no'
+    autosnap: 'no'
+    monitor: 'no'
