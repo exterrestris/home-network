@@ -87,7 +87,7 @@
       - role: bertvv.samba
         vars:
           samba_users:
-            - "{{ main_user.samba }}"
+            - "{{ main_user_samba }}"
         tags:
           - samba
       - role: geerlingguy.docker
@@ -140,7 +140,7 @@
       - role: bertvv.samba
         vars:
           samba_users:
-            - "{{ scans_user.samba }}"
+            - "{{ scans_user_samba }}"
         tags: samba
     tasks:
       - name: additional groups for main user

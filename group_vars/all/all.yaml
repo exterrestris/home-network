@@ -11,9 +11,10 @@ main_user:
   groups:
     - 'sudo'
   github_username: exterrestris
-  samba:
-    name: Sean
-    password: "{{ vault_main_user_password }}"
+
+main_user_samba:
+  name: Sean
+  password: "{{ vault_main_user_password }}"
 
 common_packages:
   - name: htop
