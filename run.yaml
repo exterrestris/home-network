@@ -96,6 +96,8 @@
       - role: ironicbadger.ansible_role_snapraid
         tags:
           - snapraid
+      - role: linux-system-roles.cockpit
+        tags: cockpit
       - role: weareinteractive.ufw
       - role: exterrestris.ansible_role_wsdd
     tasks:
