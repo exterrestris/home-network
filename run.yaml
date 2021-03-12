@@ -101,6 +101,7 @@
       - role: weareinteractive.ufw
         tags: firewall
       - role: exterrestris.wsdd
+      - role: exterrestris.sanoid
     tasks:
       - name: additional groups for main user
         user:
