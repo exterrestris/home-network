@@ -32,3 +32,4 @@ roles:
     src: https://github.com/exterrestris/ansible-role-snapraid
     version: main
   - name: alvistack.kernel
+  - name: linux-system-roles.cockpit

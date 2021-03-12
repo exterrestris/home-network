@@ -33,6 +33,9 @@ ufw_rules:
     name: OpenSSH
   - rule: allow
     name: Samba
+  - rule: allow
+    to_port: 9090
+    proto: tcp
 
 ### ironicbadger.ansible_role_snapraid
 snapraid_gmail_pass: "{{ vault_snapraid_email_password }}"
@@ -43,3 +46,14 @@ snapraid_run_command: "python3 {{ snapraid_run_bin }} -c {{ snapraid_run_conf}} 
 snapraid_run_scrub_percent: 25
 snapraid_run_scrub_age: 10
 snapraid_run_repo: https://github.com/exterrestris/snapraid-runner.git
+
+### linux-system-roles.cockpit
+cockpit_packages:
+  - cockpit-system
+  - cockpit-ws
+  - cockpit
+  - cockpit-networkmanager
+  - cockpit-packagekit
+  - cockpit-storaged
+  - cockpit-dashboard
+  - cockpit-doc
