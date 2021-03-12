@@ -38,6 +38,17 @@ zfs_filesystems:
     mountpoint: /mnt/zfs/archive
     state: present
 
+### exterrestris.sanoid
+sanoid_datasets:
+  - name: backup1/backups
+    templates: backups
+  - name: backup1/backups/computers
+    templates: backups
+  - name: backup1/backups/drives
+    templates: backups
+  - name: backup1/archive
+    templates: backups
+
 ### mount_disks
 parity_disks:
   - path: /mnt/ext4/parity1
