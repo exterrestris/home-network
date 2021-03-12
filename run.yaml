@@ -102,6 +102,7 @@
         tags: firewall
       - role: exterrestris.wsdd
       - role: exterrestris.sanoid
+        tags: sanoid
     tasks:
       - name: additional groups for main user
         user:
