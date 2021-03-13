@@ -24,7 +24,7 @@ samba_preferred_master: true
 # Handle Windows not being able to browse shares due to incorrectly applied mitigation (https://github.com/bertvv/ansible-role-samba/issues/62)
 samba_mitigate_cve_2017_7494: false
 
-### exterrestris.ansible_role_wsdd
+### exterrestris.wsdd
 wsdd_workgroup: "{{ samba_workgroup }}"
 
 ### weareinteractive.ufw
@@ -33,6 +33,9 @@ ufw_rules:
     name: OpenSSH
   - rule: allow
     name: Samba
+  - rule: allow
+    to_port: 9090
+    proto: tcp
 
 ### ironicbadger.ansible_role_snapraid
 snapraid_gmail_pass: "{{ vault_snapraid_email_password }}"
@@ -43,3 +46,39 @@ snapraid_run_command: "python3 {{ snapraid_run_bin }} -c {{ snapraid_run_conf}} 
 snapraid_run_scrub_percent: 25
 snapraid_run_scrub_age: 10
 snapraid_run_repo: https://github.com/exterrestris/snapraid-runner.git
+
+### linux-system-roles.cockpit
+cockpit_packages:
+  - cockpit-system
+  - cockpit-ws
+  - cockpit
+  - cockpit-networkmanager
+  - cockpit-packagekit
+  - cockpit-storaged
+  - cockpit-dashboard
+  - cockpit-doc
+
+### exterrestris.sanoid
+sanoid_templates:
+  - name: local
+    autoprune: 'yes'
+    frequently: 0
+    hourly: 0
+    daily: 28
+    weekly: 6
+    monthly: 6
+    yearly: 0
+    autosnap: 'yes'
+  - name: backups
+    autoprune: 'yes'
+    frequently: 0
+    hourly: 0
+    daily: 14
+    weekly: 12
+    monthly: 18
+    yearly: 0
+    autosnap: 'no'
+  - name: ignore
+    autoprune: 'no'
+    autosnap: 'no'
+    monitor: 'no'

@@ -11,11 +11,10 @@ main_user:
   groups:
     - 'sudo'
   github_username: exterrestris
-  uid: "1000"
-  gid: "1000"
-  samba:
-    name: Sean
-    password: "{{ vault_main_user_password }}"
+
+main_user_samba:
+  name: Sean
+  password: "{{ vault_main_user_password }}"
 
 common_packages:
   - name: htop

@@ -92,7 +92,7 @@
       - role: bertvv.samba
         vars:
           samba_users:
-            - "{{ main_user.samba }}"
+            - "{{ main_user_samba }}"
         tags:
           - samba
       - role: geerlingguy.docker
@@ -101,8 +101,13 @@
       - role: ironicbadger.ansible_role_snapraid
         tags:
           - snapraid
+      - role: linux-system-roles.cockpit
+        tags: cockpit
       - role: weareinteractive.ufw
-      - role: exterrestris.ansible_role_wsdd
+        tags: firewall
+      - role: exterrestris.wsdd
+      - role: exterrestris.sanoid
+        tags: sanoid
     tasks:
       - name: additional groups for main user
         user:
@@ -111,6 +116,17 @@
           append: yes
         tags:
           - users
+      - name: remove zfs-auto-snapshot
+        block:
+          - name: remove package
+            package:
+              name: zfs-auto-snapshot
+              state: absent
+          - name: remove cron
+            file:
+              dest: /etc/cron.d/zfs-auto-snapshot
+              state: absent
+        tags: zfs
 
 # Main - Host Specific
   - hosts: spacedock
@@ -129,7 +145,7 @@
       - role: bertvv.samba
         vars:
           samba_users:
-            - "{{ scans_user.samba }}"
+            - "{{ scans_user_samba }}"
         tags: samba
     tasks:
       - name: additional groups for main user
