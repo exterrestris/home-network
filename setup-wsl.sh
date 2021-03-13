@@ -13,6 +13,7 @@ if [ ! -e /etc/wsl.conf ]; then
   done
   cd $DIR
 fi
+chmod +x install-ansible.sh
 ./install-ansible.sh
 chmod 775 .
 make install-git-hooks
