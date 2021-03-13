@@ -7,8 +7,8 @@ fi
 
 case $DISTRO in
     ubuntu)
-        apt-add-repository --yes --update ppa:ansible/ansible
-        apt install --yes python3 git make ansible-base
+        sudo apt-add-repository --yes --update ppa:ansible/ansible
+        sudo apt install --yes python3 git make ansible-base
         ;;
     *)
         echo "Unsupported Linux distribution: $DISTRO"
