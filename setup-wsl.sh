@@ -5,7 +5,7 @@ if [ ! -e /etc/wsl.conf ]; then
   GID=$(id -g)
   for drive in $DRIVES; do
     sudo umount /mnt/$drive
-    sudo mount -t drvfs $drive: /mnt/$drive -o metadata,uid=$UID,gid=$GID,umask=22,fmask=111
+    sudo mount -t drvfs $drive: /mnt/$drive -o metadata,uid=$UID,gid=$GID,umask=22
   done
 fi
 ./install-ansible.sh
