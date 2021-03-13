@@ -36,3 +36,6 @@ encrypt-all:
 install-git-hooks:
 	@./install-git-hooks.sh
 	@echo "ansible vault pre-commit hook installed"
+
+install-ansible:
+	@./install-ansible.sh
