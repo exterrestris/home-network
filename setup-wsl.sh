@@ -12,6 +12,9 @@ fi
 chmod 775 .
 make install-git-hooks
 make reqs
-cat '*REPLACE WITH VAULT PASSWORD*' > .vault-password
+if [ ! -e .vault-password ]; then
+  echo '*REPLACE WITH VAULT PASSWORD*' > .vault-password
+fi
 nano .vault-password
+chmod -x .vault-password
 make wsl
