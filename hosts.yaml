@@ -1,4 +1,8 @@
 all:
+  vars:
+    ansible_user: "{{ vault_ansible_user }}"
+    ansible_password: "{{ vault_ansible_password }}"
+    ansible_become_password: "{{ vault_ansible_password }}"
   children:
     nas:
       hosts:
