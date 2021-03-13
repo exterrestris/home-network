@@ -14,3 +14,5 @@ case $DISTRO in
         echo "Unsupported Linux distribution: $DISTRO"
         exit 1
 esac
+
+echo "Ansible installed"
