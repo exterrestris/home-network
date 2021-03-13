@@ -4,8 +4,10 @@ if [ ! -e /etc/wsl.conf ]; then
   DRIVES=$(wmic.exe logicaldisk get deviceid | cut -d: -f1 -s | tr '[:upper:]' '[:lower:]')
   GID=$(id -g)
   for drive in $DRIVES; do
-    sudo umount /mnt/$drive
-    sudo mount -t drvfs $drive: /mnt/$drive -o metadata,uid=$UID,gid=$GID,umask=22
+    if [ -e /mnt/$drive ]; then
+      sudo umount /mnt/$drive
+      sudo mount -t drvfs $drive: /mnt/$drive -o metadata,uid=$UID,gid=$GID,umask=22
+    fi
   done
 fi
 ./install-ansible.sh
