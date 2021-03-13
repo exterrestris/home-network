@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  tasks:
+    - name: check is WSL
+      assert:
+        that:
+          - "lookup('env', 'WSL_DISTRO_NAME')"
+    - name: install common packages
+      package:
+        name: "{{ item.name }}"
+        state: present
+      with_items: "{{ common_packages }}"
