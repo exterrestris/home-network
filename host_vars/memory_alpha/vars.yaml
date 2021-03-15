@@ -6,9 +6,10 @@ scans_user:
   username: scans
   password: "{{ vault_scans_user_password | password_hash('sha512', 65534 | random(seed=inventory_hostname) | string) }}"
   group: scans
-  samba:
-    name: Scans
-    password: "{{ vault_scans_user_password }}"
+
+scans_user_samba:
+  name: Scans
+  password: "{{ vault_scans_user_password }}"
 
 ### mrlesmithjr.zfs
 zfs_pools:
@@ -63,6 +64,35 @@ zfs_filesystems:
     compression: lz4
     mountpoint: /mnt/zfs/resources
     state: present
+
+### exterrestris.sanoid
+sanoid_datasets:
+  - name: pool1/backups
+    templates: local
+  - name: pool1/backups/computers
+    templates: local
+  - name: pool1/backups/files
+    templates: ignore
+  - name: pool1/backups/drives
+    templates: local
+  - name: pool1/archive
+    templates: local
+  - name: pool2/resources
+    templates: ignore
+
+syncoid_syncs:
+  - src: pool1/backups
+    dest: backup1/backups
+    dest_host: "memory-beta.{{ internal_domain }}"
+  - src: pool1/backups/computers
+    dest: backup1/backups/computers
+    dest_host: "memory-beta.{{ internal_domain }}"
+  - src: pool1/backups/drives
+    dest: backup1/backups/drives
+    dest_host: "memory-beta.{{ internal_domain }}"
+  - src: pool1/archive
+    dest: backup1/archive
+    dest_host: "memory-beta.{{ internal_domain }}"
 
 ### mount_disks
 parity_disks:

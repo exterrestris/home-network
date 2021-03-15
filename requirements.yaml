@@ -33,3 +33,5 @@ roles:
     version: main
   - name: alvistack.kernel
   - name: linux-system-roles.cockpit
+  - name: exterrestris.sanoid
+    src: https://github.com/exterrestris/ansible-role-sanoid
