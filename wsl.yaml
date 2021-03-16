@@ -12,3 +12,5 @@
       with_items: "{{ common_packages }}"
   roles:
     - role: viasite-ansible.zsh
+      vars:
+        zsh_user: "{{ main_user.username }}"
