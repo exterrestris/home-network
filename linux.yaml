@@ -57,6 +57,13 @@
           name: "{{ item.name }}"
           state: present
         with_items: "{{ common_packages }}"
+      - name: copy p10k config
+        copy:
+          src: "p10k.zsh"
+          dest: "/home/{{ main_user.username }}/.p10k.zsh"
+          owner: "{{ main_user.username }}"
+          group: "{{ main_user.username }}"
+          mode: '0644'
 
 # Main - Groups
   - hosts: proxmox_host
