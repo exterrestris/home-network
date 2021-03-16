@@ -19,14 +19,14 @@ holosuite-2:
 wsl:
 	ansible-playbook -b wsl.yaml --connection=local --inventory "localhost," --vault-password-file .vault-password
 
-setup:
+setup-all:
 	ansible-playbook -b linux.yaml --tags "setup" --vault-password-file .vault-password
 
-reqs:
+install-requirements:
 	ansible-galaxy role install -r requirements.yaml
 	ansible-galaxy collection install -r requirements.yaml
 
-forcereqs:
+force-install-requirements:
 	ansible-galaxy role install -r requirements.yaml --force
 	ansible-galaxy collection install -r requirements.yaml --force
 
