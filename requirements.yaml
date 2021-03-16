@@ -35,4 +35,6 @@ roles:
   - name: linux-system-roles.cockpit
   - name: exterrestris.sanoid
     src: https://github.com/exterrestris/ansible-role-sanoid
-  - name: viasite-ansible.zsh
+  - name: exterrestris.zsh
+    src: https://github.com/exterrestris/ansible-role-zsh
+    version: powerlevel10k
