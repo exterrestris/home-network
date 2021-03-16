@@ -19,3 +19,6 @@ common_packages:
   - name: python3-pip
 
 internal_domain: "{{ vault_domain }}"
+
+### viasite-ansible.zsh
+zsh_antigen_theme: "romkatv/powerlevel10k powerlevel10k"

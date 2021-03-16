@@ -48,6 +48,9 @@
             - "{{ main_user }}"
         tags:
           - users
+      - role: viasite-ansible.zsh
+        vars:
+          zsh_user: "{{ main_user }}"
     tasks:
       - name: install common packages
         package:
