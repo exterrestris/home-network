@@ -47,6 +47,7 @@ zsh_antigen_bundles:
   - urbainvaes/fzf-marks
   - ytet5uy4/fzf-widgets
   - { name: zdharma/fast-syntax-highlighting@v1.2 }
+zsh_editor: nano
 zsh_aliases:
   - alias: 'lsdisk'
     action: 'lsblk --output NAME,UUID,LABEL,FSTYPE,MOUNTPOINT,SIZE,FSAVAIL'
