@@ -5,7 +5,9 @@
 # https://gist.github.com/leucos/a9f42e111a8cfc2ebf6e
 
 if [ -d .git/ ]; then
-rm .git/hooks/pre-commit
-cp .git-pre-commit-hook.sh .git/hooks/pre-commit
+  rm .git/hooks/pre-commit
+  cp .git-pre-commit-hook.sh .git/hooks/pre-commit
+  chmod +x .git/hooks/pre-commit
+
+  echo "Installed pre-commit hook to ensure Ansible vaults are encrypted"
 fi
-chmod +x .git/hooks/pre-commit

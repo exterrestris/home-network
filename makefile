@@ -16,6 +16,9 @@ holosuite-1:
 holosuite-2:
 	ansible-playbook -b linux.yaml --limit holosuite_2 --skip-tags "setup" --vault-password-file .vault-password
 
+wsl:
+	ansible-playbook -b wsl.yaml --connection=local --inventory "localhost," --vault-password-file .vault-password
+
 setup:
 	ansible-playbook -b linux.yaml --tags "setup" --vault-password-file .vault-password
 
@@ -35,4 +38,6 @@ encrypt-all:
 
 install-git-hooks:
 	@./install-git-hooks.sh
-	@echo "ansible vault pre-commit hook installed"
+
+install-ansible:
+	@./install-ansible.sh
