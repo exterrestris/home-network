@@ -50,7 +50,7 @@
           - users
       - role: viasite-ansible.zsh
         vars:
-          zsh_user: "{{ main_user }}"
+          zsh_user: "{{ main_user.username }}"
     tasks:
       - name: install common packages
         package:
