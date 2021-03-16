@@ -1,20 +1,8 @@
-spacedock:
-	ansible-playbook -b linux.yaml --limit spacedock --skip-tags "setup" --vault-password-file .vault-password
+spacedock memory-alpha memory-beta:
+	ansible-playbook -b linux.yaml --limit $(subst -,_,$@) --skip-tags "setup" --vault-password-file .vault-password
 
-memory-alpha:
-	ansible-playbook -b linux.yaml --limit memory_alpha --skip-tags "setup" --vault-password-file .vault-password
-
-memory-beta:
-	ansible-playbook -b linux.yaml --limit memory_beta --skip-tags "setup" --vault-password-file .vault-password
-
-test-machines:
-	ansible-playbook -b linux.yaml --limit test_machines --skip-tags "setup" --vault-password-file .vault-password
-
-holosuite-1:
-	ansible-playbook -b linux.yaml --limit holosuite_1 --skip-tags "setup" --vault-password-file .vault-password
-
-holosuite-2:
-	ansible-playbook -b linux.yaml --limit holosuite_2 --skip-tags "setup" --vault-password-file .vault-password
+test-machines holosuite-1 holosuite-2:
+	ansible-playbook -b linux.yaml --limit $(subst -,_,$@) --skip-tags "setup" --vault-password-file .vault-password
 
 wsl:
 	ansible-playbook -b wsl.yaml --connection=local --inventory "localhost," --vault-password-file .vault-password
