@@ -1,171 +1,218 @@
 ---
 # Setup - Common
-  - hosts: all
-    gather_facts: no
-    serial: 1
-    tasks:
-      - include_tasks: tasks/check-ansible-user.yaml
-        tags: setup
+- hosts: all
+  gather_facts: no
+  serial: 1
+  tasks:
+    # Check Ansible can connect to hosts
+    - include_tasks: tasks/check-ansible-user.yaml
+      tags: setup
 
-  - hosts: all
-    tasks:
-      - include_tasks: tasks/setup.yaml
-        tags: setup
+- hosts: all
+  tasks:
+    # Create Ansible users
+    - include_tasks: tasks/setup.yaml
+      tags: setup
 
 # Setup - Groups
 
 # Setup - Host Specific
-  - hosts: spacedock
-    tasks:
-      - name: prevent automatic kernel updates
-        dpkg_selections:
-          name: "{{ item }}"
-          selection: hold
-        loop:
-          - pve-kernel-5.4
-          - pve-kernel-helper
-          - pve-kernel-libc-dev
-        tags:
-          - kernel
-          - setup
+- hosts: spacedock
+  tasks:
+    # Prevent kernel updates as patch required to support IOMMU
+    - name: prevent automatic kernel updates
+      dpkg_selections:
+        name: "{{ item }}"
+        selection: hold
+      loop:
+        - pve-kernel-5.4
+        - pve-kernel-helper
+        - pve-kernel-libc-dev
+      tags:
+        - kernel
+        - setup
 
-  - hosts: memory_alpha
-    roles:
-      # Update kernel to HWE (5.8) to add support for Renesas USB controller
-      - role: alvistack.kernel
-        vars:
-          kernel_release: "mainline"
-        tags:
-          - kernel
-          - setup
+- hosts: memory_alpha
+  roles:
+    # Update kernel to HWE (5.8) to add support for Renesas USB controller
+    - role: alvistack.kernel
+      vars:
+        kernel_release: "mainline"
+      tags:
+        - kernel
+        - setup
 
 # Main - Common
-  - hosts: all
-    roles:
-      - role: exterrestris.ansible_users
-        vars:
-          users:
-            - "{{ main_user }}"
-        tags:
-          - users
-      - role: exterrestris.zsh
-        vars:
-          zsh_user: "{{ main_user.username }}"
-      - role: ssh_agent
-        vars:
-          user: "{{ main_user.username }}"
-          source_files:
-            - '.bashrc'
-            - '.zshrc.local.pre-p10k'
-    tasks:
-      - name: install common packages
-        package:
-          name: "{{ item.name }}"
-          state: present
-        with_items: "{{ common_packages }}"
-      - name: copy p10k config
-        copy:
-          src: "p10k.zsh"
-          dest: "/home/{{ main_user.username }}/.p10k.zsh"
-          owner: "{{ main_user.username }}"
-          group: "{{ main_user.username }}"
-          mode: '0644'
+- hosts: all
+  roles:
+    # Set up main user
+    - role: exterrestris.ansible_users
+      vars:
+        users:
+          - "{{ main_user }}"
+      tags:
+        - users
+
+    # Install/configure ZSH
+    - role: exterrestris.zsh
+      vars:
+        zsh_user: "{{ main_user.username }}"
+
+    # Run ssh-agent automatically on login
+    - role: ssh_agent
+      vars:
+        user: "{{ main_user.username }}"
+        source_files:
+          - '.bashrc'
+          - '.zshrc.local.pre-p10k'
+  
+  tasks:
+    # Install packages
+    - name: install common packages
+      package:
+        name: "{{ item.name }}"
+        state: present
+      with_items: "{{ common_packages }}"
+
+    # Install ZSH Powerlevel10k config
+    - name: copy p10k config
+      copy:
+        src: "p10k.zsh"
+        dest: "/home/{{ main_user.username }}/.p10k.zsh"
+        owner: "{{ main_user.username }}"
+        group: "{{ main_user.username }}"
+        mode: '0644'
 
 # Main - Groups
-  - hosts: proxmox_host
-    roles:
-      - role: ironicbadger.ansible_role_proxmox_nag_removal
-      - role: proxmox_host
-        tags: proxmox
-      - role: exterrestris.proxmox_ssl
-        tags: ssl
-        
-  - hosts: proxmox_vm
-    roles:
-      - role: proxmox_vm
+- hosts: proxmox_host
+  roles:
+    # Remove Proxmox 'unregisted' nag
+    - role: ironicbadger.ansible_role_proxmox_nag_removal
 
-  - hosts: nas
-    roles:
-      - role: exterrestris.ansible_users
-        vars:
-          groups_to_create: "{{ nas_groups }}"
-        tags:
-          - users
-      - role: mount_disks
-      - role: mrlesmithjr.zfs
-        tags:
-          - disks
-          - zfs
-      - role: sprat.ansible_role_mergerfs
-        tags:
-          - disks
-          - mergerfs
-      - role: bertvv.samba
-        vars:
-          samba_users:
-            - "{{ main_user_samba }}"
-        tags:
-          - samba
-      - role: geerlingguy.docker
-        tags:
-          - docker
-      - role: ironicbadger.ansible_role_snapraid
-        tags:
-          - snapraid
-      - role: linux-system-roles.cockpit
-        tags: cockpit
-      - role: weareinteractive.ufw
-        tags: firewall
-      - role: exterrestris.wsdd
-      - role: exterrestris.sanoid
-        tags: sanoid
-    tasks:
-      - name: additional groups for main user
-        user:
-          name: "{{ main_user.username }}"
-          groups: "{{ nas_groups | map(attribute='name') }}"
-          append: yes
-        tags:
-          - users
-      - name: remove zfs-auto-snapshot
-        block:
-          - name: remove package
-            package:
-              name: zfs-auto-snapshot
-              state: absent
-          - name: remove cron
-            file:
-              dest: /etc/cron.d/zfs-auto-snapshot
-              state: absent
-        tags: zfs
+    # Disable cluster services to prevent SSD wear
+    - role: proxmox_host
+      tags: proxmox
+
+    # Install SSL certificate
+    - role: exterrestris.proxmox_ssl
+      tags: ssl
+      
+- hosts: proxmox_vm
+  roles:
+    # Install qemu-guest-agent
+    - role: proxmox_vm
+
+- hosts: nas
+  roles:
+    # Set up groups needed for file permissions
+    - role: exterrestris.ansible_users
+      vars:
+        groups_to_create: "{{ nas_groups }}"
+      tags:
+        - users
+
+    # Mount ext4 disks
+    - role: mount_disks
+
+    # Install/configure ZFS pools
+    - role: mrlesmithjr.zfs
+      tags:
+        - disks
+        - zfs
+
+    # Install/configure mergerfs
+    - role: sprat.ansible_role_mergerfs
+      tags:
+        - disks
+        - mergerfs
+    
+    # Install/configure Samba shares/users
+    - role: bertvv.samba
+      vars:
+        samba_users:
+          - "{{ main_user_samba }}"
+      tags:
+        - samba
+
+    # Install Docker (needed by ironicbadger.ansible_role_snapraid)
+    - role: geerlingguy.docker
+      tags:
+        - docker
+
+    # Build and configure snapraid
+    - role: ironicbadger.ansible_role_snapraid
+      tags:
+        - snapraid
+    
+    # Install Cockpit UI
+    - role: linux-system-roles.cockpit
+      tags: cockpit
+    
+    # Configure firewall
+    - role: weareinteractive.ufw
+      tags: firewall
+
+    # Set up WSDD for network discovery
+    - role: exterrestris.wsdd
+
+    # Install/configure ZFS snapshots/replication using Sanoid
+    - role: exterrestris.sanoid
+      tags: sanoid
+  
+  tasks:
+    # Add main user to groups created
+    - name: additional groups for main user
+      user:
+        name: "{{ main_user.username }}"
+        groups: "{{ nas_groups | map(attribute='name') }}"
+        append: yes
+      tags:
+        - users
+
+    # Remove ZFS Auto Snapshot (installed by default)
+    - name: remove zfs-auto-snapshot
+      block:
+        - name: remove package
+          package:
+            name: zfs-auto-snapshot
+            state: absent
+        - name: remove cron
+          file:
+            dest: /etc/cron.d/zfs-auto-snapshot
+            state: absent
+      tags: zfs
 
 # Main - Host Specific
-  - hosts: spacedock
-    roles:
+- hosts: spacedock
+  roles:
 
-  - hosts: memory_alpha
-    roles:
-      - role: exterrestris.ansible_users
-        vars:
-          users:
-            - "{{ scans_user }}"
-          groups_to_create:
-            - name: "{{ scans_user.group }}"
-        tags:
-          - users
-      - role: bertvv.samba
-        vars:
-          samba_users:
-            - "{{ scans_user_samba }}"
-        tags: samba
-    tasks:
-      - name: additional groups for main user
-        user:
-          name: "{{ main_user.username }}"
-          groups: "{{ scans_user.group }}"
-          append: yes
-        tags:
-          - users
+- hosts: memory_alpha
+  roles:
+    # Create 'Scans' user
+    - role: exterrestris.ansible_users
+      vars:
+        users:
+          - "{{ scans_user }}"
+        groups_to_create:
+          - name: "{{ scans_user.group }}"
+      tags:
+        - users
 
-  - hosts: memory_beta
-    roles:
+    # Set up Samba user for 'Scans'
+    - role: bertvv.samba
+      vars:
+        samba_users:
+          - "{{ scans_user_samba }}"
+      tags: samba
+  tasks:
+    # Add 'Scans' role to main user
+    - name: additional groups for main user
+      user:
+        name: "{{ main_user.username }}"
+        groups: "{{ scans_user.group }}"
+        append: yes
+      tags:
+        - users
+
+- hosts: memory_beta
+  roles:

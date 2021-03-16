@@ -5,6 +5,7 @@
     ansible_become_user: "{{ main_user.username }}"
     ansible_become_password: "{{ vault_main_user_password }}"
   tasks:
+    # Verify this is a WSL environment
     - name: check is WSL
       assert:
         that:
@@ -16,11 +17,14 @@
     ansible_become_user: "{{ main_user.username }}"
     ansible_become_password: "{{ vault_main_user_password }}"
   tasks:
+    # Install packages
     - name: install common packages
       package:
         name: "{{ item.name }}"
         state: present
       with_items: "{{ common_packages }}"
+    
+    # Install ZSH Powerlevel10k config
     - name: copy p10k config
       copy:
         src: "p10k.zsh"
@@ -29,9 +33,12 @@
         group: "{{ main_user.username }}"
         mode: '0644'
   roles:
+    # Install/configure ZSH
     - role: exterrestris.zsh
       vars:
         zsh_user: "{{ main_user.username }}"
+    
+    # Run ssh-agent automatically on login
     - role: ssh_agent
       vars:
         user: "{{ main_user.username }}"
