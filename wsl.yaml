@@ -1,5 +1,9 @@
 ---
 - hosts: localhost
+  vars:
+    ansible_user: "{{ main_user.username }}"
+    ansible_become_user: "{{ main_user.username }}"
+    ansible_become_password: "{{ vault_main_user_password }}"
   tasks:
     - name: check is WSL
       assert:
@@ -7,6 +11,10 @@
           - "lookup('env', 'WSL_DISTRO_NAME')"
 
 - hosts: localhost
+  vars:
+    ansible_user: "{{ main_user.username }}"
+    ansible_become_user: "{{ main_user.username }}"
+    ansible_become_password: "{{ vault_main_user_password }}"
   tasks:
     - name: install common packages
       package:
