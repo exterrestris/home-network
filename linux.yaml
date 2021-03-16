@@ -51,6 +51,12 @@
       - role: exterrestris.zsh
         vars:
           zsh_user: "{{ main_user.username }}"
+      - role: ssh_agent
+        vars:
+          user: "{{ main_user.username }}"
+          source_files:
+            - '.bashrc'
+            - '.zshrc.local.pre-p10k'
     tasks:
       - name: install common packages
         package:
