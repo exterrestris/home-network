@@ -48,12 +48,28 @@
             - "{{ main_user }}"
         tags:
           - users
+      - role: exterrestris.zsh
+        vars:
+          zsh_user: "{{ main_user.username }}"
+      - role: ssh_agent
+        vars:
+          user: "{{ main_user.username }}"
+          source_files:
+            - '.bashrc'
+            - '.zshrc.local.pre-p10k'
     tasks:
       - name: install common packages
         package:
           name: "{{ item.name }}"
           state: present
         with_items: "{{ common_packages }}"
+      - name: copy p10k config
+        copy:
+          src: "p10k.zsh"
+          dest: "/home/{{ main_user.username }}/.p10k.zsh"
+          owner: "{{ main_user.username }}"
+          group: "{{ main_user.username }}"
+          mode: '0644'
 
 # Main - Groups
   - hosts: proxmox_host
