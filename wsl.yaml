@@ -5,6 +5,9 @@
       assert:
         that:
           - "lookup('env', 'WSL_DISTRO_NAME')"
+
+- hosts: localhost
+  tasks:
     - name: install common packages
       package:
         name: "{{ item.name }}"
