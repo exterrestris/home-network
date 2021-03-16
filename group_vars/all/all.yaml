@@ -17,6 +17,7 @@ common_packages:
   - name: ncdu
   - name: python3
   - name: python3-pip
+  - name: fzf
 
 internal_domain: "{{ vault_domain }}"
 
