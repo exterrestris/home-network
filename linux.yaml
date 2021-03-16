@@ -48,7 +48,7 @@
             - "{{ main_user }}"
         tags:
           - users
-      - role: viasite-ansible.zsh
+      - role: exterrestris.zsh
         vars:
           zsh_user: "{{ main_user.username }}"
     tasks:
