@@ -57,6 +57,7 @@
     - role: exterrestris.zsh
       vars:
         zsh_user: "{{ main_user.username }}"
+      tags: zsh
 
     # Run ssh-agent automatically on login
     - role: ssh_agent
@@ -73,6 +74,7 @@
         name: "{{ item.name }}"
         state: present
       with_items: "{{ common_packages }}"
+      tags: packages
 
     # Install ZSH Powerlevel10k config
     - name: copy p10k config
@@ -82,6 +84,7 @@
         owner: "{{ main_user.username }}"
         group: "{{ main_user.username }}"
         mode: '0644'
+      tags: zsh
 
 # Main - Groups
 - hosts: proxmox_host
