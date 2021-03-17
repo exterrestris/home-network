@@ -15,4 +15,4 @@ case $DISTRO in
         exit 1
 esac
 
-echo "Ansible installed"
+ansible --version
