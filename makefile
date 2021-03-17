@@ -10,6 +10,12 @@ wsl:
 setup-all:
 	ansible-playbook -b linux.yaml --tags "setup" --vault-password-file .vault-password
 
+update-spacedock update-memory-alpha update-memory-beta:
+	ansible-playbook -b linux.yaml --limit $(subst -,_,$(subst update-,,$@)) --skip-tags "setup" --vault-password-file .vault-password
+
+update-all:
+	ansible-playbook -b linux.yaml --tags "updates" --vault-password-file .vault-password
+
 install-requirements:
 	ansible-galaxy role install -r requirements.yaml
 	ansible-galaxy collection install -r requirements.yaml

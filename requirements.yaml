@@ -38,3 +38,5 @@ roles:
   - name: exterrestris.zsh
     src: https://github.com/exterrestris/ansible-role-zsh
     version: powerlevel10k
+  - name: robertdebock.update
+  - name: robertdebock.reboot
