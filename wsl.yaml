@@ -33,6 +33,16 @@
         group: "{{ main_user.username }}"
         mode: '0644'
   roles:
+    # Install any available package updates
+    - role: robertdebock.update
+      vars:
+        update_reboot: no
+      tags: updates
+
+    # Reboot if necessary
+    - role: robertdebock.reboot
+      tags: updates
+
     # Install/configure ZSH
     - role: exterrestris.zsh
       vars:
