@@ -45,10 +45,13 @@
 # Main - Common
 - hosts: all
   roles:
+    # Install any available package updates
     - role: robertdebock.update
       vars:
         update_reboot: no
       tags: updates
+
+    # Reboot if necessary
     - role: robertdebock.reboot
       tags: updates
 
