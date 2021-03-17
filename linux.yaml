@@ -42,6 +42,12 @@
 # Main - Common
   - hosts: all
     roles:
+      - role: robertdebock.update
+        vars:
+          update_reboot: no
+        tags: updates
+      - role: robertdebock.reboot
+        tags: updates
       - role: exterrestris.ansible_users
         vars:
           users:
