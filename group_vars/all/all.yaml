@@ -23,8 +23,11 @@ internal_domain: "{{ vault_domain }}"
 
 ### viasite-ansible.zsh
 zsh_antigen_theme: "romkatv/powerlevel10k powerlevel10k"
+
 zsh_powerlevel10k_instant_prompt: yes
+
 zsh_powerlevel_custom_elements:
+
 zsh_antigen_bundles:
   - { name: command-not-found }
   - { name: docker, command: docker }
@@ -48,12 +51,15 @@ zsh_antigen_bundles:
   - urbainvaes/fzf-marks
   - ytet5uy4/fzf-widgets
   - { name: zdharma/fast-syntax-highlighting@v1.2 }
+
 zsh_editor: nano
+
 zsh_aliases:
   - alias: 'lsdisk'
     action: 'lsblk --output NAME,UUID,LABEL,FSTYPE,MOUNTPOINT,SIZE,FSAVAIL'
   - alias: 'dfused'
     action: 'df -h -x tmpfs -t zfs -t fuse.mergerfs -t xfs -t ext4 -t btrfs --output=target,source,fstype,size,used,avail,pcent | (read -r; printf "%s\n" "$REPLY"; sort)'
+
 zsh_path:
   - "{{ zsh_fzf_path }}"
   - /usr/local/sbin
