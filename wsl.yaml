@@ -1,9 +1,7 @@
 ---
 - hosts: localhost
-  vars:
-    ansible_user: "{{ main_user.username }}"
-    ansible_become_user: "{{ main_user.username }}"
-    ansible_become_password: "{{ vault_main_user_password }}"
+  connection: local
+  become: no
   tasks:
     # Verify this is a WSL environment
     - name: check is WSL
@@ -12,10 +10,9 @@
           - "lookup('env', 'WSL_DISTRO_NAME')"
 
 - hosts: localhost
-  vars:
-    ansible_user: "{{ main_user.username }}"
-    ansible_become_user: "{{ main_user.username }}"
-    ansible_become_password: "{{ vault_main_user_password }}"
+  become: yes
+  gather_facts: no
+  connection: local
   tasks:
     # Install packages
     - name: install common packages

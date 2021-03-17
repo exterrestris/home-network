@@ -5,7 +5,7 @@ test-machines holosuite-1 holosuite-2:
 	ansible-playbook -b linux.yaml --limit $(subst -,_,$@) --skip-tags "setup" --vault-password-file .vault-password
 
 wsl:
-	ansible-playbook -b wsl.yaml --connection=local --inventory "localhost," --vault-password-file .vault-password
+	ansible-playbook -b wsl.yaml --inventory "localhost," --vault-password-file .vault-password
 
 setup-all:
 	ansible-playbook -b linux.yaml --tags "setup" --vault-password-file .vault-password
