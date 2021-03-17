@@ -54,3 +54,12 @@ zsh_aliases:
     action: 'lsblk --output NAME,UUID,LABEL,FSTYPE,MOUNTPOINT,SIZE,FSAVAIL'
   - alias: 'dfused'
     action: 'df -h -x tmpfs -t zfs -t fuse.mergerfs -t xfs -t ext4 -t btrfs --output=target,source,fstype,size,used,avail,pcent | (read -r; printf "%s\n" "$REPLY"; sort)'
+zsh_path:
+  - "{{ zsh_fzf_path }}"
+  - /usr/local/sbin
+  - /usr/local/bin
+  - $HOME/.local/bin
+  - /usr/sbin
+  - /usr/bin
+  - /sbin
+  - /bin
