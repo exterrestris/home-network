@@ -1,18 +1,5 @@
 ---
 # Setup - Common
-- hosts: all
-  gather_facts: no
-  serial: 1
-  tasks:
-    # Check Ansible can connect to hosts
-    - include_tasks: tasks/check-ansible-user.yaml
-      tags: setup
-
-- hosts: all
-  tasks:
-    # Create Ansible users
-    - include_tasks: tasks/setup.yaml
-      tags: setup
 
 # Setup - Groups
 
@@ -119,6 +106,17 @@
     # Install qemu-guest-agent
     - role: proxmox_vm
 
+- hosts: zfs
+  roles:
+    # Install/configure ZFS pools
+    - role: mrlesmithjr.zfs
+      tags:
+        - disks
+        - zfs
+    # Install/configure ZFS snapshots/replication using Sanoid
+    - role: exterrestris.sanoid
+      tags: sanoid
+
 - hosts: docker
   roles:
     # Install Docker
@@ -137,12 +135,6 @@
 
     # Mount ext4 disks
     - role: mount_disks
-
-    # Install/configure ZFS pools
-    - role: mrlesmithjr.zfs
-      tags:
-        - disks
-        - zfs
 
     # Install/configure mergerfs
     - role: sprat.ansible_role_mergerfs
@@ -179,10 +171,6 @@
     # Set up WSDD for network discovery
     - role: exterrestris.wsdd
 
-    # Install/configure ZFS snapshots/replication using Sanoid
-    - role: exterrestris.sanoid
-      tags: sanoid
-  
   tasks:
     # Add main user to groups created
     - name: additional groups for main user
@@ -192,19 +180,6 @@
         append: yes
       tags:
         - users
-
-    # Remove ZFS Auto Snapshot (installed by default)
-    - name: remove zfs-auto-snapshot
-      block:
-        - name: remove package
-          package:
-            name: zfs-auto-snapshot
-            state: absent
-        - name: remove cron
-          file:
-            dest: /etc/cron.d/zfs-auto-snapshot
-            state: absent
-      tags: zfs
 
 # Main - Host Specific
 - hosts: spacedock

@@ -1,0 +1,53 @@
+# Bootstrap host not in inventory
+- hosts: localhost
+  gather_facts: no
+  tasks:
+    - pause:
+          prompt: IP address to bootstrap
+          echo: yes
+      register: target_host
+      tags: bootstrap-new
+    - add_host:
+        name: "{{ target_host.user_input }}"
+        groups: setup
+      tags: bootstrap-new
+
+# Bootstrap all hosts in inventory
+- hosts: localhost
+  gather_facts: no
+  tasks:
+    - add_host:
+        name: '{{ item }}'
+        groups: setup
+      loop: "{{ groups.all }}"
+      tags: bootstrap-all
+
+# Check Ansible can connect
+- hosts: setup
+  gather_facts: no
+  serial: 1
+  tasks:
+    - include_tasks: tasks/check-ansible-user.yaml
+      tags:
+        - bootstrap-new
+        - bootstrap-all
+
+# Standard bootstrap
+- hosts: setup
+  tasks:
+    - include_tasks: tasks/setup.yaml
+      tags:
+        - bootstrap-new
+        - bootstrap-all
+
+# Additional new host tasks
+- hosts: setup
+  tasks:
+    - pause:
+          prompt: Desired hostname
+          echo: yes
+      register: hostname
+      tags: bootstrap-new
+    - ansible.builtin.hostname:
+        name: "{{ hostname.user_input }}"
+      tags: bootstrap-new

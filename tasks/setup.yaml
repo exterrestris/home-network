@@ -2,12 +2,16 @@
   package:
     name: sudo
     state: present
-  tags: setup
+  tags:
+    - bootstrap-new
+    - bootstrap-all
 
 - name: create ansible group
   group:
     name: "{{ vault_ansible_user_group }}"
-  tags: setup
+  tags:
+    - bootstrap-new
+    - bootstrap-all
 
 - name: create ansible user
   user:
@@ -15,10 +19,14 @@
     group: "{{ vault_ansible_user_group }}"
     groups: "sudo"
     password: "{{ vault_ansible_password | password_hash('sha512', 65534 | random(seed=inventory_hostname) | string) }}"
-  tags: setup
+  tags:
+    - bootstrap-new
+    - bootstrap-all
 
 - name: add SSH authorized_keys from github
   authorized_key:
     user: "{{ vault_ansible_user }}"
     key: "https://github.com/{{ vault_ansible_user_github_user }}.keys"
-  tags: setup
+  tags:
+    - bootstrap-new
+    - bootstrap-all
