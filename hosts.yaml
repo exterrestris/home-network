@@ -19,6 +19,7 @@ all:
       hosts:
         memory_beta:
         holosuite_2:
+        argus_array:
     test_machines:
       hosts:
         holosuite_1:
