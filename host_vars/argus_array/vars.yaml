@@ -13,7 +13,12 @@ zfs_pools:
     type: 'basic'
     state: 'present'
 
-zfs_filesystems: []
+zfs_filesystems:
+  - name: appdata
+    pool: data1
+    compression: lz4
+    mountpoint: /mnt/appdata
+    state: present
 
 ### exterrestris.sanoid
 sanoid_datasets: []

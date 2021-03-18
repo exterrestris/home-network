@@ -64,6 +64,11 @@ zfs_filesystems:
     compression: lz4
     mountpoint: /mnt/zfs/resources
     state: present
+  - name: appdata
+    pool: pool2
+    compression: lz4
+    mountpoint: /mnt/zfs/appdata
+    state: present
 
 ### exterrestris.sanoid
 sanoid_datasets:
