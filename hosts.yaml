@@ -4,6 +4,9 @@ all:
     ansible_password: "{{ vault_ansible_password }}"
     ansible_become_password: "{{ vault_ansible_password }}"
   children:
+    zfs:
+      hosts:
+        argus_array:
     nas:
       hosts:
         memory_alpha:
