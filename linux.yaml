@@ -49,11 +49,15 @@
     - role: robertdebock.update
       vars:
         update_reboot: no
-      tags: updates
+      tags:
+        - updates
+        - setup
 
     # Reboot if necessary
     - role: robertdebock.reboot
-      tags: updates
+      tags:
+        - updates
+        - setup
 
     # Set up main user
     - role: exterrestris.ansible_users
