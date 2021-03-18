@@ -8,4 +8,4 @@
     mode: '0644'
     marker: "# {mark} ANSIBLE MANAGED BLOCK - SSH Agent"
     create: yes
-  with_items: "{{ source_files }}"
+  with_items: "{{ ssh_agent_source_files }}"
