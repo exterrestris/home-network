@@ -3,6 +3,7 @@
 collections:
   - ansible.posix
   - community.general
+  - pfsensible.core
 
 # Required Galaxy Roles
 roles:
