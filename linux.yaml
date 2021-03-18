@@ -119,6 +119,13 @@
     # Install qemu-guest-agent
     - role: proxmox_vm
 
+- hosts: docker
+  roles:
+    # Install Docker
+    - role: geerlingguy.docker
+      tags:
+        - docker
+
 - hosts: nas
   roles:
     # Set up groups needed for file permissions
