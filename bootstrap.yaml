@@ -10,6 +10,7 @@
     - add_host:
         name: "{{ target_host.user_input }}"
         groups: setup
+      changed_when: False
 
 # Bootstrap all hosts in inventory
 - hosts: localhost
