@@ -2,6 +2,7 @@
 ### mrlesmithjr.zfs
 zfs_create_pools: true
 zfs_create_filesystems: true
+zfs_enable_auto_snapshots: false
 
 ### exterrestris.sanoid
 sanoid_templates:

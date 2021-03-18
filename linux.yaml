@@ -116,19 +116,6 @@
     # Install/configure ZFS snapshots/replication using Sanoid
     - role: exterrestris.sanoid
       tags: sanoid
-  tasks:    
-    # Remove ZFS Auto Snapshot (installed by default)
-    - name: remove zfs-auto-snapshot
-      block:
-        - name: remove package
-          package:
-            name: zfs-auto-snapshot
-            state: absent
-        - name: remove cron
-          file:
-            dest: /etc/cron.d/zfs-auto-snapshot
-            state: absent
-      tags: zfs
 
 - hosts: nas
   roles:
