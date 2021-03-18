@@ -6,10 +6,6 @@ nas_groups:
   - name: downloads
   - name: resources
 
-### mrlesmithjr.zfs
-zfs_create_pools: true
-zfs_create_filesystems: true
-
 ### mount_disks
 btrfs_data_opts: compress=zstd
 ntfs_opts: nls=utf8,umask=0022,uid=1000
@@ -57,28 +53,3 @@ cockpit_packages:
   - cockpit-storaged
   - cockpit-dashboard
   - cockpit-doc
-
-### exterrestris.sanoid
-sanoid_templates:
-  - name: local
-    autoprune: 'yes'
-    frequently: 0
-    hourly: 0
-    daily: 28
-    weekly: 6
-    monthly: 6
-    yearly: 0
-    autosnap: 'yes'
-  - name: backups
-    autoprune: 'yes'
-    frequently: 0
-    hourly: 0
-    daily: 14
-    weekly: 12
-    monthly: 18
-    yearly: 0
-    autosnap: 'no'
-  - name: ignore
-    autoprune: 'no'
-    autosnap: 'no'
-    monitor: 'no'

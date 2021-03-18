@@ -7,10 +7,11 @@ all:
     zfs:
       hosts:
         argus_array:
-    nas:
-      hosts:
-        memory_alpha:
-        memory_beta:
+      children:
+        nas:
+          hosts:
+            memory_alpha:
+            memory_beta:
     proxmox_host:
       hosts:
         spacedock:
