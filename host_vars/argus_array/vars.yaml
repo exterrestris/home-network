@@ -1,3 +1,19 @@
 ---
 ansible_host: 192.168.5.149
 target_os: ubuntu
+
+### mrlesmithjr.zfs
+zfs_pools:
+  - name: data1
+    action: 'create'
+    compression: 'lz4'
+    devices:
+      # Partition on main disk
+      - '31535139-61d4-429d-bd1a-93d9c4f07868'
+    type: 'basic'
+    state: 'present'
+
+zfs_filesystems: []
+
+### exterrestris.sanoid
+sanoid_datasets: []
