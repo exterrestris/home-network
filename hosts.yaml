@@ -15,6 +15,9 @@ all:
       hosts:
         memory_alpha:
         holosuite_1:
+    docker:
+      hosts:
+        memory_alpha:
     raspberry_pi:
       hosts:
         memory_beta:
