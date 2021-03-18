@@ -7,6 +7,9 @@ test-machines holosuite-1 holosuite-2:
 wsl:
 	ansible-playbook -b wsl.yaml --inventory "localhost," --vault-password-file .vault-password
 
+bootstrap-new:
+	ansible-playbook -b bootstrap.yaml --tags "bootstrap-new" --vault-password-file .vault-password
+
 bootstrap-all:
 	ansible-playbook -b bootstrap.yaml --tags "bootstrap-all" --vault-password-file .vault-password
 

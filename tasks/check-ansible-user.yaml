@@ -6,6 +6,7 @@
   become: false
   changed_when: False
   tags:
+    - bootstrap-new
     - bootstrap-all
 
 - name: collect credentials
@@ -29,4 +30,5 @@
         ansible_become_password: "{{ password_result.user_input }}"
   when: remote.failed
   tags:
+    - bootstrap-new
     - bootstrap-all

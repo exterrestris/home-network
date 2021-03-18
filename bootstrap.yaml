@@ -1,3 +1,17 @@
+# Bootstrap host not in inventory
+- hosts: localhost
+  gather_facts: no
+  tasks:
+    - pause:
+          prompt: IP address to bootstrap
+          echo: yes
+      register: target_host
+      tags: bootstrap-new
+    - add_host:
+        name: "{{ target_host.user_input }}"
+        groups: setup
+      tags: bootstrap-new
+
 # Bootstrap all hosts in inventory
 - hosts: localhost
   gather_facts: no
@@ -15,6 +29,7 @@
   tasks:
     - include_tasks: tasks/check-ansible-user.yaml
       tags:
+        - bootstrap-new
         - bootstrap-all
 
 # Standard bootstrap
@@ -22,4 +37,5 @@
   tasks:
     - include_tasks: tasks/setup.yaml
       tags:
+        - bootstrap-new
         - bootstrap-all
