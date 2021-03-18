@@ -22,6 +22,7 @@ all:
     docker:
       hosts:
         memory_alpha:
+        argus_array:
     raspberry_pi:
       hosts:
         memory_beta:
