@@ -4,8 +4,8 @@
   tags: bootstrap-new
   tasks:
     - pause:
-          prompt: IP address to bootstrap
-          echo: yes
+        prompt: IP address to bootstrap
+        echo: yes
       register: target_host
     - add_host:
         name: "{{ target_host.user_input }}"
@@ -44,8 +44,8 @@
   tags: bootstrap-new
   tasks:
     - pause:
-          prompt: "Desired hostname (Current: {{ ansible_hostname }})"
-          echo: yes
+        prompt: "Desired hostname (Current: {{ ansible_hostname }})"
+        echo: yes
       register: hostname
     - ansible.builtin.hostname:
         name: "{{ hostname.user_input }}"
