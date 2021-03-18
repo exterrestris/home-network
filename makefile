@@ -7,7 +7,11 @@ test-machines holosuite-1 holosuite-2:
 wsl:
 	ansible-playbook -b wsl.yaml --inventory "localhost," --vault-password-file .vault-password
 
-setup-all:
+bootstrap-all:
+	ansible-playbook -b bootstrap.yaml --tags "bootstrap-all" --vault-password-file .vault-password
+
+full-bootstrap-all:
+	ansible-playbook -b bootstrap.yaml --tags "bootstrap-all" --vault-password-file .vault-password
 	ansible-playbook -b linux.yaml --tags "setup" --vault-password-file .vault-password
 
 update-spacedock update-memory-alpha update-memory-beta:

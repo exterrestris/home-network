@@ -5,7 +5,8 @@
   ignore_errors: yes
   become: false
   changed_when: False
-  tags: setup
+  tags:
+    - bootstrap-all
 
 - name: collect credentials
   block:
@@ -27,4 +28,5 @@
         ansible_password: "{{ password_result.user_input }}"
         ansible_become_password: "{{ password_result.user_input }}"
   when: remote.failed
-  tags: setup
+  tags:
+    - bootstrap-all

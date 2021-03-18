@@ -1,0 +1,25 @@
+# Bootstrap all hosts in inventory
+- hosts: localhost
+  gather_facts: no
+  tasks:
+    - add_host:
+        name: '{{ item }}'
+        groups: setup
+      loop: "{{ groups.all }}"
+      tags: bootstrap-all
+
+# Check Ansible can connect
+- hosts: setup
+  gather_facts: no
+  serial: 1
+  tasks:
+    - include_tasks: tasks/check-ansible-user.yaml
+      tags:
+        - bootstrap-all
+
+# Standard bootstrap
+- hosts: setup
+  tasks:
+    - include_tasks: tasks/setup.yaml
+      tags:
+        - bootstrap-all

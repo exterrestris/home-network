@@ -1,18 +1,5 @@
 ---
 # Setup - Common
-- hosts: all
-  gather_facts: no
-  serial: 1
-  tasks:
-    # Check Ansible can connect to hosts
-    - include_tasks: tasks/check-ansible-user.yaml
-      tags: setup
-
-- hosts: all
-  tasks:
-    # Create Ansible users
-    - include_tasks: tasks/setup.yaml
-      tags: setup
 
 # Setup - Groups
 
