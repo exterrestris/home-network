@@ -12,6 +12,9 @@ all:
           hosts:
             memory_alpha:
             memory_beta:
+    pfsense:
+      hosts:
+        midas_array:
     proxmox_host:
       hosts:
         spacedock:
