@@ -4,10 +4,14 @@ all:
     ansible_password: "{{ vault_ansible_password }}"
     ansible_become_password: "{{ vault_ansible_password }}"
   children:
-    nas:
+    zfs:
       hosts:
-        memory_alpha:
-        memory_beta:
+        argus_array:
+      children:
+        nas:
+          hosts:
+            memory_alpha:
+            memory_beta:
     proxmox_host:
       hosts:
         spacedock:
@@ -19,6 +23,7 @@ all:
       hosts:
         memory_beta:
         holosuite_2:
+        argus_array:
     test_machines:
       hosts:
         holosuite_1:
