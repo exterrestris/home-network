@@ -49,3 +49,4 @@
       register: hostname
     - ansible.builtin.hostname:
         name: "{{ hostname.user_input }}"
+      when: hostname.user_input != ''
