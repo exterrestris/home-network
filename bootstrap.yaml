@@ -39,3 +39,15 @@
       tags:
         - bootstrap-new
         - bootstrap-all
+
+# Additional new host tasks
+- hosts: setup
+  tasks:
+    - pause:
+          prompt: Desired hostname
+          echo: yes
+      register: hostname
+      tags: bootstrap-new
+    - ansible.builtin.hostname:
+        name: "{{ hostname.user_input }}"
+      tags: bootstrap-new
