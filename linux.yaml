@@ -136,6 +136,11 @@
       tags:
         - docker
 
+- import_playbook: playbooks/docker_swarm.yaml
+  vars:
+    docker_swarm_iface: eth0
+  tags: docker
+
 - hosts: nas
   roles:
     # Set up groups needed for file permissions
