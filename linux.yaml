@@ -141,6 +141,42 @@
     docker_swarm_iface: eth0
   tags: docker
 
+- hosts: swarm_manager[0]
+  pre_tasks:
+    - name: Create Docker traefik/apps network
+      docker_network:
+        name: traefik
+        driver: overlay
+  roles:
+    - role: docker-stack
+      vars:
+        docker_stack_networks:
+          traefik:
+            driver: overlay
+            external: 'true'
+        docker_stack_services:
+          traefik:
+            image: traefik:v2.2
+            commands:
+              - --api
+            volumes:
+              - 
+            dns:
+            networks:
+              - traefik
+            ports:
+              - 80:80
+              - 443:443
+            deploy:
+              placement:
+                constraints:
+                  - node.hostname == argus-array
+              labels:
+
+            
+          
+  tags: docker
+
 - hosts: nas
   roles:
     # Set up groups needed for file permissions
