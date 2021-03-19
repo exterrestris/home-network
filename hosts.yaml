@@ -20,9 +20,15 @@ all:
         memory_alpha:
         holosuite_1:
     docker:
-      hosts:
-        memory_alpha:
-        argus_array:
+      children:
+        docker_swarm:
+          children:
+            swarm_manager:
+              hosts:
+                argus_array:
+            swarm_worker:
+              hosts:
+                memory_alpha:
     raspberry_pi:
       hosts:
         memory_beta:
