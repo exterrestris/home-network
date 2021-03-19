@@ -121,6 +121,10 @@
     - role: linux-system-roles.cockpit
       tags: cockpit
 
+    # Install Cockpit ZFS Manager
+    - role: cockpit_zfs
+      tags: cockpit
+
 - hosts: nas
   roles:
     # Set up groups needed for file permissions

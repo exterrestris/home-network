@@ -1,0 +1,32 @@
+---
+- name: create temp directory
+  file:
+    dest: "{{ cockpit_zfs_download_dir }}"
+    state: directory
+
+- block:
+  - name: set request version
+    set_fact:
+      cockpit_zfs_version: HEAD
+  when: cockpit_zfs_version == "latest"
+
+- name: clone repo
+  git:
+    repo: "{{ cockpit_zfs_github_url }}"
+    dest: "{{ cockpit_zfs_download_dir }}"
+    version: "{{ cockpit_zfs_version }}"
+    update: yes
+    force: yes
+
+- name: copy module
+  copy:
+    src: "{{ cockpit_zfs_download_dir }}/zfs"
+    dest: /usr/share/cockpit
+    remote_src: yes
+    mode: '0755'
+  become: true
+
+- name: remove temp directory
+  file:
+    dest: "{{ cockpit_zfs_download_dir }}"
+    state: absent
