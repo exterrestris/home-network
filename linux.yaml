@@ -117,6 +117,10 @@
     - role: exterrestris.sanoid
       tags: sanoid
 
+    # Install Cockpit UI
+    - role: linux-system-roles.cockpit
+      tags: cockpit
+
 - hosts: nas
   roles:
     # Set up groups needed for file permissions
@@ -152,10 +156,6 @@
     - role: ironicbadger.ansible_role_snapraid
       tags:
         - snapraid
-    
-    # Install Cockpit UI
-    - role: linux-system-roles.cockpit
-      tags: cockpit
     
     # Configure firewall
     - role: weareinteractive.ufw
