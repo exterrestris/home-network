@@ -1,6 +1,17 @@
+--- 
+- name: configure variables
+  block:
+    - set_fact:
+        sudo_package: pfSense-pkg-sudo
+        sudo_group: wheel
+      when: ansible_distribution == 'FreeBSD' and 'pfSense' in ansible_kernel_version
+  tags:
+    - bootstrap-new
+    - bootstrap-all
+
 - name: install sudo
   package:
-    name: sudo
+    name: "{{ sudo_package | default('sudo') }}"
     state: present
   tags:
     - bootstrap-new
@@ -17,7 +28,7 @@
   user:
     name: "{{ vault_ansible_user }}"
     group: "{{ vault_ansible_user_group }}"
-    groups: "sudo"
+    groups: "{{ sudo_group | default('sudo') }}"
     password: "{{ vault_ansible_password | password_hash('sha512', 65534 | random(seed=inventory_hostname) | string) }}"
   tags:
     - bootstrap-new
