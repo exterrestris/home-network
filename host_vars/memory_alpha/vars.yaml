@@ -11,6 +11,8 @@ scans_user_samba:
   name: Scans
   password: "{{ vault_scans_user_password }}"
 
+appdata_path: /mnt/zfs/appdata
+
 ### mrlesmithjr.zfs
 zfs_pools:
   - name: pool1
@@ -67,7 +69,7 @@ zfs_filesystems:
   - name: appdata
     pool: pool2
     compression: lz4
-    mountpoint: /mnt/zfs/appdata
+    mountpoint: "{{ appdata_path }}"
     state: present
 
 ### exterrestris.sanoid

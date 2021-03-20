@@ -2,6 +2,8 @@
 ansible_host: 192.168.5.149
 target_os: ubuntu
 
+appdata_path: /mnt/appdata
+
 ### mrlesmithjr.zfs
 zfs_pools:
   - name: data1
@@ -17,7 +19,7 @@ zfs_filesystems:
   - name: appdata
     pool: data1
     compression: lz4
-    mountpoint: /mnt/appdata
+    mountpoint: "{{ appdata_path }}"
     state: present
 
 ### exterrestris.sanoid
