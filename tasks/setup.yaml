@@ -4,6 +4,7 @@
     - set_fact:
         sudo_package: pfSense-pkg-sudo
         sudo_group: wheel
+        sudoers: /usr/local/etc/sudoers
       when: ansible_distribution == 'FreeBSD' and 'pfSense' in ansible_kernel_version
   tags:
     - bootstrap-new
@@ -13,6 +14,18 @@
   package:
     name: "{{ sudo_package | default('sudo') }}"
     state: present
+  tags:
+    - bootstrap-new
+    - bootstrap-all
+
+- name: ensure sudo group in sudoers
+  lineinfile:
+    dest: "{{ sudoers | default('/etc/sudoers') }}"
+    state: present
+    regexp: "^%{{ sudo_group | default('sudo') }}"
+    insertbefore: '^#includedir'
+    line: "%{{ sudo_group | default('sudo') }} ALL=(ALL) ALL"
+    validate: visudo -cf %s
   tags:
     - bootstrap-new
     - bootstrap-all

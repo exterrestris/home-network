@@ -32,6 +32,19 @@
   tasks:
     - include_tasks: tasks/check-ansible-user.yaml
 
+# Verify Python path
+- hosts: setup
+  gather_facts: no
+  tags: bootstrap-new
+  tasks:
+    - pause:
+        prompt: "Path to Python executable (Current: auto detect)"
+        echo: yes
+      register: python
+    - set_fact:
+        ansible_python_interpreter: "{{ python.user_input }}"
+      when: python.user_input != ''
+
 # Standard bootstrap
 - hosts: setup
   tags:
