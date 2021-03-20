@@ -124,6 +124,15 @@
       tags:
         - docker
 
+    # Install PIP
+    - role: geerlingguy.pip
+      vars:
+        pip_install_packages:
+          - name: docker
+          - name: docker-compose
+      tags:
+        - docker
+
 - hosts: nas
   roles:
     # Set up groups needed for file permissions

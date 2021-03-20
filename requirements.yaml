@@ -25,6 +25,7 @@ roles:
     src: https://github.com/sprat/ansible-role-mergerfs
   - name: weareinteractive.ufw
   - name: geerlingguy.docker
+  - name: geerlingguy.pip
   - name: ironicbadger.ansible_role_snapraid
     # Using own fork until PRs merged:
     # - https://github.com/IronicBadger/ansible-role-snapraid/pull/5
