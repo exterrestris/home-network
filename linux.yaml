@@ -135,6 +135,19 @@
       tags:
         - docker
 
+- hosts: traefik
+  roles:
+    - role: exterrestris.traefik
+      tags:
+        - docker
+        - traefik
+
+    # Install SSL certificate
+    - role: exterrestris.fetch_ssl
+      tags:
+        - docker
+        - traefik
+
 - hosts: nas
   roles:
     # Set up groups needed for file permissions
