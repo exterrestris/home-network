@@ -64,9 +64,11 @@
     - role: ssh_agent
       vars:
         user: "{{ main_user.username }}"
-        source_files:
+        ssh_agent_source_files:
           - '.bashrc'
           - '.zshrc.local.pre-p10k'
+        ssh_agent_keys:
+          - ~/.ssh/id_ed25519
   
   tasks:
     # Install packages

@@ -7,6 +7,9 @@ main_user:
   groups:
     - 'sudo'
   github_username: exterrestris
+  generate_ssh_key: yes
+  generate_ssh_key_type: ed25519
+  generate_ssh_key_file: .ssh/id_ed25519
 
 main_user_samba:
   name: Sean
