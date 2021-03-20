@@ -42,3 +42,7 @@ roles:
     version: powerlevel10k
   - name: robertdebock.update
   - name: robertdebock.reboot
+  - name: exterrestris.traefik
+    src: https://github.com/exterrestris/ansible-role-traefik
+  - name: exterrestris.fetch_ssl
+    src: https://github.com/exterrestris/ansible-role-fetch-ssl
