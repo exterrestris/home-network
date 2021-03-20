@@ -3,6 +3,7 @@
 collections:
   - ansible.posix
   - community.general
+  - community.docker
 
 # Required Galaxy Roles
 roles:
