@@ -23,9 +23,11 @@ all:
         memory_alpha:
         holosuite_1:
     docker:
-      hosts:
-        memory_alpha:
-        argus_array:
+      children:
+        traefik:
+          hosts:
+            memory_alpha:
+            argus_array:
     raspberry_pi:
       hosts:
         memory_beta:
