@@ -1,0 +1,4 @@
+---
+### geerlingguy.docker
+docker_users:
+  - "{{ main_user.username }}"

@@ -12,6 +12,9 @@ all:
           hosts:
             memory_alpha:
             memory_beta:
+    pfsense:
+      hosts:
+        midas_array:
     proxmox_host:
       hosts:
         spacedock:
@@ -19,6 +22,12 @@ all:
       hosts:
         memory_alpha:
         holosuite_1:
+    docker:
+      children:
+        traefik:
+          hosts:
+            memory_alpha:
+            argus_array:
     raspberry_pi:
       hosts:
         memory_beta:

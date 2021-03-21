@@ -3,6 +3,7 @@
 collections:
   - ansible.posix
   - community.general
+  - community.docker
 
 # Required Galaxy Roles
 roles:
@@ -25,6 +26,7 @@ roles:
     src: https://github.com/sprat/ansible-role-mergerfs
   - name: weareinteractive.ufw
   - name: geerlingguy.docker
+  - name: geerlingguy.pip
   - name: ironicbadger.ansible_role_snapraid
     src: https://github.com/IronicBadger/ansible-role-snapraid
   - name: alvistack.kernel
@@ -36,3 +38,7 @@ roles:
     version: powerlevel10k
   - name: robertdebock.update
   - name: robertdebock.reboot
+  - name: exterrestris.traefik
+    src: https://github.com/exterrestris/ansible-role-traefik
+  - name: exterrestris.fetch_ssl
+    src: https://github.com/exterrestris/ansible-role-fetch-ssl

@@ -127,6 +127,35 @@
     - role: cockpit_zfs
       tags: cockpit
 
+- hosts: docker
+  roles:
+    # Install Docker
+    - role: geerlingguy.docker
+      tags:
+        - docker
+
+    # Install PIP
+    - role: geerlingguy.pip
+      vars:
+        pip_install_packages:
+          - name: docker
+          - name: docker-compose
+      tags:
+        - docker
+
+- hosts: traefik
+  roles:
+    - role: exterrestris.traefik
+      tags:
+        - docker
+        - traefik
+
+    # Install SSL certificate
+    - role: exterrestris.fetch_ssl
+      tags:
+        - docker
+        - traefik
+
 - hosts: nas
   roles:
     # Set up groups needed for file permissions
