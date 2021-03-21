@@ -1,7 +1,7 @@
 ---
 ### exterrestris.traefik
 traefik_config_dir: "{{ appdata_path }}/traefik"
-traefik_insecure_api: true
+traefik_dashboard_domain: "traefik.{{ ansible_hostname }}.{{ internal_domain }}"
 traefik_tls_certificates:
   - cert: "/etc/traefik/{{ internal_domain }}-wildcard.cert"
     key: "/etc/traefik/{{ internal_domain }}-wildcard.key"
