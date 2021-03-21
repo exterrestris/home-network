@@ -119,41 +119,6 @@
     - role: exterrestris.sanoid
       tags: sanoid
 
-- hosts: docker
-  roles:
-    # Install Docker
-    - role: geerlingguy.docker
-      tags:
-        - docker
-
-    # Install PIP
-    - role: geerlingguy.pip
-      vars:
-        pip_install_packages:
-          - name: docker
-          - name: docker-compose
-      tags:
-        - docker
-
-    # Generate Docker Compose
-    - role: exterrestris.docker_compose
-      tags:
-        - docker
-        - docker-compose
-
-- hosts: traefik
-  roles:
-    - role: exterrestris.traefik
-      tags:
-        - docker
-        - traefik
-
-    # Install SSL certificate
-    - role: exterrestris.fetch_ssl
-      tags:
-        - docker
-        - traefik
-
 - hosts: nas
   roles:
     # Set up groups needed for file permissions
@@ -210,6 +175,41 @@
         append: yes
       tags:
         - users
+
+- hosts: docker
+  roles:
+    # Install Docker
+    - role: geerlingguy.docker
+      tags:
+        - docker
+
+    # Install PIP
+    - role: geerlingguy.pip
+      vars:
+        pip_install_packages:
+          - name: docker
+          - name: docker-compose
+      tags:
+        - docker
+
+    # Generate Docker Compose
+    - role: exterrestris.docker_compose
+      tags:
+        - docker
+        - docker-compose
+
+- hosts: traefik
+  roles:
+    - role: exterrestris.traefik
+      tags:
+        - docker
+        - traefik
+
+    # Install SSL certificate
+    - role: exterrestris.fetch_ssl
+      tags:
+        - docker
+        - traefik
 
 # Main - Host Specific
 - hosts: spacedock
