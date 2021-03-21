@@ -3,8 +3,9 @@
 traefik_config_dir: "{{ appdata_path }}/traefik"
 traefik_insecure_api: true
 traefik_tls_certificates:
-  - cert: "{{ appdata_path }}/traefik/{{ internal_domain }}-wildcard.cert"
-    key: "{{ appdata_path }}/traefik/{{ internal_domain }}-wildcard.key"
+  - cert: "/etc/traefik/{{ internal_domain }}-wildcard.cert"
+    key: "/etc/traefik/{{ internal_domain }}-wildcard.key"
+    default: yes
 
 ### exterrestris.fetch_ssl
 fetch_ssl_ssh_host: "midas-array.{{ internal_domain }}"
