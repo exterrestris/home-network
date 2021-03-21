@@ -135,6 +135,12 @@
       tags:
         - docker
 
+    # Generate Docker Compose
+    - role: exterrestris.docker_compose
+      tags:
+        - docker
+        - docker-compose
+
 - hosts: traefik
   roles:
     - role: exterrestris.traefik

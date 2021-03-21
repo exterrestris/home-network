@@ -46,3 +46,5 @@ roles:
     src: https://github.com/exterrestris/ansible-role-traefik
   - name: exterrestris.fetch_ssl
     src: https://github.com/exterrestris/ansible-role-fetch-ssl
+  - name: exterrestris.docker_compose
+    src: https://github.com/exterrestris/ansible-role-docker-compose
