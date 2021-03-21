@@ -213,3 +213,45 @@ samba_shares:
 
 ### ironicbadger.ansible_role_snapraid
 snapraid_email_address: "memory-alpha@{{ internal_domain }}"
+
+### exterrestris.docker_compose
+docker_compose_project_dir: "{{ appdata_path }}/docker"
+
+docker_compose_containers:
+  - service_name: jellyfin
+    image: linuxserver/jellyfin
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - source: "{{ appdata_path }}/jellyfin"
+        target: /config
+      - "/mnt/storage/Media:/data/media"
+    expose:
+      - 8096
+    ports:
+      - port: 7359
+        protocol: udp        
+      - port: 1900
+        protocol: udp
+    restart: unless-stopped
+    networks:
+      - "{{ traefik_docker_network }}"
+    labels:
+      - "traefik.enable=true"
+      ## Router
+      - "traefik.http.routers.jellyfin.entryPoints=https"
+      - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.{{ internal_domain }}`)" # OPTIONAL: && PathPrefix(`/jellyfin`)
+      - "traefik.http.routers.jellyfin.tls=true"
+#      ## Middleware
+      - "traefik.http.routers.jellyfin.middlewares=jellyfin-mw"
+      - "traefik.http.middlewares.jellyfin-mw.headers.customResponseHeaders.X-Robots-Tag=noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex"
+      - "traefik.http.middlewares.jellyfin-mw.headers.frameDeny=true"
+      - "traefik.http.middlewares.jellyfin-mw.headers.contentTypeNosniff=true"
+      - "traefik.http.middlewares.jellyfin-mw.headers.browserXSSFilter=true"
+      - "traefik.http.middlewares.jellyfin-mw.headers.customFrameOptionsValue='allow-from https://jellyfin.{{ internal_domain }}'"
+#      ## Service
+      - "traefik.http.services.jellyfin-svc.loadBalancer.server.port=8096"
+      - "traefik.http.services.jellyfin-svc.loadbalancer.server.scheme=http"
+      - "traefik.http.services.jellyfin-svc.loadBalancer.passHostHeader=true"
