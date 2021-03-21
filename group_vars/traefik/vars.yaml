@@ -5,14 +5,23 @@ traefik_insecure_api: true
 traefik_tls_certificates:
   - cert: "/etc/traefik/{{ internal_domain }}-wildcard.cert"
     key: "/etc/traefik/{{ internal_domain }}-wildcard.key"
+  - cert: "/etc/traefik/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.cert"
+    key: "/etc/traefik/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.key"
     default: yes
 
 ### exterrestris.fetch_ssl
 fetch_ssl_ssh_host: "midas-array.{{ internal_domain }}"
 fetch_ssl_ssh_user: admin
-fetch_ssl_ssh_cert_path: "/conf/acme/{{ internal_domain }}-wildcard.fullchain"
-fetch_ssl_ssh_key_path: "/conf/acme/{{ internal_domain }}-wildcard.key"
+fetch_ssl_certs:
+  - cert: "/conf/acme/{{ internal_domain }}-wildcard.fullchain"
+    key: "/conf/acme/{{ internal_domain }}-wildcard.key"
+    install_to:
+      - cert: "{{ appdata_path }}/traefik/{{ internal_domain }}-wildcard.cert"
+        key: "{{ appdata_path }}/traefik/{{ internal_domain }}-wildcard.key"
+  - cert: "/conf/acme/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.fullchain"
+    key: "/conf/acme/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.key"
+    install_to:
+      - cert: "{{ appdata_path }}/traefik/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.cert"
+        key: "{{ appdata_path }}/traefik/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.key"
+
 fetch_ssl_run_now: yes
-fetch_ssl_install_to:
-  - cert: "{{ appdata_path }}/traefik/{{ internal_domain }}-wildcard.cert"
-    key: "{{ appdata_path }}/traefik/{{ internal_domain }}-wildcard.key"
