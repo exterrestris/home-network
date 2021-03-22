@@ -272,7 +272,26 @@ docker_compose_files:
             group: "jellyfin"
             user: "jellyfin"
             mode: "755"
-          - "/mnt/storage/Media:/data/media"
+          - source: /mnt/storage/Media/Shows
+            target: /media/shows
+            group: media
+            mode: "g+rx"
+          - source: /mnt/storage/Media/Movies
+            target: /media/movies
+            group: media
+            mode: "g+rx"
+          - source: /mnt/storage/Media/Music
+            target: /media/music
+            group: media
+            mode: "g+rx"
+          - source: /mnt/storage/Media/Reactions
+            target: /media/reactions
+            group: media
+            mode: "g+rx"
+          - source: /mnt/transient/DVR
+            target: /media/dvr
+            group: media
+            mode: "g+rwx"
         network_mode: "host"
         restart: unless-stopped
         labels:
