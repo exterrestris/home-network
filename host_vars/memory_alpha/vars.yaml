@@ -260,8 +260,8 @@ docker_compose_files:
           - "traefik.http.routers.jellyfin.entryPoints=https"
           - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.{{ internal_domain }}`)" # OPTIONAL: && PathPrefix(`/jellyfin`)
           - "traefik.http.routers.jellyfin.tls=true"
-          ## Middleware
           - "traefik.http.routers.jellyfin.middlewares=jellyfin-mw"
+          ## Middleware
           - "traefik.http.middlewares.jellyfin-mw.headers.customResponseHeaders.X-Robots-Tag=noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex"
           - "traefik.http.middlewares.jellyfin-mw.headers.frameDeny=true"
           - "traefik.http.middlewares.jellyfin-mw.headers.contentTypeNosniff=true"
