@@ -161,6 +161,8 @@
     
     # Configure firewall
     - role: weareinteractive.ufw
+      vars:
+        ufw_rules: "{{ nas_ufw_rules }}"
       tags: firewall
 
     # Set up WSDD for network discovery
@@ -205,6 +207,13 @@
         - docker
         - traefik
       when: "'traefik' in group_names"
+    
+    # Configure firewall
+    - role: weareinteractive.ufw
+      vars:
+        ufw_rules: "{{ docker_ufw_rules }}"
+      tags:
+        - docker-firewall
 
     # Install SSL certificate
     - role: exterrestris.fetch_ssl
