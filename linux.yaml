@@ -165,6 +165,8 @@
     
     # Configure firewall
     - role: weareinteractive.ufw
+      vars:
+        ufw_rules: "{{ nas_ufw_rules }}"
       tags: firewall
 
     # Set up WSDD for network discovery
@@ -179,6 +181,56 @@
         append: yes
       tags:
         - users
+
+- hosts: docker
+  roles:
+    # Install Docker
+    - role: geerlingguy.docker
+      tags:
+        - docker
+
+    # Install PIP
+    - role: geerlingguy.pip
+      vars:
+        pip_install_packages:
+          - name: docker
+          - name: docker-compose
+      tags:
+        - docker
+
+    # Set up users specific to containers
+    - role: exterrestris.ansible_users
+      vars:
+        users: "{{ container_users }}"
+      tags:
+        - docker
+        - container-users
+
+    - role: exterrestris.traefik
+      tags:
+        - docker
+        - traefik
+      when: "'traefik' in group_names"
+    
+    # Configure firewall
+    - role: weareinteractive.ufw
+      vars:
+        ufw_rules: "{{ docker_ufw_rules }}"
+      tags:
+        - docker-firewall
+
+    # Install SSL certificate
+    - role: exterrestris.fetch_ssl
+      tags:
+        - docker
+        - traefik
+      when: "'traefik' in group_names"
+
+    # Generate Docker Compose
+    - role: exterrestris.docker_compose
+      tags:
+        - docker
+        - docker-compose
 
 # Main - Host Specific
 - hosts: spacedock

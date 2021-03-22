@@ -11,6 +11,8 @@ scans_user_samba:
   name: Scans
   password: "{{ vault_scans_user_password }}"
 
+appdata_path: /mnt/zfs/appdata
+
 ### mrlesmithjr.zfs
 zfs_pools:
   - name: pool1
@@ -63,6 +65,11 @@ zfs_filesystems:
     pool: pool2
     compression: lz4
     mountpoint: /mnt/zfs/resources
+    state: present
+  - name: appdata
+    pool: pool2
+    compression: lz4
+    mountpoint: "{{ appdata_path }}"
     state: present
 
 ### exterrestris.sanoid
@@ -206,3 +213,87 @@ samba_shares:
 
 ### ironicbadger.ansible_role_snapraid
 snapraid_email_address: "memory-alpha@{{ internal_domain }}"
+
+## exterrestris.users
+container_users:
+  - username: jellyfin
+    groups:
+      - media
+    uid: 200
+    gid: 200
+    shell: /usr/sbin/nologin
+    home: /nonexistent
+    createhome: no
+
+### exterrestris.traefik
+traefik_services:
+  - name: jellyfin-svc
+    type: http
+    servers:
+      - "http://jellyfin.{{ internal_domain }}:8096"
+
+### weareinteractive.ufw
+docker_ufw_rules:
+  # Traefik proxy
+  - rule: allow
+    to_port: 8096
+    proto: tcp
+    interface_in: "{{ traefik_docker_network_bridge_name }}"
+  # DLNA
+  - rule: allow
+    to_port: 1900
+    proto: udp
+  - rule: allow
+    proto: igmp
+  # Jellyfin Server Discovery
+  - rule: allow
+    to_port: 7359
+    proto: udp
+  # HDHomeRun
+  - rule: allow
+    from_ip: 192.168.5.162
+    proto: udp
+
+### exterrestris.docker_compose
+docker_compose_files:
+  - project_dir: "{{ appdata_path }}/media"
+    containers:
+      - service_name: jellyfin
+        image:
+          name: linuxserver/jellyfin
+          tag: bionic
+        environment:
+          - PUID=200
+          - PGID=200
+          - TZ=Europe/London
+        volumes:
+          - source: "{{ appdata_path }}/media/jellyfin"
+            target: /config
+            group: "jellyfin"
+            user: "jellyfin"
+            mode: "755"
+          - "/mnt/storage/Media:/data/media"
+        network_mode: "host"
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=true"
+          ## Router
+          - "traefik.http.routers.jellyfin.entryPoints=https"
+          - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.{{ internal_domain }}`)" # OPTIONAL: && PathPrefix(`/jellyfin`)
+          - "traefik.http.routers.jellyfin.tls=true"
+          - "traefik.http.routers.jellyfin.middlewares=jellyfin-mw"
+          - "traefik.http.routers.jellyfin.service=jellyfin-svc@file"
+          ## Middleware
+          - "traefik.http.middlewares.jellyfin-mw.headers.customResponseHeaders.X-Robots-Tag=noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex"
+          - "traefik.http.middlewares.jellyfin-mw.headers.frameDeny=true"
+          - "traefik.http.middlewares.jellyfin-mw.headers.contentTypeNosniff=true"
+          - "traefik.http.middlewares.jellyfin-mw.headers.browserXSSFilter=true"
+          - "traefik.http.middlewares.jellyfin-mw.headers.customFrameOptionsValue='allow-from https://jellyfin.{{ internal_domain }}'"
+          ## Service
+          - "traefik.http.services.jellyfin-svc.loadBalancer.server.port=8096"
+          - "traefik.http.services.jellyfin-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.jellyfin-svc.loadBalancer.passHostHeader=true"
+    networks:
+      - name: media
+        external: true
+        alias: "{{ traefik_docker_network }}"
