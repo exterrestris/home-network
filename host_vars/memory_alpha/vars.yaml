@@ -259,7 +259,9 @@ docker_compose_files:
   - project_dir: "{{ appdata_path }}/media"
     containers:
       - service_name: jellyfin
-        image: linuxserver/jellyfin
+        image:
+          name: linuxserver/jellyfin
+          tag: bionic
         environment:
           - PUID=200
           - PGID=200
