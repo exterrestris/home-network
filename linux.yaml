@@ -198,6 +198,9 @@
 
     # Set up WSDD for network discovery
     - role: exterrestris.wsdd
+      tags:
+        - wsdd
+        - samba
 
   tasks:
     # Add main user to groups created
