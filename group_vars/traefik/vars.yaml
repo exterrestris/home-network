@@ -1,4 +1,6 @@
 ---
+traefik_docker_network_bridge_name: br-traefik0
+
 ### exterrestris.traefik
 traefik_config_dir: "{{ appdata_path }}/traefik"
 traefik_dashboard_domain: "traefik.{{ ansible_hostname }}.{{ internal_domain }}"
@@ -8,6 +10,11 @@ traefik_tls_certificates:
   - cert: "/etc/traefik/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.cert"
     key: "/etc/traefik/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.key"
     default: yes
+traefik_docker_network: traefik
+traefik_docker_network_driver_options:
+  com.docker.network.bridge.name: "{{ traefik_docker_network_bridge_name }}"
+
+### exterrestris.docker_compose
 
 ### exterrestris.fetch_ssl
 fetch_ssl_ssh_host: "midas-array.{{ internal_domain }}"

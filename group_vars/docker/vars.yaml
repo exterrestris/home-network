@@ -2,3 +2,6 @@
 ### geerlingguy.docker
 docker_users:
   - "{{ main_user.username }}"
+
+### weareinteractive.ufw
+docker_ufw_rules: []
