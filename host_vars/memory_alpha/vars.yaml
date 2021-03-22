@@ -214,6 +214,17 @@ samba_shares:
 ### ironicbadger.ansible_role_snapraid
 snapraid_email_address: "memory-alpha@{{ internal_domain }}"
 
+## exterrestris.users
+container_users:
+  - username: jellyfin
+    groups:
+      - media
+    uid: 200
+    gid: 200
+    shell: /usr/sbin/nologin
+    home: /nonexistent
+    createhome: no
+
 ### exterrestris.docker_compose
 docker_compose_files:
   - project_dir: "{{ appdata_path }}/media"
@@ -221,12 +232,15 @@ docker_compose_files:
       - service_name: jellyfin
         image: linuxserver/jellyfin
         environment:
-          - PUID=1000
-          - PGID=1000
+          - PUID=200
+          - PGID=200
           - TZ=Europe/London
         volumes:
           - source: "{{ appdata_path }}/media/jellyfin"
             target: /config
+            group: "jellyfin"
+            user: "jellyfin"
+            mode: "755"
           - "/mnt/storage/Media:/data/media"
         expose:
           - 8096

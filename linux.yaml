@@ -192,6 +192,14 @@
       tags:
         - docker
 
+    # Set up users specific to containers
+    - role: exterrestris.ansible_users
+      vars:
+        users: "{{ container_users }}"
+      tags:
+        - docker
+        - container-users
+
     # Generate Docker Compose
     - role: exterrestris.docker_compose
       tags:
