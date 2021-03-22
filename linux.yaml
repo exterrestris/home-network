@@ -200,24 +200,24 @@
         - docker
         - container-users
 
-    # Generate Docker Compose
-    - role: exterrestris.docker_compose
-      tags:
-        - docker
-        - docker-compose
-
-- hosts: traefik
-  roles:
     - role: exterrestris.traefik
       tags:
         - docker
         - traefik
+      when: "'traefik' in group_names"
 
     # Install SSL certificate
     - role: exterrestris.fetch_ssl
       tags:
         - docker
         - traefik
+      when: "'traefik' in group_names"
+
+    # Generate Docker Compose
+    - role: exterrestris.docker_compose
+      tags:
+        - docker
+        - docker-compose
 
 # Main - Host Specific
 - hosts: spacedock
