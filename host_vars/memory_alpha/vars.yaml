@@ -225,6 +225,13 @@ container_users:
     home: /nonexistent
     createhome: no
 
+### exterrestris.traefik
+traefik_services:
+  - name: jellyfin-svc
+    type: http
+    servers:
+      - "http://jellyfin.{{ internal_domain }}:8096"
+
 ### exterrestris.docker_compose
 docker_compose_files:
   - project_dir: "{{ appdata_path }}/media"
@@ -242,18 +249,8 @@ docker_compose_files:
             user: "jellyfin"
             mode: "755"
           - "/mnt/storage/Media:/data/media"
-        expose:
-          - 8096
-        ports:
-          # Jellyfin Server Discovery
-          - port: 7359
-            protocol: udp
-          # DLNA
-          - port: 1900
-            protocol: udp
+        network_mode: "host"
         restart: unless-stopped
-        networks:
-          - media
         labels:
           - "traefik.enable=true"
           ## Router
@@ -261,6 +258,7 @@ docker_compose_files:
           - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.{{ internal_domain }}`)" # OPTIONAL: && PathPrefix(`/jellyfin`)
           - "traefik.http.routers.jellyfin.tls=true"
           - "traefik.http.routers.jellyfin.middlewares=jellyfin-mw"
+          - "traefik.http.routers.jellyfin.service=jellyfin-svc@file"
           ## Middleware
           - "traefik.http.middlewares.jellyfin-mw.headers.customResponseHeaders.X-Robots-Tag=noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex"
           - "traefik.http.middlewares.jellyfin-mw.headers.frameDeny=true"
