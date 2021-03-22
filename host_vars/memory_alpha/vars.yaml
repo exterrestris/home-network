@@ -231,13 +231,15 @@ docker_compose_files:
         expose:
           - 8096
         ports:
+          # Jellyfin Server Discovery
           - port: 7359
             protocol: udp
+          # DLNA
           - port: 1900
             protocol: udp
         restart: unless-stopped
         networks:
-          - "{{ traefik_docker_network }}"
+          - media
         labels:
           - "traefik.enable=true"
           ## Router
@@ -255,3 +257,7 @@ docker_compose_files:
           - "traefik.http.services.jellyfin-svc.loadBalancer.server.port=8096"
           - "traefik.http.services.jellyfin-svc.loadbalancer.server.scheme=http"
           - "traefik.http.services.jellyfin-svc.loadBalancer.passHostHeader=true"
+    networks:
+      - name: media
+        external: true
+        alias: "{{ traefik_docker_network }}"

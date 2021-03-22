@@ -11,10 +11,6 @@ traefik_tls_certificates:
 traefik_docker_network: traefik
 
 ### exterrestris.docker_compose
-docker_compose_networks:
-  - name: "{{ traefik_docker_network }}"
-    external: true
-    alias: "{{ traefik_docker_network }}"
 
 ### exterrestris.fetch_ssl
 fetch_ssl_ssh_host: "midas-array.{{ internal_domain }}"
