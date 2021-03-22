@@ -232,6 +232,28 @@ traefik_services:
     servers:
       - "http://jellyfin.{{ internal_domain }}:8096"
 
+### weareinteractive.ufw
+docker_ufw_rules:
+  # Traefik proxy
+  - rule: allow
+    to_port: 8096
+    proto: tcp
+    interface_in: "{{ traefik_docker_network_bridge_name }}"
+  # DLNA
+  - rule: allow
+    to_port: 1900
+    proto: udp
+  - rule: allow
+    proto: igmp
+  # Jellyfin Server Discovery
+  - rule: allow
+    to_port: 7359
+    proto: udp
+  # HDHomeRun
+  - rule: allow
+    from_ip: 192.168.5.162
+    proto: udp
+
 ### exterrestris.docker_compose
 docker_compose_files:
   - project_dir: "{{ appdata_path }}/media"
