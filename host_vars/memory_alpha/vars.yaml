@@ -262,7 +262,7 @@ docker_ufw_rules:
     proto: udp
 
 ### exterrestris.docker_compose
-docker_compose_files:
+docker_compose_projects:
   - project_dir: "{{ appdata_path }}/media"
     containers:
       - service_name: jellyfin
