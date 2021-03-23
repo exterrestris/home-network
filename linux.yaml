@@ -197,6 +197,7 @@
       vars:
         ufw_rules: "{{ docker_ufw_rules }}"
       tags:
+        - firewall
         - docker-firewall
     # Install SSL certificate
     - role: exterrestris.fetch_ssl
