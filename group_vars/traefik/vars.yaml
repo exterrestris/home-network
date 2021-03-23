@@ -53,12 +53,12 @@ fetch_ssl_certs:
   - cert: "/conf/acme/{{ internal_domain }}-wildcard.fullchain"
     key: "/conf/acme/{{ internal_domain }}-wildcard.key"
     install_to:
-      - cert: "{{ appdata_path }}/traefik/{{ internal_domain }}-wildcard.cert"
-        key: "{{ appdata_path }}/traefik/{{ internal_domain }}-wildcard.key"
+      - cert: "{{ traefik_config_dir }}/{{ internal_domain }}-wildcard.cert"
+        key: "{{ traefik_config_dir }}/{{ internal_domain }}-wildcard.key"
   - cert: "/conf/acme/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.fullchain"
     key: "/conf/acme/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.key"
     install_to:
-      - cert: "{{ appdata_path }}/traefik/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.cert"
-        key: "{{ appdata_path }}/traefik/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.key"
+      - cert: "{{ traefik_config_dir }}/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.cert"
+        key: "{{ traefik_config_dir }}/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.key"
 
 fetch_ssl_run_now: yes
