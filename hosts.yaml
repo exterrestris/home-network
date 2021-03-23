@@ -20,6 +20,13 @@ all:
     pfsense:
       hosts:
         midas_array:
+    ubuntu:
+      hosts:
+        memory_alpha:
+        memory_beta:
+        argus_array:
+        holosuite_1:
+        holosuite_2:
     linux:
       children:
         # Roles
