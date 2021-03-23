@@ -2,6 +2,7 @@
 traefik_docker_network_bridge_name: br-traefik0
 
 ### exterrestris.traefik
+traefik_log_enabled: yes
 traefik_config_dir: "{{ appdata_path }}/traefik"
 traefik_dashboard_domain: "traefik.{{ ansible_hostname }}.{{ internal_domain }}"
 traefik_tls_certificates:
