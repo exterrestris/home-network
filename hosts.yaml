@@ -11,6 +11,7 @@ all:
     proxmox_vm:
       hosts:
         memory_alpha:
+        epsilon_ix:
         holosuite_1:
     raspberry_pi:
       hosts:
