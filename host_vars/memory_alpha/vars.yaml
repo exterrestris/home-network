@@ -86,6 +86,8 @@ sanoid_datasets:
     templates: local
   - name: pool2/resources
     templates: ignore
+  - name: pool2/appdata
+    templates: frequent
 
 syncoid_syncs:
   - src: pool1/backups
@@ -99,6 +101,9 @@ syncoid_syncs:
     dest_host: "memory-beta.{{ internal_domain }}"
   - src: pool1/archive
     dest: backup1/archive
+    dest_host: "memory-beta.{{ internal_domain }}"
+  - src: pool2/appdata
+    dest: backup1/backups/memory-alpha/appdata
     dest_host: "memory-beta.{{ internal_domain }}"
 
 ### mount_disks

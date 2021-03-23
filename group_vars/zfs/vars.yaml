@@ -15,10 +15,19 @@ sanoid_templates:
     monthly: 6
     yearly: 0
     autosnap: 'yes'
+  - name: frequent
+    autoprune: 'yes'
+    frequently: 24
+    hourly: 48
+    daily: 28
+    weekly: 6
+    monthly: 6
+    yearly: 0
+    autosnap: 'yes'
   - name: backups
     autoprune: 'yes'
-    frequently: 0
-    hourly: 0
+    frequently: 6
+    hourly: 24
     daily: 14
     weekly: 12
     monthly: 18
