@@ -72,6 +72,9 @@
           - '.zshrc.local.pre-p10k'
         ssh_agent_keys:
           - ~/.ssh/id_ed25519
+    # Install Cockpit UI
+    - role: linux-system-roles.cockpit
+      tags: cockpit
   tasks:
     # Install ZSH Powerlevel10k config
     - name: copy p10k config
@@ -110,9 +113,6 @@
     # Install/configure ZFS snapshots/replication using Sanoid
     - role: exterrestris.sanoid
       tags: sanoid
-    # Install Cockpit UI
-    - role: linux-system-roles.cockpit
-      tags: cockpit
     # Install Cockpit ZFS Manager
     - role: cockpit_zfs
       tags: cockpit
