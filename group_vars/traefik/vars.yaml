@@ -15,6 +15,22 @@ traefik_docker_network: traefik
 traefik_docker_network_driver_options:
   com.docker.network.bridge.name: "{{ traefik_docker_network_bridge_name }}"
 
+cockpit_traefik_service:
+  name: cockpit-svc
+  type: http
+  servers:
+    - "http://{{ ansible_hostname }}.{{ internal_domain }}:9090"
+
+cockpit_traefik_router:
+  name: cockpit
+  service: "cockpit-svc@file"
+  rule: "Host(`cockpit.{{ ansible_hostname }}.{{ internal_domain }}`)"
+
+traefik_routers:
+  - "{{ cockpit_traefik_router }}"
+traefik_services:
+  - "{{ cockpit_traefik_service }}"
+
 ### exterrestris.docker_compose
 
 ### exterrestris.fetch_ssl

@@ -227,6 +227,7 @@ container_users:
 
 ### exterrestris.traefik
 traefik_services:
+  - "{{ cockpit_traefik_service }}"
   - name: jellyfin-svc
     type: http
     servers:
