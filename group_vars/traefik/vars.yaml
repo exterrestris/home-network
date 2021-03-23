@@ -31,6 +31,19 @@ traefik_routers:
 traefik_services:
   - "{{ cockpit_traefik_service }}"
 
+### weareinteractive.ufw
+cockpit_traefik_ufw_rules:
+  - rule: allow
+    to_port: 9090
+    proto: tcp
+    delete: yes
+  - rule: allow
+    to_port: 9090
+    proto: tcp
+    interface_in: "{{ traefik_docker_network_bridge_name }}"
+docker_ufw_rules:
+  - "{{ cockpit_traefik_ufw_rules }}"
+
 ### exterrestris.docker_compose
 
 ### exterrestris.fetch_ssl
