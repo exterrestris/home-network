@@ -74,3 +74,12 @@ zsh_path:
   - /usr/bin
   - /sbin
   - /bin
+
+### weareinteractive.ufw
+common_ufw_rules:
+  - rule: allow
+    name: OpenSSH
+    # Cockpit
+  - rule: allow
+    to_port: 9090
+    proto: tcp

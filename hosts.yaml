@@ -4,17 +4,7 @@ all:
     ansible_password: "{{ vault_ansible_password }}"
     ansible_become_password: "{{ vault_ansible_password }}"
   children:
-    zfs:
-      hosts:
-        argus_array:
-      children:
-        nas:
-          hosts:
-            memory_alpha:
-            memory_beta:
-    pfsense:
-      hosts:
-        midas_array:
+    # Type
     proxmox_host:
       hosts:
         spacedock:
@@ -22,18 +12,32 @@ all:
       hosts:
         memory_alpha:
         holosuite_1:
-    docker:
-      children:
-        traefik:
-          hosts:
-            memory_alpha:
-            argus_array:
     raspberry_pi:
       hosts:
         memory_beta:
         holosuite_2:
         argus_array:
-    test_machines:
+    pfsense:
       hosts:
-        holosuite_1:
-        holosuite_2:
+        midas_array:
+    linux:
+      children:
+        # Roles
+        zfs:
+          hosts:
+            argus_array:
+          children:
+            nas:
+              hosts:
+                memory_alpha:
+                memory_beta:
+        docker:
+          children:
+            traefik:
+              hosts:
+                memory_alpha:
+                argus_array:
+        test_machines:
+          hosts:
+            holosuite_1:
+            holosuite_2:
