@@ -187,7 +187,8 @@
       vars:
         users: "{{ container_users }}"
       tags:
-        - container-users
+        - container-users    
+    # Install Traefik
     - role: exterrestris.traefik
       tags:
         - traefik
