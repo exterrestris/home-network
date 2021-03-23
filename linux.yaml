@@ -197,6 +197,7 @@
       vars:
         ufw_rules: "{{ docker_ufw_rules }}"
       tags:
+        - firewall
         - docker-firewall
     # Install SSL certificate
     - role: exterrestris.fetch_ssl
@@ -207,6 +208,16 @@
     - role: exterrestris.docker_compose
       tags:
         - docker-compose
+  tasks:
+    - name: configure Cockpit to allow proxying
+      template:
+        src: cockpit.conf.j2
+        dest: "/etc/cockpit/cockpit.conf"
+      vars:
+        domain: "cockpit.{{ ansible_hostname }}.{{ internal_domain }}"
+      when: "'traefik' in group_names"
+      tags:
+        - traefik
   tags:
     - docker
 

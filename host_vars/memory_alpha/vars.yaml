@@ -227,6 +227,7 @@ container_users:
 
 ### exterrestris.traefik
 traefik_services:
+  - "{{ cockpit_traefik_service }}"
   - name: jellyfin-svc
     type: http
     servers:
@@ -234,6 +235,7 @@ traefik_services:
 
 ### weareinteractive.ufw
 docker_ufw_rules:
+  - "{{ cockpit_traefik_ufw_rules }}"
   # Traefik proxy
   - rule: allow
     to_port: 8096
