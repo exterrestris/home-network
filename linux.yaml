@@ -15,9 +15,9 @@
         - pve-kernel-5.4
         - pve-kernel-helper
         - pve-kernel-libc-dev
-      tags:
-        - kernel
-        - setup
+  tags:
+    - kernel
+    - setup
 
 - hosts: memory_alpha
   roles:
@@ -25,9 +25,9 @@
     - role: alvistack.kernel
       vars:
         kernel_release: "mainline"
-      tags:
-        - kernel
-        - setup
+  tags:
+    - kernel
+    - setup
 
 # Main - Common
 - hosts: all
@@ -189,29 +189,21 @@
   roles:
     # Install Docker
     - role: geerlingguy.docker
-      tags:
-        - docker
-
     # Install PIP
     - role: geerlingguy.pip
       vars:
         pip_install_packages:
           - name: docker
           - name: docker-compose
-      tags:
-        - docker
-
     # Set up users specific to containers
     - role: exterrestris.ansible_users
       vars:
         users: "{{ container_users }}"
       tags:
-        - docker
         - container-users
 
     - role: exterrestris.traefik
       tags:
-        - docker
         - traefik
       when: "'traefik' in group_names"
     
@@ -225,15 +217,15 @@
     # Install SSL certificate
     - role: exterrestris.fetch_ssl
       tags:
-        - docker
         - traefik
       when: "'traefik' in group_names"
 
     # Generate Docker Compose
     - role: exterrestris.docker_compose
       tags:
-        - docker
         - docker-compose
+  tags:
+    - docker
 
 # Main - Host Specific
 - hosts: memory_alpha
