@@ -236,9 +236,6 @@
         - docker-compose
 
 # Main - Host Specific
-- hosts: spacedock
-  roles:
-
 - hosts: memory_alpha
   roles:
     # Create 'Scans' user
@@ -266,6 +263,3 @@
         append: yes
       tags:
         - users
-
-- hosts: memory_beta
-  roles:
