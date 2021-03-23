@@ -1,7 +1,15 @@
 ---
+traefik_docker_network_bridge_name: br-traefik0
+
 ### geerlingguy.docker
 docker_users:
   - "{{ main_user.username }}"
 
 ### weareinteractive.ufw
 docker_ufw_rules: []
+
+### exterrestris.traefik
+traefik_config_dir: "{{ appdata_path }}/traefik"
+traefik_docker_network: traefik
+traefik_docker_network_driver_options:
+  com.docker.network.bridge.name: "{{ traefik_docker_network_bridge_name }}"
