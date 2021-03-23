@@ -14,15 +14,20 @@ zfs_pools:
     type: 'mirror'
     state: 'present'
 
-zfs_filesystems: []
+zfs_filesystems:
+  - name: backups
+    pool: backup1
+    compression: lz4
+    mountpoint: /mnt/zfs/backups
+    state: present
 
 ### exterrestris.sanoid
 sanoid_datasets:
-  - name: backup1/backups
+  - name: backup1/backups/memory-alpha
     templates: backups
-  - name: backup1/backups/computers
+  - name: backup1/backups/memory-alpha/computers
     templates: backups
-  - name: backup1/backups/drives
+  - name: backup1/backups/memory-alpha/drives
     templates: backups
   - name: backup1/archive
     templates: backups
