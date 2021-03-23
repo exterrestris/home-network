@@ -1,8 +1,4 @@
 ---
-# Setup - Common
-
-# Setup - Groups
-
 # Setup - Host Specific
 - hosts: spacedock
   tasks:
@@ -39,13 +35,11 @@
       tags:
         - updates
         - setup
-
     # Reboot if necessary
     - role: robertdebock.reboot
       tags:
         - updates
         - setup
-
     # Set up main user
     - role: exterrestris.ansible_users
       vars:
@@ -53,13 +47,11 @@
           - "{{ main_user }}"
       tags:
         - users
-
     # Install/configure ZSH
     - role: exterrestris.zsh
       vars:
         zsh_user: "{{ main_user.username }}"
       tags: zsh
-
     # Run ssh-agent automatically on login
     - role: ssh_agent
       vars:
@@ -69,7 +61,6 @@
           - '.zshrc.local.pre-p10k'
         ssh_agent_keys:
           - ~/.ssh/id_ed25519
-  
   tasks:
     # Install packages
     - name: install common packages
@@ -78,7 +69,6 @@
         state: present
       with_items: "{{ common_packages }}"
       tags: packages
-
     # Install ZSH Powerlevel10k config
     - name: copy p10k config
       copy:
@@ -94,11 +84,9 @@
   roles:
     # Remove Proxmox 'unregisted' nag
     - role: ironicbadger.ansible_role_proxmox_nag_removal
-
     # Disable cluster services to prevent SSD wear
     - role: proxmox_host
       tags: proxmox
-
     # Install SSL certificate
     - role: exterrestris.proxmox_ssl
       tags: ssl
@@ -118,11 +106,9 @@
     # Install/configure ZFS snapshots/replication using Sanoid
     - role: exterrestris.sanoid
       tags: sanoid
-
     # Install Cockpit UI
     - role: linux-system-roles.cockpit
       tags: cockpit
-
     # Install Cockpit ZFS Manager
     - role: cockpit_zfs
       tags: cockpit
@@ -135,16 +121,13 @@
         groups_to_create: "{{ nas_groups }}"
       tags:
         - users
-
     # Mount ext4 disks
     - role: mount_disks
-
     # Install/configure mergerfs
     - role: sprat.ansible_role_mergerfs
       tags:
         - disks
         - mergerfs
-    
     # Install/configure Samba shares/users
     - role: bertvv.samba
       vars:
@@ -152,29 +135,24 @@
           - "{{ main_user_samba }}"
       tags:
         - samba
-
     # Install Docker (needed by ironicbadger.ansible_role_snapraid)
     - role: geerlingguy.docker
       tags:
         - docker
-
     # Build and configure snapraid
     - role: ironicbadger.ansible_role_snapraid
       tags:
         - snapraid
-    
     # Configure firewall
     - role: weareinteractive.ufw
       vars:
         ufw_rules: "{{ nas_ufw_rules }}"
       tags: firewall
-
     # Set up WSDD for network discovery
     - role: exterrestris.wsdd
       tags:
         - wsdd
         - samba
-
   tasks:
     # Add main user to groups created
     - name: additional groups for main user
@@ -201,25 +179,21 @@
         users: "{{ container_users }}"
       tags:
         - container-users
-
     - role: exterrestris.traefik
       tags:
         - traefik
       when: "'traefik' in group_names"
-    
     # Configure firewall
     - role: weareinteractive.ufw
       vars:
         ufw_rules: "{{ docker_ufw_rules }}"
       tags:
         - docker-firewall
-
     # Install SSL certificate
     - role: exterrestris.fetch_ssl
       tags:
         - traefik
       when: "'traefik' in group_names"
-
     # Generate Docker Compose
     - role: exterrestris.docker_compose
       tags:
@@ -239,7 +213,6 @@
           - name: "{{ scans_user.group }}"
       tags:
         - users
-
     # Set up Samba user for 'Scans'
     - role: bertvv.samba
       vars:
