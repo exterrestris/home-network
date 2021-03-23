@@ -32,12 +32,15 @@ all:
               hosts:
                 memory_alpha:
                 memory_beta:
+        traefik:
+          hosts:
+            epsilon_ix:
+            memory_alpha:
+            argus_array:
         docker:
-          children:
-            traefik:
-              hosts:
-                memory_alpha:
-                argus_array:
+          hosts:
+            memory_alpha:
+            argus_array:
         test_machines:
           hosts:
             holosuite_1:
