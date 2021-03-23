@@ -75,6 +75,11 @@
     # Install Cockpit UI
     - role: linux-system-roles.cockpit
       tags: cockpit
+    # Configure firewall
+    - role: weareinteractive.ufw
+      vars:
+        ufw_rules: "{{ common_ufw_rules }}"
+      tags: firewall
   tasks:
     # Install ZSH Powerlevel10k config
     - name: copy p10k config

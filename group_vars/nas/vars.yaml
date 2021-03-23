@@ -26,12 +26,7 @@ wsdd_workgroup: "{{ samba_workgroup }}"
 ### weareinteractive.ufw
 nas_ufw_rules:
   - rule: allow
-    name: OpenSSH
-  - rule: allow
     name: Samba
-  - rule: allow
-    to_port: 9090
-    proto: tcp
 
 ### ironicbadger.ansible_role_snapraid
 snapraid_gmail_pass: "{{ vault_snapraid_email_password }}"
