@@ -26,7 +26,18 @@
     - setup
 
 # Main - Common
-- hosts: all
+- hosts: all:!pfsense
+  tasks:
+    # Install packages
+    - name: install common packages
+      package:
+        name: "{{ item.name }}"
+        state: present
+      with_items: "{{ common_packages }}"
+      tags: packages
+
+# Main - Standard Linux
+- hosts: linux
   roles:
     # Install any available package updates
     - role: robertdebock.update
@@ -62,13 +73,6 @@
         ssh_agent_keys:
           - ~/.ssh/id_ed25519
   tasks:
-    # Install packages
-    - name: install common packages
-      package:
-        name: "{{ item.name }}"
-        state: present
-      with_items: "{{ common_packages }}"
-      tags: packages
     # Install ZSH Powerlevel10k config
     - name: copy p10k config
       copy:
