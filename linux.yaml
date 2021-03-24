@@ -231,6 +231,7 @@
     - role: exterrestris.fetch_ssl
       tags:
         - traefik
+        - traefik-ssl
       when: "'traefik' in group_names"
     # Generate Docker Compose
     - role: exterrestris.docker_compose
