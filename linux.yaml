@@ -172,6 +172,34 @@
       tags:
         - users
 
+- hosts: traefik:!docker
+  roles:
+    # Install Traefik
+    - role: exterrestris.traefik
+    # Configure firewall
+    - role: weareinteractive.ufw
+      vars:
+        ufw_rules: "{{ traefik_ufw_rules }}"
+      tags:
+        - firewall
+        - traefik-firewall
+    # Install SSL certificate
+    - role: exterrestris.fetch_ssl
+      tags:
+        - traefik-ssl
+  tasks:
+    - name: configure Cockpit to allow proxying
+      template:
+        src: cockpit.conf.j2
+        dest: "/etc/cockpit/cockpit.conf"
+      vars:
+        domain: "cockpit.{{ ansible_hostname }}.{{ internal_domain }}"
+      when: "'traefik' in group_names"
+      tags:
+        - traefik
+  tags:
+    - traefik
+
 - hosts: docker
   roles:
     # Install Docker
@@ -204,6 +232,7 @@
     - role: exterrestris.fetch_ssl
       tags:
         - traefik
+        - traefik-ssl
       when: "'traefik' in group_names"
     # Generate Docker Compose
     - role: exterrestris.docker_compose
