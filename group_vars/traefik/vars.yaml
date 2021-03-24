@@ -1,9 +1,7 @@
 ---
-traefik_docker_network_bridge_name: br-traefik0
-
 ### exterrestris.traefik
+traefik_install: binary
 traefik_log_enabled: yes
-traefik_config_dir: "{{ appdata_path }}/traefik"
 traefik_dashboard_domain: "traefik.{{ ansible_hostname }}.{{ internal_domain }}"
 traefik_tls_certificates:
   - cert: "/etc/traefik/{{ internal_domain }}-wildcard.cert"
@@ -11,9 +9,6 @@ traefik_tls_certificates:
   - cert: "/etc/traefik/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.cert"
     key: "/etc/traefik/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.key"
     default: yes
-traefik_docker_network: traefik
-traefik_docker_network_driver_options:
-  com.docker.network.bridge.name: "{{ traefik_docker_network_bridge_name }}"
 
 cockpit_traefik_service:
   name: cockpit-svc
@@ -25,6 +20,9 @@ cockpit_traefik_router:
   name: cockpit
   service: "cockpit-svc@file"
   rule: "Host(`cockpit.{{ ansible_hostname }}.{{ internal_domain }}`)"
+  entrypoints:
+    - http
+    - https
 
 traefik_routers:
   - "{{ cockpit_traefik_router }}"
@@ -37,11 +35,7 @@ cockpit_traefik_ufw_rules:
     to_port: 9090
     proto: tcp
     delete: yes
-  - rule: allow
-    to_port: 9090
-    proto: tcp
-    interface_in: "{{ traefik_docker_network_bridge_name }}"
-docker_ufw_rules:
+traefik_ufw_rules:
   - "{{ cockpit_traefik_ufw_rules }}"
 
 ### exterrestris.fetch_ssl
@@ -51,12 +45,12 @@ fetch_ssl_certs:
   - cert: "/conf/acme/{{ internal_domain }}-wildcard.fullchain"
     key: "/conf/acme/{{ internal_domain }}-wildcard.key"
     install_to:
-      - cert: "{{ appdata_path }}/traefik/{{ internal_domain }}-wildcard.cert"
-        key: "{{ appdata_path }}/traefik/{{ internal_domain }}-wildcard.key"
+      - cert: "{{ traefik_config_dir }}/{{ internal_domain }}-wildcard.cert"
+        key: "{{ traefik_config_dir }}/{{ internal_domain }}-wildcard.key"
   - cert: "/conf/acme/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.fullchain"
     key: "/conf/acme/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.key"
     install_to:
-      - cert: "{{ appdata_path }}/traefik/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.cert"
-        key: "{{ appdata_path }}/traefik/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.key"
+      - cert: "{{ traefik_config_dir }}/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.cert"
+        key: "{{ traefik_config_dir }}/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.key"
 
 fetch_ssl_run_now: yes
