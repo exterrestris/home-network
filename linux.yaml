@@ -185,6 +185,18 @@
         - traefik-firewall
     # Install SSL certificate
     - role: exterrestris.fetch_ssl
+      tags:
+        - traefik-ssl
+  tasks:
+    - name: configure Cockpit to allow proxying
+      template:
+        src: cockpit.conf.j2
+        dest: "/etc/cockpit/cockpit.conf"
+      vars:
+        domain: "cockpit.{{ ansible_hostname }}.{{ internal_domain }}"
+      when: "'traefik' in group_names"
+      tags:
+        - traefik
   tags:
     - traefik
 
