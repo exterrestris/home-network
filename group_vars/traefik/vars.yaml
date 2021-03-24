@@ -20,6 +20,9 @@ cockpit_traefik_router:
   name: cockpit
   service: "cockpit-svc@file"
   rule: "Host(`cockpit.{{ ansible_hostname }}.{{ internal_domain }}`)"
+  entrypoints:
+    - http
+    - https
 
 traefik_routers:
   - "{{ cockpit_traefik_router }}"
