@@ -1,0 +1,50 @@
+---
+ansible_host: 192.168.5.136
+target_os: ubuntu
+
+### exterrestris.traefik
+traefik_internal_entrypoint:
+  host: "{{ ansible_ens18.ipv4.address }}"
+
+traefik_external_entrypoint:
+  host: "{{ ansible_ens19.ipv4.address }}"
+
+traefik_entrypoints:
+  - "{{ traefik_default_http_entrypoint | combine(traefik_internal_entrypoint) }}"
+  - "{{ traefik_default_https_entrypoint | combine(traefik_internal_entrypoint) }}"
+  - name: web-http
+    port: 80
+    host: "{{ ansible_ens19.ipv4.address }}"
+    http:
+      redirect:
+        to: web-https
+        scheme: 'https'
+  - name: web-https
+    port: 443
+    host: "{{ ansible_ens19.ipv4.address }}"
+
+traefik_routers:
+  - "{{ cockpit_traefik_router }}"
+  - name: jellyfin-proxy
+    service: "jellyfin-proxy-svc@file"
+    rule: "Host(`jellyfin.{{ internal_domain }}`)"
+    entrypoints:
+      - web-http
+      - web-https
+
+traefik_services:
+  - "{{ cockpit_traefik_service }}"
+  - name: jellyfin-proxy-svc
+    type: http
+    servers:
+      - "https://jellyfin.{{ internal_domain }}"
+
+### weareinteractive.ufw
+traefik_ufw_rules:
+  - "{{ cockpit_traefik_ufw_rules }}"
+  - rule: allow
+    to_port: 80
+    proto: tcp
+  - rule: allow
+    to_port: 443
+    proto: tcp
