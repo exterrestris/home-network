@@ -19,6 +19,7 @@ docker_ufw_rules:
   - "{{ cockpit_traefik_ufw_rules }}"
 
 ### exterrestris.traefik
+traefik_install: docker
 traefik_config_dir: "{{ appdata_path }}/traefik"
 traefik_docker_network: traefik
 traefik_docker_network_driver_options:

@@ -1,5 +1,6 @@
 ---
 ### exterrestris.traefik
+traefik_install: binary
 traefik_log_enabled: yes
 traefik_dashboard_domain: "traefik.{{ ansible_hostname }}.{{ internal_domain }}"
 traefik_tls_certificates:
