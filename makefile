@@ -1,4 +1,4 @@
-spacedock memory-alpha memory-beta argus-array:
+spacedock memory-alpha memory-beta argus-array epsilon-ix:
 	ansible-playbook -b linux.yaml --limit $(subst -,_,$@) --skip-tags "setup" --vault-password-file .vault-password
 
 test-machines holosuite-1 holosuite-2:
@@ -17,7 +17,7 @@ full-bootstrap-all:
 	ansible-playbook -b bootstrap.yaml --tags "bootstrap-all" --vault-password-file .vault-password
 	ansible-playbook -b linux.yaml --tags "setup" --vault-password-file .vault-password
 
-update-spacedock update-memory-alpha update-memory-beta update-argus-array:
+update-spacedock update-memory-alpha update-memory-beta update-argus-array update-epsilon-ix:
 	ansible-playbook -b linux.yaml --limit $(subst -,_,$(subst update-,,$@)) --tags "updates" --vault-password-file .vault-password
 
 update-all:
