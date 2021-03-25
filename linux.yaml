@@ -36,6 +36,16 @@
       with_items: "{{ common_packages }}"
       tags: packages
 
+- hosts: raspberry_pi:&ubuntu
+  tasks:
+    # Install packages
+    - name: install rasberry pi ubuntu packages
+      package:
+        name: "{{ item.name }}"
+        state: present
+      with_items: "{{ raspberry_pi_ubuntu_packages }}"
+      tags: packages
+
 # Main - Standard Linux
 - hosts: linux
   roles:

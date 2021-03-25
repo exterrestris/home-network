@@ -24,6 +24,9 @@ traefik_config_dir: "{{ appdata_path }}/traefik"
 traefik_docker_network: traefik
 traefik_docker_network_driver_options:
   com.docker.network.bridge.name: "{{ traefik_docker_network_bridge_name }}"
+traefik_providers:
+  - "{{ traefik_default_docker_provider }}"
+  - "{{ traefik_default_file_provider }}"
 
 ## exterrestris.users
 container_users: []
