@@ -213,7 +213,7 @@
     # Set up users specific to containers
     - role: exterrestris.ansible_users
       vars:
-        users: "{{ container_users }}"
+        users: "{{ container_users | map('combine', container_user_opts) }}"
       tags:
         - container-users    
     # Install Traefik

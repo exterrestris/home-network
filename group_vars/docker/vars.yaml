@@ -24,3 +24,11 @@ traefik_config_dir: "{{ appdata_path }}/traefik"
 traefik_docker_network: traefik
 traefik_docker_network_driver_options:
   com.docker.network.bridge.name: "{{ traefik_docker_network_bridge_name }}"
+
+## exterrestris.users
+container_users: []
+
+container_user_opts:
+  shell: /usr/sbin/nologin
+  home: /nonexistent
+  createhome: no
