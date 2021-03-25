@@ -45,6 +45,8 @@ all:
             memory_alpha:
             argus_array:
         docker:
+          vars:
+            ansible_group_priority: 10
           hosts:
             memory_alpha:
             argus_array:
