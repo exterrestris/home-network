@@ -21,6 +21,8 @@ common_packages:
   - name: python3
   - name: python3-pip
   - name: fzf
+  - name: sysstat
+  - name: iotop
 
 internal_domain: "{{ vault_domain }}"
 
