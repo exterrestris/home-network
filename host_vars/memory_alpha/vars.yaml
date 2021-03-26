@@ -273,7 +273,7 @@ docker_compose_projects:
           - source: "{{ appdata_path }}/media/jellyfin"
             target: /config
             group: "jellyfin"
-            user: "jellyfin"
+            owner: "jellyfin"
             mode: "755"
           - source: /mnt/storage/Media/Shows
             target: /media/shows
