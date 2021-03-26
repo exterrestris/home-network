@@ -38,13 +38,3 @@ traefik_services:
     type: http
     servers:
       - "https://jellyfin.{{ internal_domain }}"
-
-### weareinteractive.ufw
-traefik_ufw_rules:
-  - "{{ cockpit_traefik_ufw_rules }}"
-  - rule: allow
-    to_port: 80
-    proto: tcp
-  - rule: allow
-    to_port: 443
-    proto: tcp
