@@ -4,10 +4,10 @@ traefik_install: binary
 traefik_log_enabled: yes
 traefik_dashboard_domain: "traefik.{{ ansible_hostname }}.{{ internal_domain }}"
 traefik_tls_certificates:
-  - cert: "/etc/traefik/{{ internal_domain }}-wildcard.cert"
-    key: "/etc/traefik/{{ internal_domain }}-wildcard.key"
-  - cert: "/etc/traefik/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.cert"
-    key: "/etc/traefik/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.key"
+  - cert: "{{ internal_domain }}-wildcard.cert"
+    key: "{{ internal_domain }}-wildcard.key"
+  - cert: "{{ ansible_hostname }}.{{ internal_domain }}-wildcard.cert"
+    key: "{{ ansible_hostname }}.{{ internal_domain }}-wildcard.key"
     default: yes
 traefik_providers:
   - "{{ traefik_default_file_provider }}"
@@ -53,12 +53,12 @@ fetch_ssl_certs:
   - cert: "/conf/acme/{{ internal_domain }}-wildcard.fullchain"
     key: "/conf/acme/{{ internal_domain }}-wildcard.key"
     install_to:
-      - cert: "{{ traefik_config_dir }}/{{ internal_domain }}-wildcard.cert"
-        key: "{{ traefik_config_dir }}/{{ internal_domain }}-wildcard.key"
+      - cert: "{{ traefik_tls_certificate_dir }}/{{ internal_domain }}-wildcard.cert"
+        key: "{{ traefik_tls_certificate_dir }}/{{ internal_domain }}-wildcard.key"
   - cert: "/conf/acme/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.fullchain"
     key: "/conf/acme/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.key"
     install_to:
-      - cert: "{{ traefik_config_dir }}/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.cert"
-        key: "{{ traefik_config_dir }}/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.key"
+      - cert: "{{ traefik_tls_certificate_dir }}/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.cert"
+        key: "{{ traefik_tls_certificate_dir }}/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.key"
 
 fetch_ssl_run_now: yes
