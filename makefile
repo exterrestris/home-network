@@ -32,10 +32,10 @@ force-install-requirements:
 	ansible-galaxy collection install -r requirements.yaml --force
 
 decrypt-all:
-	find . -name 'vault.yaml' -exec ansible-vault decrypt {} --vault-password .vault-password \;
+	find . -name '*vault.yaml' -exec ansible-vault decrypt {} --vault-password .vault-password \;
 
 encrypt-all:
-	find . -name 'vault.yaml' -exec ansible-vault encrypt {} --vault-password .vault-password \;
+	find . -name '*vault.yaml' -exec ansible-vault encrypt {} --vault-password .vault-password \;
 
 install-git-hooks:
 	@./install-git-hooks.sh
