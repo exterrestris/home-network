@@ -1,10 +1,15 @@
 ---
 nas_groups:
   - name: backups
+    gid: 1001
   - name: media
+    gid: 1002
   - name: archive
+    gid: 1003
   - name: downloads
+    gid: 1004
   - name: resources
+    gid: 1005
 
 ### mount_disks
 btrfs_data_opts: compress=zstd

@@ -271,8 +271,8 @@ docker_compose_projects:
           name: linuxserver/jellyfin
           tag: bionic
         environment:
-          - PUID=200
-          - PGID=200
+          - PUID={{ (container_users | selectattr('username', 'equalto', 'jellyfin') | list | first).uid }}
+          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
           - TZ=Europe/London
         volumes:
           - source: "{{ appdata_path }}/media/jellyfin"
@@ -299,7 +299,7 @@ docker_compose_projects:
           - source: /mnt/transient/DVR
             target: /media/dvr
             group: media
-            mode: "g+rwx"
+            mode: "g+rwxs"
         network_mode: "host"
         restart: unless-stopped
         labels:
@@ -360,8 +360,8 @@ docker_compose_projects:
         image: ghcr.io/linuxserver/qbittorrent
         container_name: qbittorrent
         environment:
-          - PUID=204
-          - PGID=204
+          - PUID={{ (container_users | selectattr('username', 'equalto', 'torrents') | list | first).uid }}
+          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}
           - TZ=Europe/London
           - WEBUI_PORT=8080
         volumes:
