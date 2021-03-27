@@ -226,6 +226,11 @@ container_users:
       - media
     uid: 200
     gid: 200
+  - username: torrents
+    groups:
+      - downloads
+    uid: 204
+    gid: 204
 
 ### exterrestris.traefik
 traefik_services:
@@ -317,5 +322,62 @@ docker_compose_projects:
           - "traefik.http.services.jellyfin-svc.loadBalancer.passHostHeader=true"
     networks:
       - name: media
+        external: true
+        alias: "{{ traefik_docker_network }}"
+  - project_dir: "{{ appdata_path }}/torrents"
+    containers:
+      - service_name: vpn
+        image: qmcgaw/gluetun
+        container_name: gluetun
+        cap_add:
+          - NET_ADMIN
+        networks:
+          - proxy
+        expose:
+          # qBittorrent WebUI
+          - 8080 
+        volumes:
+          - gluetun:/gluetun
+        environment:
+          - VPNSP=nordvpn
+          - TZ=Europe/London
+          - OPENVPN_USER={{ vault_nordvpn_username }}
+          - OPENVPN_PASSWORD={{ vault_nordvpn_password }}
+          - REGION=Netherlands
+          - SERVER_NUMBER=918
+        restart: always
+        labels:
+          - "traefik.enable=true"
+          ## Router
+          - "traefik.http.routers.qbittorrent.entryPoints=https"
+          - "traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.{{ ansible_hostname }}.{{ internal_domain }}`)"
+          - "traefik.http.routers.qbittorrent.tls=true"
+          ## Service
+          - "traefik.http.services.qbittorrent-svc.loadBalancer.server.port=8080"
+          - "traefik.http.services.qbittorrent-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.qbittorrent-svc.loadBalancer.passHostHeader=true"
+      - service_name: qbittorrent
+        image: ghcr.io/linuxserver/qbittorrent
+        container_name: qbittorrent
+        environment:
+          - PUID=204
+          - PGID=204
+          - TZ=Europe/London
+          - WEBUI_PORT=8080
+        volumes:
+          - source: "qbittorrent"
+            target: /config
+            owner: "torrents"
+            group: "torrents"
+            mode: "755"
+          - source: /mnt/transient/Downloads/torrents
+            target: /downloads
+            owner: "torrents"
+            group: "downloads"
+            mode: "g+rx"
+        network_mode: "service:vpn"
+        restart: unless-stopped
+    networks:
+      - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
