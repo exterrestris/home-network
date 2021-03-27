@@ -1,0 +1,23 @@
+---
+- hosts: all
+  tasks:
+    - name: Print Variables
+      debug: 
+        var: vars       
+      tags: vars
+    - name: Print Environment Variables
+      debug: 
+        var: environment       
+      tags: environment
+    - name: Print Group Names Variables
+      debug: 
+        var: group_names       
+      tags: group_names
+    - name: Print Groups Variables
+      debug: 
+        var: groups       
+      tags: groups
+    - name: Print Hosts Variables
+      debug: 
+        var: hostvars       
+      tags: hostvars

@@ -226,9 +226,6 @@ container_users:
       - media
     uid: 200
     gid: 200
-    shell: /usr/sbin/nologin
-    home: /nonexistent
-    createhome: no
 
 ### exterrestris.traefik
 traefik_services:
@@ -240,7 +237,6 @@ traefik_services:
 
 ### weareinteractive.ufw
 docker_ufw_rules:
-  - "{{ cockpit_traefik_ufw_rules }}"
   # Traefik proxy
   - rule: allow
     to_port: 8096

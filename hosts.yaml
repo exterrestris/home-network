@@ -21,6 +21,13 @@ all:
     pfsense:
       hosts:
         midas_array:
+    ubuntu:
+      hosts:
+        memory_alpha:
+        memory_beta:
+        argus_array:
+        holosuite_1:
+        holosuite_2:
     linux:
       children:
         # Roles
@@ -38,6 +45,8 @@ all:
             memory_alpha:
             argus_array:
         docker:
+          vars:
+            ansible_group_priority: 10
           hosts:
             memory_alpha:
             argus_array:
