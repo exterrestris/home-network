@@ -31,6 +31,8 @@ sanoid_datasets:
     templates: backups
   - name: backup1/archive
     templates: backups
+  - name: backup1/backups/memory-alpha/appdata
+    templates: backups
 
 ### mount_disks
 parity_disks:
