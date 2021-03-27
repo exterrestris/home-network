@@ -23,6 +23,8 @@ common_packages:
   - name: fzf
   - name: sysstat
   - name: iotop
+  - name: iftop
+  - name: unzip
 
 internal_domain: "{{ vault_domain }}"
 
