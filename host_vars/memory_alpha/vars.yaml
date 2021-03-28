@@ -116,26 +116,31 @@ parity_disks:
 
 data_disks:
   - path: /mnt/ext4/data1
+    data_path: /data
     diskbyid: /dev/disk/by-uuid/3eee8a73-449f-4680-ac95-a88226b27d79
     fs: ext4
     opts: defaults
     content: true
   - path: /mnt/ext4/data2
+    data_path: /data
     diskbyid: /dev/disk/by-uuid/7f6e6993-8f06-4cf4-8f59-ec0ba5771bea
     fs: ext4
     opts: defaults
     content: true
   - path: /mnt/ext4/data3
+    data_path: /data
     diskbyid: /dev/disk/by-uuid/f4ca6d24-5142-4583-adc4-ae791f25b4ca
     fs: ext4
     opts: defaults
     content: true
   - path: /mnt/ext4/data4
+    data_path: /data
     diskbyid: /dev/disk/by-uuid/56eb9377-2ddc-4fc3-8409-d7549d4a0dab
     fs: ext4
     opts: defaults
     content: true
   - path: /mnt/ext4/data5
+    data_path: /data
     diskbyid: /dev/disk/by-uuid/e0e41243-f51b-4730-a9c7-c001279a7315
     fs: ext4
     opts: defaults
@@ -143,10 +148,12 @@ data_disks:
 
 other_disks:
   - path: /mnt/ext4/transient1
+    data_path: /data
     diskbyid: /dev/disk/by-uuid/cade8c26-973a-4ff1-9669-36fbcde5b97c
     fs: ext4
     opts: defaults
   - path: /mnt/ext4/transient2
+    data_path: /data
     diskbyid: /dev/disk/by-uuid/d8fb93fb-4c74-4e21-b005-942d5cd89e58
     fs: ext4
     opts: defaults
@@ -162,11 +169,11 @@ remove_mounts:
 mergerfs_mounts:
   - path: /mnt/storage
     branches:
-      - /mnt/ext4/data*
+      - /mnt/ext4/data*/data
     options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }},x-systemd.requires=/mnt/ext4/data1,x-systemd.requires=/mnt/ext4/data2,x-systemd.requires=/mnt/ext4/data3"
   - path: /mnt/transient
     branches:
-      - /mnt/ext4/transient*
+      - /mnt/ext4/transient*/data
     options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }},x-systemd.requires=/mnt/ext4/transient1"
 
 ### bertvv.samba
@@ -186,7 +193,7 @@ samba_shares:
     writable: 'yes'
     guest_ok: 'yes'
   - name: Media
-    path: /mnt/storage/Media
+    path: /mnt/storage/media
     owner: "{{ main_user.username }}"
     group: media
     mode: '2775'
@@ -200,7 +207,7 @@ samba_shares:
     writable: 'yes'
     guest_ok: 'yes'
   - name: Downloads
-    path: /mnt/transient/Downloads
+    path: /mnt/storage/downloads
     owner: "{{ main_user.username }}"
     group: downloads
     mode: '2775'
@@ -280,23 +287,23 @@ docker_compose_projects:
             group: "jellyfin"
             owner: "jellyfin"
             mode: "755"
-          - source: /mnt/storage/Media/Shows
+          - source: /mnt/storage/media/Shows
             target: /media/shows
             group: media
             mode: "g+rx"
-          - source: /mnt/storage/Media/Movies
+          - source: /mnt/storage/media/Movies
             target: /media/movies
             group: media
             mode: "g+rx"
-          - source: /mnt/storage/Media/Music
+          - source: /mnt/storage/media/Music
             target: /media/music
             group: media
             mode: "g+rx"
-          - source: /mnt/storage/Media/Reactions
+          - source: /mnt/storage/media/Reactions
             target: /media/reactions
             group: media
             mode: "g+rx"
-          - source: /mnt/transient/DVR
+          - source: /mnt/transient/dvr
             target: /media/dvr
             group: media
             mode: "g+rwxs"
@@ -370,8 +377,8 @@ docker_compose_projects:
             owner: "torrents"
             group: "torrents"
             mode: "755"
-          - source: /mnt/transient/Downloads/torrents
-            target: /downloads
+          - source: /mnt/storage/downloads/torrents
+            target: /storage/downloads/torrents
             owner: "torrents"
             group: "downloads"
             mode: "g+rx"
