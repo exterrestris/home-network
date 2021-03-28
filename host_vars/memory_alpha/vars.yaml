@@ -235,6 +235,18 @@ container_users:
       - media
     uid: 200
     gid: 200
+  - username: sonarr
+    groups:
+      - media
+      - downloads
+    uid: 201
+    gid: 201    
+  - username: radarr
+    groups:
+      - media
+      - downloads
+    uid: 202
+    gid: 202
   - username: torrents
     groups:
       - downloads
@@ -371,6 +383,7 @@ docker_compose_projects:
         environment:
           - PUID={{ (container_users | selectattr('username', 'equalto', 'torrents') | list | first).uid }}
           - PGID={{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}
+          - UMASK=002
           - TZ=Europe/London
           - WEBUI_PORT=8080
         volumes:
@@ -386,6 +399,74 @@ docker_compose_projects:
             mode: "g+rx"
         network_mode: "service:vpn"
         restart: unless-stopped
+    networks:
+      - name: proxy
+        external: true
+        alias: "{{ traefik_docker_network }}"
+  - project_dir: "{{ appdata_path }}/media-downloads"
+    containers:
+      - service_name: sonarr
+        image:
+          name: linuxserver/sonarr
+        environment:
+          - PUID={{ (container_users | selectattr('username', 'equalto', 'sonarr') | list | first).uid }}
+          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
+          - UMASK=002
+          - TZ=Europe/London
+        volumes:
+          - source: sonarr
+            target: /config
+            group: sonarr
+            owner: sonarr
+            mode: "755"
+          - source: /mnt/storage
+            target: /storage
+        expose:
+          - 8989
+        networks:
+          - proxy
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=true"
+          ## Router
+          - "traefik.http.routers.sonarr.entryPoints=https"
+          - "traefik.http.routers.sonarr.rule=Host(`sonarr.{{ ansible_hostname }}.{{ internal_domain }}`)"
+          - "traefik.http.routers.sonarr.tls=true"
+          ## Service
+          - "traefik.http.services.sonarr-svc.loadBalancer.server.port=8989"
+          - "traefik.http.services.sonarr-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.sonarr-svc.loadBalancer.passHostHeader=true"
+      - service_name: radarr
+        image:
+          name: linuxserver/radarr
+        environment:
+          - PUID={{ (container_users | selectattr('username', 'equalto', 'radarr') | list | first).uid }}
+          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
+          - UMASK=002
+          - TZ=Europe/London
+        volumes:
+          - source: radarr
+            target: /config
+            group: radarr
+            owner: radarr
+            mode: "755"
+          - source: /mnt/storage
+            target: /storage
+        expose:
+          - 7878
+        networks:
+          - proxy
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=true"
+          ## Router
+          - "traefik.http.routers.radarr.entryPoints=https"
+          - "traefik.http.routers.radarr.rule=Host(`radarr.{{ ansible_hostname }}.{{ internal_domain }}`)"
+          - "traefik.http.routers.radarr.tls=true"
+          ## Service
+          - "traefik.http.services.radarr-svc.loadBalancer.server.port=7878"
+          - "traefik.http.services.radarr-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.radarr-svc.loadBalancer.passHostHeader=true"
     networks:
       - name: proxy
         external: true
