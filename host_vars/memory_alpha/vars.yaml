@@ -225,6 +225,8 @@ samba_shares:
 
 ### ironicbadger.ansible_role_snapraid
 snapraid_email_address: "memory-alpha@{{ internal_domain }}"
+snapraid_config_excludes:
+  - /downloads/
 
 ## exterrestris.users
 container_users:
