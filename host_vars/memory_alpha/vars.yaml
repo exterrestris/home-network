@@ -264,6 +264,11 @@ container_users:
       - downloads
     uid: 204
     gid: 204
+  - username: ombi
+    groups:
+      - downloads
+    uid: 205
+    gid: 205
 
 ### exterrestris.traefik
 traefik_services:
@@ -513,6 +518,35 @@ docker_compose_projects:
           - "traefik.http.services.jackett-svc.loadBalancer.server.port=9117"
           - "traefik.http.services.jackett-svc.loadbalancer.server.scheme=http"
           - "traefik.http.services.jackett-svc.loadBalancer.passHostHeader=true"
+      - service_name: ombi
+        image:
+          name: linuxserver/ombi
+        environment:
+          - PUID={{ (container_users | selectattr('username', 'equalto', 'ombi') | list | first).uid }}
+          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
+          - UMASK=002
+          - TZ=Europe/London
+        volumes:
+          - source: ombi
+            target: /config
+            group: ombi
+            owner: ombi
+            mode: "755"
+        expose:
+          - 3579
+        networks:
+          - proxy
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=true"
+          ## Router
+          - "traefik.http.routers.ombi.entryPoints=https"
+          - "traefik.http.routers.ombi.rule=Host(`ombi.{{ internal_domain }}`)"
+          - "traefik.http.routers.ombi.tls=true"
+          ## Service
+          - "traefik.http.services.ombi-svc.loadBalancer.server.port=3579"
+          - "traefik.http.services.ombi-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.ombi-svc.loadBalancer.passHostHeader=true"
     networks:
       - name: proxy
         external: true

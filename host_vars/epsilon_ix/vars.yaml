@@ -31,6 +31,12 @@ traefik_routers:
     entrypoints:
       - web-http
       - web-https
+  - name: ombi-proxy
+    service: "ombi-proxy-svc@file"
+    rule: "Host(`ombi.{{ internal_domain }}`)"
+    entrypoints:
+      - web-http
+      - web-https
 
 traefik_services:
   - "{{ cockpit_traefik_service }}"
@@ -38,3 +44,7 @@ traefik_services:
     type: http
     servers:
       - "https://jellyfin.{{ internal_domain }}"
+  - name: ombi-proxy-svc
+    type: http
+    servers:
+      - "https://ombi.{{ internal_domain }}"
