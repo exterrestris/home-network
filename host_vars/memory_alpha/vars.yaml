@@ -199,6 +199,13 @@ samba_shares:
     mode: '2775'
     writable: 'yes'
     guest_ok: 'yes'
+  - name: Jellyfin DVR
+    path: /mnt/transient/dvr
+    owner: "jellyfin"
+    group: media
+    mode: '2775'
+    writable: 'no'
+    guest_ok: 'yes'
   - name: Resources
     path: /mnt/zfs/resources
     owner: "{{ main_user.username }}"
@@ -321,6 +328,11 @@ docker_compose_projects:
             target: /media/dvr
             group: media
             mode: "g+rwxs"
+          - source: /mnt/transient/transcode
+            target: /config/data/transcodes
+            owner: jellyfin
+            group: jellyfin
+            mode: "u+rwx"
         network_mode: "host"
         restart: unless-stopped
         labels:
