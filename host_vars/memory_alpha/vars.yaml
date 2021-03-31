@@ -199,6 +199,13 @@ samba_shares:
     mode: '2775'
     writable: 'yes'
     guest_ok: 'yes'
+  - name: Jellyfin DVR
+    path: /mnt/transient/dvr
+    owner: "jellyfin"
+    group: media
+    mode: '2775'
+    writable: 'no'
+    guest_ok: 'yes'
   - name: Resources
     path: /mnt/zfs/resources
     owner: "{{ main_user.username }}"
