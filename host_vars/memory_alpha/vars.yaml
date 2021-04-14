@@ -452,7 +452,7 @@ docker_compose_projects:
           - "traefik.enable=true"
           ## Router
           - "traefik.http.routers.sonarr.entryPoints=https"
-          - "traefik.http.routers.sonarr.rule=Host(`sonarr.{{ ansible_hostname }}.{{ internal_domain }}`)"
+          - "traefik.http.routers.sonarr.rule=Host(`sonarr.{{ internal_domain }}`)"
           - "traefik.http.routers.sonarr.tls=true"
           ## Service
           - "traefik.http.services.sonarr-svc.loadBalancer.server.port=8989"
@@ -483,7 +483,7 @@ docker_compose_projects:
           - "traefik.enable=true"
           ## Router
           - "traefik.http.routers.radarr.entryPoints=https"
-          - "traefik.http.routers.radarr.rule=Host(`radarr.{{ ansible_hostname }}.{{ internal_domain }}`)"
+          - "traefik.http.routers.radarr.rule=Host(`radarr.{{ internal_domain }}`)"
           - "traefik.http.routers.radarr.tls=true"
           ## Service
           - "traefik.http.services.radarr-svc.loadBalancer.server.port=7878"
