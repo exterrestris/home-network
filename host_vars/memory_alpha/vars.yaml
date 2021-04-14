@@ -382,12 +382,11 @@ docker_compose_projects:
         volumes:
           - gluetun:/gluetun
         environment:
-          - VPNSP=nordvpn
+          - VPNSP=surfshark
           - TZ=Europe/London
-          - OPENVPN_USER={{ vault_nordvpn_username }}
-          - OPENVPN_PASSWORD={{ vault_nordvpn_password }}
-          - REGION=Netherlands
-          - SERVER_NUMBER=918
+          - OPENVPN_USER={{ vault_surfshark_username }}
+          - OPENVPN_PASSWORD={{ vault_surfshark_password }}
+          - REGION=Netherlands Amsterdam
         restart: always
         labels:
           - "traefik.enable=true"
