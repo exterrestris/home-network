@@ -11,8 +11,8 @@ sanoid_templates:
     frequently: 0
     hourly: 0
     daily: 28
-    weekly: 6
-    monthly: 6
+    weekly: 4
+    monthly: 3
     yearly: 0
     autosnap: 'yes'
   - name: frequent
@@ -30,7 +30,7 @@ sanoid_templates:
     hourly: 24
     daily: 14
     weekly: 12
-    monthly: 18
+    monthly: 12
     yearly: 0
     autosnap: 'no'
   - name: ignore
