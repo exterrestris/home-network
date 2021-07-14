@@ -157,6 +157,10 @@ other_disks:
     diskbyid: /dev/disk/by-uuid/d8fb93fb-4c74-4e21-b005-942d5cd89e58
     fs: ext4
     opts: defaults
+  - path: /mnt/ext4/scratch1
+    diskbyid: /dev/disk/by-uuid/33c8b24f-b917-4fb5-8150-2b3a606f3c7a
+    fs: ext4
+    opts: defaults
 
 ntfs_data_disks:
 
