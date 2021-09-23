@@ -346,7 +346,7 @@ docker_compose_projects:
             target: /media/dvr
             group: media
             mode: "g+rwxs"
-          - source: /mnt/transient/transcode
+          - source: /mnt/scratch1/transcodes
             target: /config/data/transcodes
             owner: jellyfin
             group: jellyfin
