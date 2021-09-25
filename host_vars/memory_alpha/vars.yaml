@@ -190,42 +190,44 @@ samba_shares:
     path: /mnt/zfs/archive
     owner: "{{ main_user.username }}"
     group: archive
-    mode: '2775'
+    directory_mode: '2775'
     writable: 'yes'
     guest_ok: 'yes'
   - name: Backups
     path: /mnt/zfs/backups
     owner: "{{ main_user.username }}"
     group: backups
-    mode: '2775'
+    directory_mode: '2775'
     writable: 'yes'
     guest_ok: 'yes'
   - name: Media
     path: /mnt/storage/media
     owner: "{{ main_user.username }}"
     group: media
-    mode: '2775'
+    directory_mode: '2775'
     writable: 'yes'
     guest_ok: 'yes'
   - name: Jellyfin DVR
     path: /mnt/transient/dvr
     owner: "jellyfin"
     group: media
-    mode: '2775'
+    directory_mode: '2775'
     writable: 'no'
     guest_ok: 'yes'
   - name: Resources
     path: /mnt/zfs/resources
     owner: "{{ main_user.username }}"
     group: resources
-    mode: '2775'
+    create_mode: '775'
+    directory_mode: '2775'
     writable: 'yes'
     guest_ok: 'yes'
   - name: Downloads
     path: /mnt/storage/downloads
     owner: "{{ main_user.username }}"
     group: downloads
-    mode: '2775'
+    create_mode: '775'
+    directory_mode: '2775'
     writable: 'yes'
     guest_ok: 'yes'
     browseable: 'yes'
@@ -233,7 +235,7 @@ samba_shares:
     path: /mnt/transient/Scans
     owner: "{{ scans_user.username }}"
     group: "{{ scans_user.group }}"
-    mode: '2775'
+    directory_mode: '2775'
     writable: 'yes'
     guest_ok: 'yes'
     browseable: 'yes'
