@@ -17,6 +17,9 @@ full-bootstrap-all:
 	ansible-playbook -b bootstrap.yaml --tags "bootstrap-all" --vault-password-file .vault-password
 	ansible-playbook -b linux.yaml --tags "setup" --vault-password-file .vault-password
 
+docker-memory-alpha docker-argus-array:
+	ansible-playbook -b linux.yaml --limit $(subst -,_,$(subst docker-,,$@)) --tags "container-users,docker-compose" --vault-password-file .vault-password
+
 update-spacedock update-memory-alpha update-memory-beta update-argus-array update-epsilon-ix:
 	ansible-playbook -b linux.yaml --limit $(subst -,_,$(subst update-,,$@)) --tags "updates" --vault-password-file .vault-password
 
