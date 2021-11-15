@@ -279,6 +279,11 @@ container_users:
       - downloads
     uid: 205
     gid: 205
+  - username: metube
+    groups:
+      - downloads
+    uid: 206
+    gid: 206
 
 ### exterrestris.traefik
 traefik_services:
@@ -556,6 +561,33 @@ docker_compose_projects:
           - "traefik.http.services.ombi-svc.loadBalancer.server.port=3579"
           - "traefik.http.services.ombi-svc.loadbalancer.server.scheme=http"
           - "traefik.http.services.ombi-svc.loadBalancer.passHostHeader=true"
+      - service_name: metube
+        image:
+          name: alexta69/metube
+        environment:
+          - YTDL_OPTIONS={"cookiefile":"/downloads/cookies.txt"}
+        volumes:
+          - source: /mnt/storage/downloads/metube
+            target: /downloads
+            owner: metube
+            group: downloads
+            mode: "775"
+        user: "206:1001"
+        expose:
+          - 8081
+        networks:
+          - proxy
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=true"
+          ## Router
+          - "traefik.http.routers.metube.entryPoints=https"
+          - "traefik.http.routers.metube.rule=Host(`metube.{{ ansible_hostname }}.{{ internal_domain }}`)"
+          - "traefik.http.routers.metube.tls=true"
+          ## Service
+          - "traefik.http.services.metube-svc.loadBalancer.server.port=8081"
+          - "traefik.http.services.metube-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.metube-svc.loadBalancer.passHostHeader=true"  
     networks:
       - name: proxy
         external: true
