@@ -572,7 +572,7 @@ docker_compose_projects:
             owner: metube
             group: downloads
             mode: "775"
-        user: "206:1001"
+        user: "{{ (container_users | selectattr('username', 'equalto', 'metube') | list | first).uid }}:{{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
         expose:
           - 8081
         networks:
