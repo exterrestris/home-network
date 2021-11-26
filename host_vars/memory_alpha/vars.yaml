@@ -71,6 +71,11 @@ zfs_filesystems:
     compression: lz4
     mountpoint: "{{ appdata_path }}"
     state: present
+  - name: photos
+    pool: pool2
+    compression: lz4
+    mountpoint: "/mnt/zfs/photos"
+    state: present
 
 ### exterrestris.sanoid
 sanoid_datasets:
@@ -88,6 +93,8 @@ sanoid_datasets:
     templates: frequent
   - name: pool2/resources
     templates: ignore
+  - name: pool2/photos
+    templates: local
 
 syncoid_syncs:
   - src: pool1/archive
@@ -193,6 +200,13 @@ samba_shares:
     path: /mnt/zfs/backups
     owner: "{{ main_user.username }}"
     group: backups
+    directory_mode: '2775'
+    writable: 'yes'
+    guest_ok: 'yes'
+  - name: Photos
+    path: /mnt/zfs/photos
+    owner: "{{ main_user.username }}"
+    group: photos
     directory_mode: '2775'
     writable: 'yes'
     guest_ok: 'yes'
