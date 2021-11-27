@@ -63,8 +63,8 @@ remove_mounts:
 mergerfs_mounts:
   - path: /mnt/backups
     branches:
-      - /mnt/ext4/backups*/data
-    options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }},x-systemd.requires=/mnt/ext4/backups1,x-systemd.requires=/mnt/ext4/backups2"
+      - /mnt/zfs/backups*
+    options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }}"
 
 ### bertvv.samba
 samba_shares:
@@ -76,13 +76,6 @@ samba_shares:
     writable: 'no'
     guest_ok: 'yes'
   - name: Backups
-    path: /mnt/zfs/backups
-    owner: "{{ main_user.username }}"
-    group: backups
-    mode: '2775'
-    writable: 'no'
-    guest_ok: 'yes'
-  - name: Old Backups
     path: /mnt/backups
     owner: "{{ main_user.username }}"
     group: backups
