@@ -13,12 +13,26 @@ zfs_pools:
       - 'c2101a06-81ad-4194-b32f-3962b92b9b00'
     type: 'mirror'
     state: 'present'
+  - name: backup2
+    action: 'create'
+    compression: 'lz4'
+    devices:
+      # USB dock doesn't expose disk IDs - using partition UUIDs
+      - 'f6fafa6d-897e-4129-97eb-979ea3957329'
+      - 'a6a86991-75dd-430e-921a-f2839bb38da8'
+    type: 'mirror'
+    state: 'present'
 
 zfs_filesystems:
   - name: backups
     pool: backup1
     compression: lz4
-    mountpoint: /mnt/zfs/backups
+    mountpoint: /mnt/zfs/backups1
+    state: present
+  - name: backups
+    pool: backup2
+    compression: lz4
+    mountpoint: /mnt/zfs/backups2
     state: present
 
 ### exterrestris.sanoid
