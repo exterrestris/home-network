@@ -49,19 +49,17 @@ zfs_filesystems:
 
 ### exterrestris.sanoid
 sanoid_datasets:
+  - name: backup1/archive
+    templates: backups
   - name: backup1/backups/memory-alpha
     templates: backups
   - name: backup1/backups/memory-alpha/computers
     templates: backups
-  - name: backup1/backups/memory-alpha/drives
-    templates: backups
-  - name: backup1/archive
-    templates: backups
-  - name: backup1/backups/memory-alpha/appdata
-    templates: backups
   - name: backup2/backups/memory-alpha
     templates: backups
   - name: backup2/backups/memory-alpha/appdata
+    templates: backups
+  - name: backup2/backups/memory-alpha/drives
     templates: backups
 
 ### mount_disks
