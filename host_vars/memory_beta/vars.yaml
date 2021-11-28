@@ -29,10 +29,22 @@ zfs_filesystems:
     compression: lz4
     mountpoint: /mnt/zfs/backups1
     state: present
+  - name: backups/memory-alpha
+    pool: backup1
+    compression: lz4
+    recordsize: 1M
+    mountpoint: /mnt/zfs/backups1/memory-alpha
+    state: present
   - name: backups
     pool: backup2
     compression: lz4
     mountpoint: /mnt/zfs/backups2
+    state: present
+  - name: backups/memory-alpha
+    pool: backup2
+    compression: lz4
+    recordsize: 1M
+    mountpoint: /mnt/zfs/backups2/memory-alpha
     state: present
 
 ### exterrestris.sanoid
