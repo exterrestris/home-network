@@ -74,6 +74,8 @@ zfs_filesystems:
 
 ### exterrestris.sanoid
 sanoid_datasets:
+  - name: pool1/archive
+    templates: local
   - name: pool1/backups
     templates: local
   - name: pool1/backups/computers
@@ -82,12 +84,10 @@ sanoid_datasets:
     templates: ignore
   - name: pool1/backups/drives
     templates: local
-  - name: pool1/archive
-    templates: local
-  - name: pool2/resources
-    templates: ignore
   - name: pool2/appdata
     templates: frequent
+  - name: pool2/resources
+    templates: ignore
 
 syncoid_syncs:
   - src: pool1/archive
