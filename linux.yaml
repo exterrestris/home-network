@@ -45,12 +45,12 @@
         state: present
       with_items: "{{ raspberry_pi_ubuntu_packages }}"
       tags: packages
-    - name: delete default "ubuntu" user
+    - name: remove default "ubuntu" user
       user:
         name: ubuntu
         remove: yes
         state: absent
-    - name: delete default "ubuntu" group
+    - name: remove default "ubuntu" group
       group:
         name: ubuntu
         state: absent
