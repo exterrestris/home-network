@@ -33,6 +33,7 @@
 - name: create ansible group
   group:
     name: "{{ vault_ansible_user_group }}"
+    gid: "{{ vault_ansible_user_group_gid }}"
   tags:
     - bootstrap-new
     - bootstrap-all
@@ -40,9 +41,10 @@
 - name: create ansible user
   user:
     name: "{{ vault_ansible_user }}"
+    uid: "{{ vault_ansible_user_uid }}"
     group: "{{ vault_ansible_user_group }}"
     groups: "{{ sudo_group | default('sudo') }}"
-    password: "{{ vault_ansible_password | password_hash('sha512', 65534 | random(seed=inventory_hostname) | string) }}"
+    password: "{{ vault_ansible_user_password | password_hash('sha512', 65534 | random(seed=inventory_hostname) | string) }}"
   tags:
     - bootstrap-new
     - bootstrap-all
