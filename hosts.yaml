@@ -34,11 +34,15 @@ all:
         zfs:
           hosts:
             argus_array:
-          children:
-            nas:
-              hosts:
-                memory_alpha:
-                memory_beta:
+            memory_alpha:
+            memory_beta:
+        nas:
+          hosts:
+            memory_alpha:
+            memory_beta:
+        snapraid:
+          hosts:
+            memory_alpha:
         traefik:
           hosts:
             epsilon_ix:
