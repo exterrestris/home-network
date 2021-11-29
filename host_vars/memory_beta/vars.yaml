@@ -46,6 +46,12 @@ zfs_filesystems:
     recordsize: 1M
     mountpoint: /mnt/zfs/backups2/memory-alpha
     state: present
+  - name: backups/argus-array
+    pool: backup2
+    compression: lz4
+    recordsize: 1M
+    mountpoint: /mnt/zfs/backups2/argus-array
+    state: present
 
 ### exterrestris.sanoid
 sanoid_datasets:

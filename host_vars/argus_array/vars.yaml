@@ -23,4 +23,11 @@ zfs_filesystems:
     state: present
 
 ### exterrestris.sanoid
-sanoid_datasets: []
+sanoid_datasets:
+  - name: data1/appdata
+    templates: frequent
+
+syncoid_syncs:
+  - src: data1/appdata
+    dest: backup2/backups/argus-array/appdata
+    dest_host: "memory-beta.{{ internal_domain }}"
