@@ -424,7 +424,9 @@ docker_compose_projects:
           - "traefik.http.services.qbittorrent-svc.loadbalancer.server.scheme=http"
           - "traefik.http.services.qbittorrent-svc.loadBalancer.passHostHeader=true"
       - service_name: qbittorrent
-        image: ghcr.io/linuxserver/qbittorrent
+        image:
+          name: ghcr.io/linuxserver/qbittorrent
+          tag: version-14.3.9.99202110311443-7435-01519b5e7ubuntu20.04.1
         container_name: qbittorrent
         environment:
           - PUID={{ (container_users | selectattr('username', 'equalto', 'torrents') | list | first).uid }}
