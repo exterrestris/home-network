@@ -578,12 +578,18 @@ docker_compose_projects:
           name: alexta69/metube
         environment:
           - YTDL_OPTIONS={"cookiefile":"/downloads/cookies.txt"}
+          - STATE_DIR=/state
         volumes:
           - source: /mnt/storage/downloads/metube
             target: /downloads
             owner: metube
             group: downloads
             mode: "775"
+          - source: metube
+            target: /state
+            owner: metube
+            group: metube
+            mode: "755"
         user: "{{ (container_users | selectattr('username', 'equalto', 'metube') | list | first).uid }}:{{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
         expose:
           - 8081
