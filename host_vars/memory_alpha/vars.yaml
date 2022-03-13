@@ -794,6 +794,25 @@ docker_compose_projects:
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
+  - project_dir: "{{ appdata_path }}/games"
+    containers:
+      - service_name: minecraft
+        image:
+          name: itzg/minecraft-server
+        environment:
+          - UID={{ (container_users | selectattr('username', 'equalto', 'minecraft') | list | first).uid }}
+          - GID={{ (nas_groups | selectattr('name', 'equalto', 'games') | list | first).gid }}
+          - EULA=TRUE
+          - TZ=Europe/London
+        volumes:
+          - source: minecraft
+            target: /data
+            group: minecraft
+            owner: minecraft
+            mode: "755"
+        ports:
+          - "25565:25565"
+        restart: unless-stopped
 
 ### linuxserver_containers
 linuxserver_container_custom_scripts:
