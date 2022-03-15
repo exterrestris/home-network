@@ -515,6 +515,37 @@ docker_compose_projects:
           - "traefik.http.services.radarr-svc.loadBalancer.server.port=7878"
           - "traefik.http.services.radarr-svc.loadbalancer.server.scheme=http"
           - "traefik.http.services.radarr-svc.loadBalancer.passHostHeader=true"
+      - service_name: radarr-1080
+        image:
+          name: linuxserver/radarr
+        environment:
+          - PUID={{ (container_users | selectattr('username', 'equalto', 'radarr') | list | first).uid }}
+          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
+          - UMASK=002
+          - TZ=Europe/London
+        volumes:
+          - source: radarr-1080
+            target: /config
+            group: radarr
+            owner: radarr
+            mode: "755"
+          - source: /mnt/storage
+            target: /storage
+        expose:
+          - 7879
+        networks:
+          - proxy
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=true"
+          ## Router
+          - "traefik.http.routers.radarr-1080.entryPoints=https"
+          - "traefik.http.routers.radarr-1080.rule=Host(`radarr.{{ ansible_hostname }}.{{ internal_domain }}`)"
+          - "traefik.http.routers.radarr-1080.tls=true"
+          ## Service
+          - "traefik.http.services.radarr-1080-svc.loadBalancer.server.port=7879"
+          - "traefik.http.services.radarr-1080-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.radarr-1080-svc.loadBalancer.passHostHeader=true"
       - service_name: jackett
         image:
           name: linuxserver/jackett
