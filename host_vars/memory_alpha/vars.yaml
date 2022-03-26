@@ -581,6 +581,29 @@ docker_compose_projects:
           - "traefik.http.services.prowlarr-svc.loadBalancer.server.port=9696"
           - "traefik.http.services.prowlarr-svc.loadbalancer.server.scheme=http"
           - "traefik.http.services.prowlarr-svc.loadBalancer.passHostHeader=true"
+      - service_name: flaresolverr
+        image:
+          name: flaresolverr/flaresolverr
+        environment:
+          - LOG_LEVEL=info
+          - LOG_HTML=false
+          - CAPTCHA_SOLVER=none
+          - TZ=Europe/London
+        expose:
+          - 8191
+        networks:
+          - proxy
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=true"
+          ## Router
+          - "traefik.http.routers.flaresolverr.entryPoints=https"
+          - "traefik.http.routers.flaresolverr.rule=Host(`flaresolverr.{{ ansible_hostname }}.{{ internal_domain }}`)"
+          - "traefik.http.routers.flaresolverr.tls=true"
+          ## Service
+          - "traefik.http.services.flaresolverr-svc.loadBalancer.server.port=8191"
+          - "traefik.http.services.flaresolverr-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.flaresolverr-svc.loadBalancer.passHostHeader=true"
       - service_name: jackett
         image:
           name: linuxserver/jackett
