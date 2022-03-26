@@ -274,7 +274,7 @@ container_users:
       - downloads
     uid: 202
     gid: 202
-  - username: jackett
+  - username: jackett # Unused
     groups:
       - downloads
     uid: 203
@@ -294,6 +294,11 @@ container_users:
       - downloads
     uid: 206
     gid: 206
+  - username: prowlarr
+    groups:
+      - downloads
+    uid: 207
+    gid: 207
 
 ### exterrestris.traefik
 traefik_services:
@@ -546,35 +551,59 @@ docker_compose_projects:
           - "traefik.http.services.radarr-1080-svc.loadBalancer.server.port=7879"
           - "traefik.http.services.radarr-1080-svc.loadbalancer.server.scheme=http"
           - "traefik.http.services.radarr-1080-svc.loadBalancer.passHostHeader=true"
-      - service_name: jackett
+      - service_name: prowlarr
         image:
-          name: linuxserver/jackett
+          name: linuxserver/prowlarr
+          tag: develop
         environment:
-          - PUID={{ (container_users | selectattr('username', 'equalto', 'jackett') | list | first).uid }}
+          - PUID={{ (container_users | selectattr('username', 'equalto', 'prowlarr') | list | first).uid }}
           - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
           - UMASK=002
           - TZ=Europe/London
         volumes:
-          - source: jackett
+          - source: prowlarr
             target: /config
-            group: jackett
-            owner: jackett
+            group: prowlarr
+            owner: prowlarr
             mode: "755"
         expose:
-          - 9117
+          - 9696
         networks:
           - proxy
         restart: unless-stopped
         labels:
           - "traefik.enable=true"
           ## Router
-          - "traefik.http.routers.jackett.entryPoints=https"
-          - "traefik.http.routers.jackett.rule=Host(`jackett.{{ ansible_hostname }}.{{ internal_domain }}`)"
-          - "traefik.http.routers.jackett.tls=true"
+          - "traefik.http.routers.prowlarr.entryPoints=https"
+          - "traefik.http.routers.prowlarr.rule=Host(`prowlarr.{{ ansible_hostname }}.{{ internal_domain }}`)"
+          - "traefik.http.routers.prowlarr.tls=true"
           ## Service
-          - "traefik.http.services.jackett-svc.loadBalancer.server.port=9117"
-          - "traefik.http.services.jackett-svc.loadbalancer.server.scheme=http"
-          - "traefik.http.services.jackett-svc.loadBalancer.passHostHeader=true"
+          - "traefik.http.services.prowlarr-svc.loadBalancer.server.port=9696"
+          - "traefik.http.services.prowlarr-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.prowlarr-svc.loadBalancer.passHostHeader=true"
+      - service_name: flaresolverr
+        image:
+          name: flaresolverr/flaresolverr
+        environment:
+          - LOG_LEVEL=info
+          - LOG_HTML=false
+          - CAPTCHA_SOLVER=none
+          - TZ=Europe/London
+        expose:
+          - 8191
+        networks:
+          - proxy
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=true"
+          ## Router
+          - "traefik.http.routers.flaresolverr.entryPoints=https"
+          - "traefik.http.routers.flaresolverr.rule=Host(`flaresolverr.{{ ansible_hostname }}.{{ internal_domain }}`)"
+          - "traefik.http.routers.flaresolverr.tls=true"
+          ## Service
+          - "traefik.http.services.flaresolverr-svc.loadBalancer.server.port=8191"
+          - "traefik.http.services.flaresolverr-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.flaresolverr-svc.loadBalancer.passHostHeader=true"
       - service_name: ombi
         image:
           name: linuxserver/ombi
