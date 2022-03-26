@@ -294,6 +294,11 @@ container_users:
       - downloads
     uid: 206
     gid: 206
+  - username: prowlarr
+    groups:
+      - downloads
+    uid: 207
+    gid: 207
 
 ### exterrestris.traefik
 traefik_services:
@@ -546,6 +551,36 @@ docker_compose_projects:
           - "traefik.http.services.radarr-1080-svc.loadBalancer.server.port=7879"
           - "traefik.http.services.radarr-1080-svc.loadbalancer.server.scheme=http"
           - "traefik.http.services.radarr-1080-svc.loadBalancer.passHostHeader=true"
+      - service_name: prowlarr
+        image:
+          name: linuxserver/prowlarr
+          tag: develop
+        environment:
+          - PUID={{ (container_users | selectattr('username', 'equalto', 'prowlarr') | list | first).uid }}
+          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
+          - UMASK=002
+          - TZ=Europe/London
+        volumes:
+          - source: prowlarr
+            target: /config
+            group: prowlarr
+            owner: prowlarr
+            mode: "755"
+        expose:
+          - 9696
+        networks:
+          - proxy
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=true"
+          ## Router
+          - "traefik.http.routers.prowlarr.entryPoints=https"
+          - "traefik.http.routers.prowlarr.rule=Host(`prowlarr.{{ ansible_hostname }}.{{ internal_domain }}`)"
+          - "traefik.http.routers.prowlarr.tls=true"
+          ## Service
+          - "traefik.http.services.prowlarr-svc.loadBalancer.server.port=9696"
+          - "traefik.http.services.prowlarr-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.prowlarr-svc.loadBalancer.passHostHeader=true"
       - service_name: jackett
         image:
           name: linuxserver/jackett
