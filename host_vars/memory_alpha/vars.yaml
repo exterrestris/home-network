@@ -274,7 +274,7 @@ container_users:
       - downloads
     uid: 202
     gid: 202
-  - username: jackett
+  - username: jackett # Unused
     groups:
       - downloads
     uid: 203
@@ -604,35 +604,6 @@ docker_compose_projects:
           - "traefik.http.services.flaresolverr-svc.loadBalancer.server.port=8191"
           - "traefik.http.services.flaresolverr-svc.loadbalancer.server.scheme=http"
           - "traefik.http.services.flaresolverr-svc.loadBalancer.passHostHeader=true"
-      - service_name: jackett
-        image:
-          name: linuxserver/jackett
-        environment:
-          - PUID={{ (container_users | selectattr('username', 'equalto', 'jackett') | list | first).uid }}
-          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
-          - UMASK=002
-          - TZ=Europe/London
-        volumes:
-          - source: jackett
-            target: /config
-            group: jackett
-            owner: jackett
-            mode: "755"
-        expose:
-          - 9117
-        networks:
-          - proxy
-        restart: unless-stopped
-        labels:
-          - "traefik.enable=true"
-          ## Router
-          - "traefik.http.routers.jackett.entryPoints=https"
-          - "traefik.http.routers.jackett.rule=Host(`jackett.{{ ansible_hostname }}.{{ internal_domain }}`)"
-          - "traefik.http.routers.jackett.tls=true"
-          ## Service
-          - "traefik.http.services.jackett-svc.loadBalancer.server.port=9117"
-          - "traefik.http.services.jackett-svc.loadbalancer.server.scheme=http"
-          - "traefik.http.services.jackett-svc.loadBalancer.passHostHeader=true"
       - service_name: ombi
         image:
           name: linuxserver/ombi
