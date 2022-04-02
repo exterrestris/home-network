@@ -36,6 +36,10 @@ all:
         # deep_space_9:
         # holosuite_1:
         # holosuite_2:
+    ups:
+      hosts:
+        spacedock:
+        argus_array:
     linux:
       children:
         # Roles
