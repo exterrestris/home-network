@@ -108,6 +108,15 @@
     # Install qemu-guest-agent
     - role: proxmox_vm
 
+- hosts: ups
+  tasks:
+    # Install packages
+    - name: install apcupsd
+      package:
+        name: apcupsd
+        state: present
+      tags: packages
+
 - hosts: zfs
   roles:
     # Install/configure ZFS pools
