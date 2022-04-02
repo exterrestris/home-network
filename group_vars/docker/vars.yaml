@@ -28,7 +28,66 @@ traefik_providers:
   - "{{ traefik_default_file_provider }}"
 
 ## exterrestris.users
-container_users: []
+all_container_users:
+  - username: jellyfin
+    groups:
+      - media
+    uid: 200
+    gid: 200
+    hosts:
+      - memory_alpha
+  - username: sonarr
+    groups:
+      - media
+      - downloads
+    uid: 201
+    gid: 201
+    hosts:
+      - memory_alpha
+  - username: radarr
+    groups:
+      - media
+      - downloads
+    uid: 202
+    gid: 202
+    hosts:
+      - memory_alpha
+  - username: jackett # Unused
+    groups:
+      - downloads
+    uid: 203
+    gid: 203
+    hosts: []
+  - username: torrents
+    groups:
+      - downloads
+    uid: 204
+    gid: 204
+    hosts:
+      - memory_alpha
+  - username: ombi
+    groups:
+      - downloads
+    uid: 205
+    gid: 205
+    hosts:
+      - memory_alpha
+  - username: metube
+    groups:
+      - downloads
+    uid: 206
+    gid: 206
+    hosts:
+      - memory_alpha
+  - username: prowlarr
+    groups:
+      - downloads
+    uid: 207
+    gid: 207
+    hosts:
+      - memory_alpha
+
+container_users: "{{ (all_container_users | selectattr('hosts', 'superset', [ inventory_hostname ]) | list) }}"
 
 container_user_opts:
   shell: /usr/sbin/nologin
