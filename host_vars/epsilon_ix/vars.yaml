@@ -3,6 +3,8 @@ ansible_host: 192.168.5.136
 target_os: ubuntu
 
 ### exterrestris.traefik
+traefik_binary_version: v2.4.8
+
 traefik_internal_entrypoint:
   host: "{{ ansible_ens18.ipv4.address }}"
 
@@ -31,6 +33,12 @@ traefik_routers:
     entrypoints:
       - web-http
       - web-https
+  - name: ombi-proxy
+    service: "ombi-proxy-svc@file"
+    rule: "Host(`ombi.{{ internal_domain }}`)"
+    entrypoints:
+      - web-http
+      - web-https
 
 traefik_services:
   - "{{ cockpit_traefik_service }}"
@@ -38,3 +46,7 @@ traefik_services:
     type: http
     servers:
       - "https://jellyfin.{{ internal_domain }}"
+  - name: ombi-proxy-svc
+    type: http
+    servers:
+      - "https://ombi.{{ internal_domain }}"

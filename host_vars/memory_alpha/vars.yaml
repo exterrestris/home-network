@@ -71,9 +71,16 @@ zfs_filesystems:
     compression: lz4
     mountpoint: "{{ appdata_path }}"
     state: present
+  - name: photos
+    pool: pool2
+    compression: lz4
+    mountpoint: "/mnt/zfs/photos"
+    state: present
 
 ### exterrestris.sanoid
 sanoid_datasets:
+  - name: pool1/archive
+    templates: local
   - name: pool1/backups
     templates: local
   - name: pool1/backups/computers
@@ -82,14 +89,17 @@ sanoid_datasets:
     templates: ignore
   - name: pool1/backups/drives
     templates: local
-  - name: pool1/archive
-    templates: local
-  - name: pool2/resources
-    templates: ignore
   - name: pool2/appdata
     templates: frequent
+  - name: pool2/resources
+    templates: ignore
+  - name: pool2/photos
+    templates: local
 
 syncoid_syncs:
+  - src: pool1/archive
+    dest: backup1/archive
+    dest_host: "memory-beta.{{ internal_domain }}"
   - src: pool1/backups
     dest: backup1/backups/memory-alpha
     dest_host: "memory-beta.{{ internal_domain }}"
@@ -97,13 +107,10 @@ syncoid_syncs:
     dest: backup1/backups/memory-alpha/computers
     dest_host: "memory-beta.{{ internal_domain }}"
   - src: pool1/backups/drives
-    dest: backup1/backups/memory-alpha/drives
-    dest_host: "memory-beta.{{ internal_domain }}"
-  - src: pool1/archive
-    dest: backup1/archive
+    dest: backup2/backups/memory-alpha/drives
     dest_host: "memory-beta.{{ internal_domain }}"
   - src: pool2/appdata
-    dest: backup1/backups/memory-alpha/appdata
+    dest: backup2/backups/memory-alpha/appdata
     dest_host: "memory-beta.{{ internal_domain }}"
 
 ### mount_disks
@@ -116,26 +123,31 @@ parity_disks:
 
 data_disks:
   - path: /mnt/ext4/data1
+    data_path: /data
     diskbyid: /dev/disk/by-uuid/3eee8a73-449f-4680-ac95-a88226b27d79
     fs: ext4
     opts: defaults
     content: true
   - path: /mnt/ext4/data2
+    data_path: /data
     diskbyid: /dev/disk/by-uuid/7f6e6993-8f06-4cf4-8f59-ec0ba5771bea
     fs: ext4
     opts: defaults
     content: true
   - path: /mnt/ext4/data3
+    data_path: /data
     diskbyid: /dev/disk/by-uuid/f4ca6d24-5142-4583-adc4-ae791f25b4ca
     fs: ext4
     opts: defaults
     content: true
   - path: /mnt/ext4/data4
+    data_path: /data
     diskbyid: /dev/disk/by-uuid/56eb9377-2ddc-4fc3-8409-d7549d4a0dab
     fs: ext4
     opts: defaults
     content: true
   - path: /mnt/ext4/data5
+    data_path: /data
     diskbyid: /dev/disk/by-uuid/e0e41243-f51b-4730-a9c7-c001279a7315
     fs: ext4
     opts: defaults
@@ -143,11 +155,17 @@ data_disks:
 
 other_disks:
   - path: /mnt/ext4/transient1
+    data_path: /data
     diskbyid: /dev/disk/by-uuid/cade8c26-973a-4ff1-9669-36fbcde5b97c
     fs: ext4
     opts: defaults
   - path: /mnt/ext4/transient2
+    data_path: /data
     diskbyid: /dev/disk/by-uuid/d8fb93fb-4c74-4e21-b005-942d5cd89e58
+    fs: ext4
+    opts: defaults
+  - path: /mnt/ext4/scratch1
+    diskbyid: /dev/disk/by-uuid/fa7d3ad4-03bc-48f1-bb5b-253399a13202
     fs: ext4
     opts: defaults
 
@@ -162,11 +180,11 @@ remove_mounts:
 mergerfs_mounts:
   - path: /mnt/storage
     branches:
-      - /mnt/ext4/data*
+      - /mnt/ext4/data*/data
     options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }},x-systemd.requires=/mnt/ext4/data1,x-systemd.requires=/mnt/ext4/data2,x-systemd.requires=/mnt/ext4/data3"
   - path: /mnt/transient
     branches:
-      - /mnt/ext4/transient*
+      - /mnt/ext4/transient*/data
     options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }},x-systemd.requires=/mnt/ext4/transient1"
 
 ### bertvv.samba
@@ -175,35 +193,51 @@ samba_shares:
     path: /mnt/zfs/archive
     owner: "{{ main_user.username }}"
     group: archive
-    mode: '2775'
+    directory_mode: '2775'
     writable: 'yes'
     guest_ok: 'yes'
   - name: Backups
     path: /mnt/zfs/backups
     owner: "{{ main_user.username }}"
     group: backups
-    mode: '2775'
+    directory_mode: '2775'
+    writable: 'yes'
+    guest_ok: 'yes'
+  - name: Photos
+    path: /mnt/zfs/photos
+    owner: "{{ main_user.username }}"
+    group: photos
+    directory_mode: '2775'
     writable: 'yes'
     guest_ok: 'yes'
   - name: Media
-    path: /mnt/storage/Media
+    path: /mnt/storage/media
     owner: "{{ main_user.username }}"
     group: media
-    mode: '2775'
+    directory_mode: '2775'
     writable: 'yes'
+    guest_ok: 'yes'
+  - name: Jellyfin DVR
+    path: /mnt/transient/dvr
+    owner: "jellyfin"
+    group: media
+    directory_mode: '2775'
+    writable: 'no'
     guest_ok: 'yes'
   - name: Resources
     path: /mnt/zfs/resources
     owner: "{{ main_user.username }}"
     group: resources
-    mode: '2775'
+    create_mode: '775'
+    directory_mode: '2775'
     writable: 'yes'
     guest_ok: 'yes'
   - name: Downloads
-    path: /mnt/transient/Downloads
+    path: /mnt/storage/downloads
     owner: "{{ main_user.username }}"
     group: downloads
-    mode: '2775'
+    create_mode: '775'
+    directory_mode: '2775'
     writable: 'yes'
     guest_ok: 'yes'
     browseable: 'yes'
@@ -211,13 +245,15 @@ samba_shares:
     path: /mnt/transient/Scans
     owner: "{{ scans_user.username }}"
     group: "{{ scans_user.group }}"
-    mode: '2775'
+    directory_mode: '2775'
     writable: 'yes'
     guest_ok: 'yes'
     browseable: 'yes'
 
 ### ironicbadger.ansible_role_snapraid
 snapraid_email_address: "memory-alpha@{{ internal_domain }}"
+snapraid_config_excludes:
+  - /downloads/
 
 ## exterrestris.users
 container_users:
@@ -226,11 +262,43 @@ container_users:
       - media
     uid: 200
     gid: 200
+  - username: sonarr
+    groups:
+      - media
+      - downloads
+    uid: 201
+    gid: 201    
+  - username: radarr
+    groups:
+      - media
+      - downloads
+    uid: 202
+    gid: 202
+  - username: jackett # Unused
+    groups:
+      - downloads
+    uid: 203
+    gid: 203
   - username: torrents
     groups:
       - downloads
     uid: 204
     gid: 204
+  - username: ombi
+    groups:
+      - downloads
+    uid: 205
+    gid: 205
+  - username: metube
+    groups:
+      - downloads
+    uid: 206
+    gid: 206
+  - username: prowlarr
+    groups:
+      - downloads
+    uid: 207
+    gid: 207
 
 ### exterrestris.traefik
 traefik_services:
@@ -280,26 +348,31 @@ docker_compose_projects:
             group: "jellyfin"
             owner: "jellyfin"
             mode: "755"
-          - source: /mnt/storage/Media/Shows
+          - source: /mnt/storage/media/Shows
             target: /media/shows
             group: media
             mode: "g+rx"
-          - source: /mnt/storage/Media/Movies
+          - source: /mnt/storage/media/Movies
             target: /media/movies
             group: media
             mode: "g+rx"
-          - source: /mnt/storage/Media/Music
+          - source: /mnt/storage/media/Music
             target: /media/music
             group: media
             mode: "g+rx"
-          - source: /mnt/storage/Media/Reactions
+          - source: /mnt/storage/media/Reactions
             target: /media/reactions
             group: media
             mode: "g+rx"
-          - source: /mnt/transient/DVR
+          - source: /mnt/transient/dvr
             target: /media/dvr
             group: media
             mode: "g+rwxs"
+          - source: /mnt/ext4/scratch1/transcodes
+            target: /config/data/transcodes
+            owner: jellyfin
+            group: jellyfin
+            mode: "u+rwx"
         network_mode: "host"
         restart: unless-stopped
         labels:
@@ -339,12 +412,11 @@ docker_compose_projects:
         volumes:
           - gluetun:/gluetun
         environment:
-          - VPNSP=nordvpn
+          - VPNSP=surfshark
           - TZ=Europe/London
-          - OPENVPN_USER={{ vault_nordvpn_username }}
-          - OPENVPN_PASSWORD={{ vault_nordvpn_password }}
-          - REGION=Netherlands
-          - SERVER_NUMBER=918
+          - OPENVPN_USER={{ vault_surfshark_username }}
+          - OPENVPN_PASSWORD={{ vault_surfshark_password }}
+          - REGION=Netherlands Amsterdam
         restart: always
         labels:
           - "traefik.enable=true"
@@ -357,11 +429,14 @@ docker_compose_projects:
           - "traefik.http.services.qbittorrent-svc.loadbalancer.server.scheme=http"
           - "traefik.http.services.qbittorrent-svc.loadBalancer.passHostHeader=true"
       - service_name: qbittorrent
-        image: ghcr.io/linuxserver/qbittorrent
+        image:
+          name: ghcr.io/linuxserver/qbittorrent
+          tag: version-14.3.9.99202110311443-7435-01519b5e7ubuntu20.04.1
         container_name: qbittorrent
         environment:
           - PUID={{ (container_users | selectattr('username', 'equalto', 'torrents') | list | first).uid }}
           - PGID={{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}
+          - UMASK=002
           - TZ=Europe/London
           - WEBUI_PORT=8080
         volumes:
@@ -370,13 +445,227 @@ docker_compose_projects:
             owner: "torrents"
             group: "torrents"
             mode: "755"
-          - source: /mnt/transient/Downloads/torrents
-            target: /downloads
+          - source: /mnt/storage/downloads/torrents
+            target: /storage/downloads/torrents
             owner: "torrents"
             group: "downloads"
             mode: "g+rx"
         network_mode: "service:vpn"
         restart: unless-stopped
+    networks:
+      - name: proxy
+        external: true
+        alias: "{{ traefik_docker_network }}"
+  - project_dir: "{{ appdata_path }}/media-downloads"
+    containers:
+      - service_name: sonarr
+        image:
+          name: linuxserver/sonarr
+        environment:
+          - PUID={{ (container_users | selectattr('username', 'equalto', 'sonarr') | list | first).uid }}
+          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
+          - UMASK=002
+          - TZ=Europe/London
+        volumes:
+          - source: sonarr
+            target: /config
+            group: sonarr
+            owner: sonarr
+            mode: "755"
+          - source: /mnt/storage
+            target: /storage
+        expose:
+          - 8989
+        networks:
+          - proxy
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=true"
+          ## Router
+          - "traefik.http.routers.sonarr.entryPoints=https"
+          - "traefik.http.routers.sonarr.rule=Host(`sonarr.{{ internal_domain }}`)"
+          - "traefik.http.routers.sonarr.tls=true"
+          ## Service
+          - "traefik.http.services.sonarr-svc.loadBalancer.server.port=8989"
+          - "traefik.http.services.sonarr-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.sonarr-svc.loadBalancer.passHostHeader=true"
+      - service_name: radarr
+        image:
+          name: linuxserver/radarr
+        environment:
+          - PUID={{ (container_users | selectattr('username', 'equalto', 'radarr') | list | first).uid }}
+          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
+          - UMASK=002
+          - TZ=Europe/London
+        volumes:
+          - source: radarr
+            target: /config
+            group: radarr
+            owner: radarr
+            mode: "755"
+          - source: /mnt/storage
+            target: /storage
+        expose:
+          - 7878
+        networks:
+          - proxy
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=true"
+          ## Router
+          - "traefik.http.routers.radarr.entryPoints=https"
+          - "traefik.http.routers.radarr.rule=Host(`radarr.{{ internal_domain }}`)"
+          - "traefik.http.routers.radarr.tls=true"
+          ## Service
+          - "traefik.http.services.radarr-svc.loadBalancer.server.port=7878"
+          - "traefik.http.services.radarr-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.radarr-svc.loadBalancer.passHostHeader=true"
+      - service_name: radarr-1080
+        image:
+          name: linuxserver/radarr
+        environment:
+          - PUID={{ (container_users | selectattr('username', 'equalto', 'radarr') | list | first).uid }}
+          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
+          - UMASK=002
+          - TZ=Europe/London
+        volumes:
+          - source: radarr-1080
+            target: /config
+            group: radarr
+            owner: radarr
+            mode: "755"
+          - source: /mnt/storage
+            target: /storage
+        expose:
+          - 7879
+        networks:
+          - proxy
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=true"
+          ## Router
+          - "traefik.http.routers.radarr-1080.entryPoints=https"
+          - "traefik.http.routers.radarr-1080.rule=Host(`radarr.{{ ansible_hostname }}.{{ internal_domain }}`)"
+          - "traefik.http.routers.radarr-1080.tls=true"
+          ## Service
+          - "traefik.http.services.radarr-1080-svc.loadBalancer.server.port=7879"
+          - "traefik.http.services.radarr-1080-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.radarr-1080-svc.loadBalancer.passHostHeader=true"
+      - service_name: prowlarr
+        image:
+          name: linuxserver/prowlarr
+          tag: develop
+        environment:
+          - PUID={{ (container_users | selectattr('username', 'equalto', 'prowlarr') | list | first).uid }}
+          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
+          - UMASK=002
+          - TZ=Europe/London
+        volumes:
+          - source: prowlarr
+            target: /config
+            group: prowlarr
+            owner: prowlarr
+            mode: "755"
+        expose:
+          - 9696
+        networks:
+          - proxy
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=true"
+          ## Router
+          - "traefik.http.routers.prowlarr.entryPoints=https"
+          - "traefik.http.routers.prowlarr.rule=Host(`prowlarr.{{ ansible_hostname }}.{{ internal_domain }}`)"
+          - "traefik.http.routers.prowlarr.tls=true"
+          ## Service
+          - "traefik.http.services.prowlarr-svc.loadBalancer.server.port=9696"
+          - "traefik.http.services.prowlarr-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.prowlarr-svc.loadBalancer.passHostHeader=true"
+      - service_name: flaresolverr
+        image:
+          name: flaresolverr/flaresolverr
+        environment:
+          - LOG_LEVEL=info
+          - LOG_HTML=false
+          - CAPTCHA_SOLVER=none
+          - TZ=Europe/London
+        expose:
+          - 8191
+        networks:
+          - proxy
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=true"
+          ## Router
+          - "traefik.http.routers.flaresolverr.entryPoints=https"
+          - "traefik.http.routers.flaresolverr.rule=Host(`flaresolverr.{{ ansible_hostname }}.{{ internal_domain }}`)"
+          - "traefik.http.routers.flaresolverr.tls=true"
+          ## Service
+          - "traefik.http.services.flaresolverr-svc.loadBalancer.server.port=8191"
+          - "traefik.http.services.flaresolverr-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.flaresolverr-svc.loadBalancer.passHostHeader=true"
+      - service_name: ombi
+        image:
+          name: linuxserver/ombi
+        environment:
+          - PUID={{ (container_users | selectattr('username', 'equalto', 'ombi') | list | first).uid }}
+          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
+          - UMASK=002
+          - TZ=Europe/London
+        volumes:
+          - source: ombi
+            target: /config
+            group: ombi
+            owner: ombi
+            mode: "755"
+        expose:
+          - 3579
+        networks:
+          - proxy
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=true"
+          ## Router
+          - "traefik.http.routers.ombi.entryPoints=https"
+          - "traefik.http.routers.ombi.rule=Host(`ombi.{{ internal_domain }}`)"
+          - "traefik.http.routers.ombi.tls=true"
+          ## Service
+          - "traefik.http.services.ombi-svc.loadBalancer.server.port=3579"
+          - "traefik.http.services.ombi-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.ombi-svc.loadBalancer.passHostHeader=true"
+      - service_name: metube
+        image:
+          name: alexta69/metube
+        environment:
+          - YTDL_OPTIONS={"cookiefile":"/downloads/cookies.txt"}
+          - STATE_DIR=/state
+        volumes:
+          - source: /mnt/storage/downloads/metube
+            target: /downloads
+            owner: metube
+            group: downloads
+            mode: "775"
+          - source: metube
+            target: /state
+            owner: metube
+            group: metube
+            mode: "755"
+        user: "{{ (container_users | selectattr('username', 'equalto', 'metube') | list | first).uid }}:{{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
+        expose:
+          - 8081
+        networks:
+          - proxy
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=true"
+          ## Router
+          - "traefik.http.routers.metube.entryPoints=https"
+          - "traefik.http.routers.metube.rule=Host(`metube.{{ ansible_hostname }}.{{ internal_domain }}`)"
+          - "traefik.http.routers.metube.tls=true"
+          ## Service
+          - "traefik.http.services.metube-svc.loadBalancer.server.port=8081"
+          - "traefik.http.services.metube-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.metube-svc.loadBalancer.passHostHeader=true"  
     networks:
       - name: proxy
         external: true

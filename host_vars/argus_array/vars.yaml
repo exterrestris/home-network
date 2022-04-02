@@ -11,7 +11,7 @@ zfs_pools:
     compression: 'lz4'
     devices:
       # Partition on main disk
-      - '31535139-61d4-429d-bd1a-93d9c4f07868'
+      - 'f306b6f2-2186-4ba7-bac6-c6c1dd38c100'
     type: 'basic'
     state: 'present'
 
@@ -29,5 +29,5 @@ sanoid_datasets:
 
 syncoid_syncs:
   - src: data1/appdata
-    dest: backup1/backups/memory-beta/appdata
+    dest: backup2/backups/argus-array/appdata
     dest_host: "memory-beta.{{ internal_domain }}"

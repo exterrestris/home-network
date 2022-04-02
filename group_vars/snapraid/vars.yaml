@@ -1,0 +1,10 @@
+---
+### ironicbadger.ansible_role_snapraid
+snapraid_gmail_pass: "{{ vault_snapraid_email_password }}"
+snapraid_email_address_to: "{{ vault_snapraid_email_to }}"
+snapraid_email_sendon: "success,error"
+snapraid_smtp_host: smtp.migadu.com
+snapraid_run_command: "python3 {{ snapraid_run_bin }} -c {{ snapraid_run_conf}} > /dev/null"
+snapraid_run_scrub_percent: 25
+snapraid_run_scrub_age: 10
+snapraid_run_repo: https://github.com/exterrestris/snapraid-runner.git

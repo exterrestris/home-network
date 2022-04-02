@@ -45,6 +45,15 @@
         state: present
       with_items: "{{ raspberry_pi_ubuntu_packages }}"
       tags: packages
+    - name: remove default "ubuntu" user
+      user:
+        name: ubuntu
+        remove: yes
+        state: absent
+    - name: remove default "ubuntu" group
+      group:
+        name: ubuntu
+        state: absent
 
 # Main - Standard Linux
 - hosts: linux
@@ -154,14 +163,6 @@
           - "{{ main_user_samba }}"
       tags:
         - samba
-    # Install Docker (needed by ironicbadger.ansible_role_snapraid)
-    - role: geerlingguy.docker
-      tags:
-        - docker
-    # Build and configure snapraid
-    - role: ironicbadger.ansible_role_snapraid
-      tags:
-        - snapraid
     # Configure firewall
     - role: weareinteractive.ufw
       vars:
@@ -181,6 +182,17 @@
         append: yes
       tags:
         - users
+
+- hosts: snapraid
+  roles:
+    # Install Docker (needed by ironicbadger.ansible_role_snapraid)
+    - role: geerlingguy.docker
+      tags:
+        - docker
+    # Build and configure snapraid
+    - role: ironicbadger.ansible_role_snapraid
+      tags:
+        - snapraid
 
 - hosts: traefik:!docker
   roles:
@@ -216,6 +228,7 @@
   roles:
     # Install Docker
     - role: geerlingguy.docker
+      tags: docker-install
     # Install PIP
     - role: geerlingguy.pip
       vars:
