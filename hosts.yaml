@@ -28,6 +28,9 @@ all:
         argus_array:
         holosuite_1:
         holosuite_2:
+    ups:
+      hosts:
+        spacedock:
     linux:
       children:
         # Roles
