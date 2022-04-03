@@ -86,6 +86,11 @@ all_container_users:
     gid: 207
     hosts:
       - memory_alpha
+  - username: uptime-kuma
+    uid: 210
+    gid: 210
+    hosts:
+      - argus_array
 
 container_users: "{{ (all_container_users | selectattr('hosts', 'superset', [ inventory_hostname ]) | list) }}"
 
