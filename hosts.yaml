@@ -4,32 +4,37 @@ all:
     ansible_password: "{{ vault_ansible_user_password }}"
     ansible_become_password: "{{ vault_ansible_user_password }}"
   children:
-    # Type
-    proxmox_host:
-      hosts:
-        spacedock:
-    proxmox_vm:
-      hosts:
-        memory_alpha:
-        epsilon_ix:
-        holosuite_1:
-    raspberry_pi:
-      hosts:
-        memory_beta:
-        holosuite_2:
-        argus_array:
-    pfsense:
-      hosts:
-        midas_array:
-    ubuntu:
-      hosts:
-        memory_alpha:
-        memory_beta:
-        argus_array:
-        holosuite_1:
-        holosuite_2:
+    # OS Type
+    bsd:
+      children:
+        pfsense:
+          hosts:
+            midas_array:
     linux:
       children:
+        # Type
+        proxmox_host:
+          hosts:
+            spacedock:
+        proxmox_vm:
+          hosts:
+            memory_alpha:
+            epsilon_ix:
+            holosuite_1:
+        raspberry_pi:
+          vars:
+            ansible_group_priority: 10
+          hosts:
+            memory_beta:
+            holosuite_2:
+            argus_array:
+        ubuntu:
+          hosts:
+            memory_alpha:
+            memory_beta:
+            argus_array:
+            holosuite_1:
+            holosuite_2:
         # Roles
         zfs:
           hosts:
