@@ -59,6 +59,12 @@ all:
           hosts:
             memory_alpha:
             argus_array:
+        metrics:
+          hosts:
+            memory_alpha:
+            memory_beta:
+            argus_array:
+            epsilon_ix:
         test_machines:
           hosts:
             # holosuite_1:
