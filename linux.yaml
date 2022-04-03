@@ -265,6 +265,15 @@
         - wsdd
         - samba
 
+- hosts: metrics:&docker
+  roles:
+    # Generate Docker Compose
+    - role: exterrestris.docker_compose
+      vars:
+        docker_compose_projects: "{{ metrics_docker_compose }}"
+  tags:
+    - metrics
+
 # Main - Host Specific
 - hosts: memory_alpha
   tasks:

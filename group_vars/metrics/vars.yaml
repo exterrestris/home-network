@@ -1,0 +1,52 @@
+
+### exterrestris.docker_compose
+metrics_docker_compose:
+  - project_dir: "{{ appdata_path }}/metrics"
+    containers:
+      - service_name: cadvisor
+        image: gcr.io/cadvisor/cadvisor
+        container_name: cadvisor
+        expose:
+          - 8080
+        volumes:
+          - source: /
+            target: /rootfs
+            read_only: true
+            create: no
+          - source: /var/run
+            target: /var/run
+            create: no
+          - source: /sys
+            target: /sys
+            read_only: true
+            create: no
+          - source: /var/lib/docker/
+            target: /var/lib/docker
+            read_only: true
+            create: no
+        devices:
+          - /dev/kmsg
+        networks:
+          - proxy
+        restart: unless-stopped
+        depends_on:
+          - redis
+        labels:
+          - "traefik.enable=true"
+          ## Router
+          - "traefik.http.routers.cadvisor.entryPoints=https"
+          - "traefik.http.routers.cadvisor.rule=Host(`cadvisor.{{ ansible_hostname }}.{{ internal_domain }}`)"
+          - "traefik.http.routers.cadvisor.tls=true"
+          ## Service
+          - "traefik.http.services.cadvisor-svc.loadBalancer.server.port=8080"
+          - "traefik.http.services.cadvisor-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.cadvisor-svc.loadBalancer.passHostHeader=true"
+      - service_name: redis
+        image: redis
+        container_name: redis
+        expose:
+          - 6379
+    networks:
+      - name: proxy
+        external: true
+        alias: "{{ traefik_docker_network }}"
