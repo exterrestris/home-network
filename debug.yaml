@@ -1,23 +1,62 @@
 ---
-- hosts: all
+- hosts: localhost
+  gather_facts: no
   tasks:
-    - name: Print Variables
-      debug: 
-        var: vars       
-      tags: vars
-    - name: Print Environment Variables
-      debug: 
-        var: environment       
-      tags: environment
-    - name: Print Group Names Variables
-      debug: 
-        var: group_names       
-      tags: group_names
-    - name: Print Groups Variables
-      debug: 
-        var: groups       
-      tags: groups
-    - name: Print Hosts Variables
-      debug: 
-        var: hostvars       
-      tags: hostvars
+    - pause:
+        prompt: |
+          What do you want to see?
+            1 - single variable
+            2 - all variables
+            3 - group variables
+        echo: yes
+      register: debug_option
+    - pause:
+        prompt: |
+          Which variable?
+        echo: yes
+      register: selected_var
+      when: debug_option.user_input == "1"
+    - pause:
+        prompt: |
+          For which host(s)?
+        echo: yes
+      register: target_hosts
+      when: debug_option.user_input != "3"
+    - pause:
+        prompt: |
+          For which group?
+        echo: yes
+      register: target_group
+      when: debug_option.user_input == "3"
+    - block:
+        - add_host:
+            name: "{{ item }}"
+            groups: debug
+          loop: "{{ groups[ target_hosts.user_input ] }}"
+          changed_when: False
+      when:
+        - debug_option.user_input != "3"
+        - groups[ target_hosts.user_input ] is defined
+    - block:
+        - add_host:
+            name: "{{ target_hosts.user_input }}"
+            groups: debug
+          changed_when: False
+      when:
+        - debug_option.user_input != "3"
+        - groups[ target_hosts.user_input ] is not defined
+    - block:
+        - debug:
+            msg:
+              - "{{ selected_var.user_input}}: {{ hostvars[item][selected_var.user_input] | default('NOT DEFINED') }}"
+          loop: "{{ groups['debug'] }}"
+      when: debug_option.user_input == "1"
+    - block:
+        - debug:
+            var: "{{ hostvars[item] }}"
+          loop: "{{ groups['debug'] }}"
+      when: debug_option.user_input == "2"
+    - debug:
+        var: "{{ groups[target_group.user_input] }}"
+      when: debug_option.user_input == "3"
+
