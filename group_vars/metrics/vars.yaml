@@ -1,10 +1,11 @@
+cadvisor_image: gcr.io/cadvisor/cadvisor
 
 ### exterrestris.docker_compose
 metrics_docker_compose:
   - project_dir: "{{ appdata_path }}/metrics"
     containers:
       - service_name: cadvisor
-        image: gcr.io/cadvisor/cadvisor
+        image: "{{ cadvisor_image }}"
         container_name: cadvisor
         expose:
           - 8080
@@ -22,6 +23,10 @@ metrics_docker_compose:
             create: no
           - source: /var/lib/docker/
             target: /var/lib/docker
+            read_only: true
+            create: no
+          - source: /dev/disk/
+            target: /dev/disk
             read_only: true
             create: no
         devices:
