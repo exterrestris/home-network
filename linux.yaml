@@ -265,6 +265,11 @@
         - wsdd
         - samba
 
+- hosts: metrics
+  roles:
+  tags:
+    - metrics
+
 - hosts: metrics:&docker
   roles:
     # Generate Docker Compose
