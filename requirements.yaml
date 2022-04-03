@@ -26,6 +26,7 @@ roles:
     src: https://github.com/sprat/ansible-role-mergerfs
   - name: weareinteractive.ufw
   - name: geerlingguy.docker
+  - name: geerlingguy.docker_arm
   - name: geerlingguy.pip
   - name: ironicbadger.ansible_role_snapraid
     src: https://github.com/IronicBadger/ansible-role-snapraid

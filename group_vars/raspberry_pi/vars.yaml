@@ -4,6 +4,3 @@ raspberry_pi_ubuntu_packages:
 
 ### mrlesmithjr.zfs
 zfs_ubuntu_universe_repo_url: http://ports.ubuntu.com/ubuntu-ports
-
-# geerlingguy.docker
-docker_apt_arch: arm64
