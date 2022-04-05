@@ -60,7 +60,7 @@ docker_compose_projects:
           - "traefik.enable=true"
           ## Router
           - "traefik.http.routers.uptime-kuma.entryPoints=https"
-          - "traefik.http.routers.uptime-kuma.rule=Host(`status.{{ internal_domain }}`)"
+          - "traefik.http.routers.uptime-kuma.rule=Host(`uptime.{{ internal_domain }}`)"
           - "traefik.http.routers.uptime-kuma.tls=true"
           ## Service
           - "traefik.http.services.uptime-kuma-svc.loadBalancer.server.port=3001"
