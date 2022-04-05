@@ -3,7 +3,7 @@ ansible_host: 192.168.5.136
 target_os: ubuntu
 
 ### exterrestris.traefik
-traefik_binary_version: v2.4.8
+traefik_binary_version: v2.6.3
 
 traefik_internal_entrypoint:
   host: "{{ ansible_ens18.ipv4.address }}"
