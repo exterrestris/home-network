@@ -5,6 +5,8 @@ target_os: ubuntu
 ### exterrestris.traefik
 traefik_binary_version: v2.6.3
 
+traefik_access_log_enabled: yes
+
 traefik_internal_entrypoint:
   host: "{{ ansible_ens18.ipv4.address }}"
 
