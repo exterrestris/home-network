@@ -8,6 +8,7 @@ all:
     proxmox_host:
       hosts:
         spacedock:
+        utopia_planitia:
     proxmox_vm:
       hosts:
         memory_alpha:
