@@ -115,6 +115,7 @@
   roles:
     # Remove Proxmox 'unregisted' nag
     - role: ironicbadger.ansible_role_proxmox_nag_removal
+      tags: proxmox
     # Disable cluster services to prevent SSD wear
     - role: proxmox_host
       tags: proxmox
