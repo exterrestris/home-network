@@ -122,6 +122,13 @@
     # Install SSL certificate
     - role: exterrestris.proxmox_ssl
       tags: ssl
+  tasks:
+    - name: install additional packages
+      package:
+        name: "{{ item.name }}"
+        state: present
+      with_items: "{{ proxmox_additional_packages }}"
+      tags: packages
       
 - hosts: proxmox_vm
   roles:
