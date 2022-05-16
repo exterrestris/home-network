@@ -6,18 +6,24 @@ all:
   children:
     # Type
     proxmox_host:
-      hosts:
-        spacedock:
+      children:
+        proxmox_6:
+          hosts:
+            spacedock:
+        proxmox_7:
+          hosts:
+            utopia_planitia:
     proxmox_vm:
       hosts:
         memory_alpha:
         epsilon_ix:
         holosuite_1:
+        argus_array:
+        midas_array:
     raspberry_pi:
       hosts:
         memory_beta:
         holosuite_2:
-        argus_array:
     pfsense:
       hosts:
         midas_array:

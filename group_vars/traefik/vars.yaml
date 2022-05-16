@@ -63,3 +63,4 @@ fetch_ssl_certs:
         key: "{{ traefik_tls_certificate_dir }}/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.key"
 
 fetch_ssl_run_now: yes
+fetch_ssl_ssh_add_remote_to_known_hosts: yes

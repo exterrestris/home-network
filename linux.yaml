@@ -115,14 +115,22 @@
   roles:
     # Remove Proxmox 'unregisted' nag
     - role: ironicbadger.ansible_role_proxmox_nag_removal
+      tags: proxmox
     # Disable cluster services to prevent SSD wear
     - role: proxmox_host
       tags: proxmox
     # Install SSL certificate
     - role: exterrestris.proxmox_ssl
       tags: ssl
+  tasks:
+    - name: install additional packages
+      package:
+        name: "{{ item.name }}"
+        state: present
+      with_items: "{{ proxmox_additional_packages }}"
+      tags: packages
       
-- hosts: proxmox_vm
+- hosts: proxmox_vm:&linux
   roles:
     # Install qemu-guest-agent
     - role: proxmox_vm
@@ -211,6 +219,7 @@
     - role: exterrestris.fetch_ssl
       tags:
         - traefik-ssl
+        - ssl
   tasks:
     - name: configure Cockpit to allow proxying
       template:
@@ -224,17 +233,34 @@
   tags:
     - traefik
 
-- hosts: docker
+- hosts: docker:!raspberry_pi
   roles:
-    # Install Docker
+    # Install Docker (x64)
     - role: geerlingguy.docker
-      tags: docker-install
+      when: "'raspberry_pi' not in group_names"
     # Install PIP
     - role: geerlingguy.pip
       vars:
         pip_install_packages:
           - name: docker
           - name: docker-compose
+  tags: docker-install
+
+- hosts: docker:&raspberry_pi
+  roles:
+    # Install PIP
+    - role: geerlingguy.pip
+      vars:
+        pip_install_packages:
+          - name: docker
+            # geerlingguy.docker_arm will install docker-compose pip package
+    # Install Docker (arm)
+    - role: geerlingguy.docker_arm
+      when: "'raspberry_pi' in group_names"
+  tags: docker-install
+
+- hosts: docker
+  roles:
     # Set up users specific to containers
     - role: exterrestris.ansible_users
       vars:
