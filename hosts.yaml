@@ -12,7 +12,7 @@ all:
             midas_array:
     linux:
       children:
-        proxmox_host:
+        proxmox:
           children:
             proxmox_6:
               hosts:

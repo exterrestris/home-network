@@ -111,7 +111,7 @@
       tags: zsh
 
 # Main - Groups
-- hosts: proxmox_host
+- hosts: proxmox
   roles:
     # Remove Proxmox 'unregisted' nag
     - role: ironicbadger.ansible_role_proxmox_nag_removal
