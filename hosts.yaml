@@ -19,6 +19,7 @@ all:
         epsilon_ix:
         holosuite_1:
         argus_array:
+        midas_array:
     raspberry_pi:
       hosts:
         memory_beta:
