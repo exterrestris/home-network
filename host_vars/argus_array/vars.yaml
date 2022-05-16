@@ -70,6 +70,73 @@ docker_compose_projects:
           - "traefik.http.services.uptime-kuma-svc.loadBalancer.server.port=3001"
           - "traefik.http.services.uptime-kuma-svc.loadbalancer.server.scheme=http"
           - "traefik.http.services.uptime-kuma-svc.loadBalancer.passHostHeader=true"
+  - project_dir: "{{ appdata_path }}/monitoring"
+    containers:
+      - service_name: prometheus
+        container_name: prometheus
+        image:
+          name: prom/prometheus
+#        environment:
+#          - PUID={{ (container_users | selectattr('username', 'equalto', 'prometheus') | list | first).uid }}
+#          - PGID={{ (container_users | selectattr('name', 'equalto', 'prometheus') | list | first).gid }}
+#          - UMASK=002
+#          - TZ=Europe/London
+        volumes:
+          - source: prometheus/config
+            target: /etc/prometheus
+            group: prometheus
+            owner: prometheus
+            mode: "755"
+          - source: prometheus/data
+            target: /prometheus
+            group: prometheus
+            owner: prometheus
+        command:
+          - "--config.file=/etc/prometheus/prometheus.yml"
+        expose:
+          - 9090
+        networks:
+          - proxy
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=true"
+          ## Router
+          - "traefik.http.routers.prometheus.entryPoints=https"
+          - "traefik.http.routers.prometheus.rule=Host(`prometheus.{{ ansible_hostname }}.{{ internal_domain }}`)"
+          - "traefik.http.routers.prometheus.tls=true"
+          ## Service
+          - "traefik.http.services.prometheus-svc.loadBalancer.server.port=9090"
+          - "traefik.http.services.prometheus-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.prometheus-svc.loadBalancer.passHostHeader=true"
+      - service_name: grafana
+        container_name: grafana
+        image:
+          name: grafana/grafana-oss
+#        environment:
+#          - PUID={{ (container_users | selectattr('username', 'equalto', 'grafana') | list | first).uid }}
+#          - PGID={{ (container_users | selectattr('name', 'equalto', 'grafana') | list | first).gid }}
+#          - UMASK=002
+#          - TZ=Europe/London
+        volumes:
+          - source: grafana
+            target: /var/lib/grafana
+            group: grafana
+            owner: grafana
+        expose:
+          - 3000
+        networks:
+          - proxy
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=true"
+          ## Router
+          - "traefik.http.routers.grafana.entryPoints=https"
+          - "traefik.http.routers.grafana.rule=Host(`grafana.{{ internal_domain }}`)"
+          - "traefik.http.routers.grafana.tls=true"
+          ## Service
+          - "traefik.http.services.grafana-svc.loadBalancer.server.port=3000"
+          - "traefik.http.services.grafana-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.grafana-svc.loadBalancer.passHostHeader=true"
     networks:
       - name: proxy
         external: true

@@ -81,6 +81,16 @@ all_container_users:
     gid: 207
     hosts:
       - memory_alpha
+  - username: prometheus
+    uid: 208
+    gid: 208
+    hosts:
+      - argus_array
+  - username: grafana
+    uid: 209
+    gid: 209
+    hosts:
+      - argus_array
   - username: uptime-kuma
     uid: 210
     gid: 210
