@@ -219,6 +219,7 @@
     - role: exterrestris.fetch_ssl
       tags:
         - traefik-ssl
+        - ssl
   tasks:
     - name: configure Cockpit to allow proxying
       template:
