@@ -10,8 +10,7 @@ zfs_pools:
     action: 'create'
     compression: 'lz4'
     devices:
-      # Partition on main disk
-      - 'f306b6f2-2186-4ba7-bac6-c6c1dd38c100'
+      - 'scsi-0QEMU_QEMU_HARDDISK_drive-scsi1'
     type: 'basic'
     state: 'present'
 

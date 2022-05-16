@@ -18,11 +18,11 @@ all:
         memory_alpha:
         epsilon_ix:
         holosuite_1:
+        argus_array:
     raspberry_pi:
       hosts:
         memory_beta:
         holosuite_2:
-        argus_array:
     pfsense:
       hosts:
         midas_array:
