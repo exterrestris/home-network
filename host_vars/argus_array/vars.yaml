@@ -30,3 +30,42 @@ syncoid_syncs:
   - src: data1/appdata
     dest: backup2/backups/argus-array/appdata
     dest_host: "memory-beta.{{ internal_domain }}"
+
+### exterrestris.docker_compose
+docker_compose_projects:
+  - project_dir: "{{ appdata_path }}/monitoring"
+    containers:
+      - service_name: uptime-kuma
+        container_name: uptime-kuma
+        image:
+          name: louislam/uptime-kuma
+#        environment:
+#          - PUID={{ (container_users | selectattr('username', 'equalto', 'uptime-kuma') | list | first).uid }}
+#          - PGID={{ (container_users | selectattr('name', 'equalto', 'uptime-kuma') | list | first).gid }}
+#          - UMASK=002
+#          - TZ=Europe/London
+        volumes:
+          - source: uptime-kuma
+            target: /app/data
+            group: uptime-kuma
+            owner: uptime-kuma
+            mode: "755"
+        expose:
+          - 3001
+        networks:
+          - proxy
+        restart: always
+        labels:
+          - "traefik.enable=true"
+          ## Router
+          - "traefik.http.routers.uptime-kuma.entryPoints=https"
+          - "traefik.http.routers.uptime-kuma.rule=Host(`uptime.{{ internal_domain }}`)"
+          - "traefik.http.routers.uptime-kuma.tls=true"
+          ## Service
+          - "traefik.http.services.uptime-kuma-svc.loadBalancer.server.port=3001"
+          - "traefik.http.services.uptime-kuma-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.uptime-kuma-svc.loadBalancer.passHostHeader=true"
+    networks:
+      - name: proxy
+        external: true
+        alias: "{{ traefik_docker_network }}"

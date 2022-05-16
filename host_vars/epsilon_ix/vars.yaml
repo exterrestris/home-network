@@ -3,7 +3,9 @@ ansible_host: 192.168.5.136
 target_os: ubuntu
 
 ### exterrestris.traefik
-traefik_binary_version: v2.4.8
+traefik_binary_version: v2.6.3
+
+traefik_access_log_enabled: yes
 
 traefik_internal_entrypoint:
   host: "{{ ansible_enp6s18.ipv4.address }}"
@@ -39,6 +41,16 @@ traefik_routers:
     entrypoints:
       - web-http
       - web-https
+  - name: status-proxy
+    service: "status-proxy-svc@file"
+    rule: "Host(`status.{{ internal_domain }}`)"
+    entrypoints:
+      - web-http
+      - web-https
+      - http
+      - https
+    middlewares:
+      - status-proxy-public-redirect
 
 traefik_services:
   - "{{ cockpit_traefik_service }}"
@@ -50,3 +62,14 @@ traefik_services:
     type: http
     servers:
       - "https://ombi.{{ internal_domain }}"
+  - name: status-proxy-svc
+    type: http
+    passHostHeader: no
+    servers:
+      - "https://uptime.{{ internal_domain }}"
+
+traefik_middlewares:
+  - name: status-proxy-public-redirect
+    middleware: redirectRegex
+    regex: "^https://status.{{ internal_domain }}/(status(/.+)?)?$"
+    replacement: "https://status.{{ internal_domain }}/status/public"

@@ -232,17 +232,34 @@
   tags:
     - traefik
 
-- hosts: docker
+- hosts: docker:!raspberry_pi
   roles:
-    # Install Docker
+    # Install Docker (x64)
     - role: geerlingguy.docker
-      tags: docker-install
+      when: "'raspberry_pi' not in group_names"
     # Install PIP
     - role: geerlingguy.pip
       vars:
         pip_install_packages:
           - name: docker
           - name: docker-compose
+  tags: docker-install
+
+- hosts: docker:&raspberry_pi
+  roles:
+    # Install PIP
+    - role: geerlingguy.pip
+      vars:
+        pip_install_packages:
+          - name: docker
+            # geerlingguy.docker_arm will install docker-compose pip package
+    # Install Docker (arm)
+    - role: geerlingguy.docker_arm
+      when: "'raspberry_pi' in group_names"
+  tags: docker-install
+
+- hosts: docker
+  roles:
     # Set up users specific to containers
     - role: exterrestris.ansible_users
       vars:
