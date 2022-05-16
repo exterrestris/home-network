@@ -6,24 +6,24 @@ target_os: ubuntu
 traefik_binary_version: v2.4.8
 
 traefik_internal_entrypoint:
-  host: "{{ ansible_ens18.ipv4.address }}"
+  host: "{{ ansible_enp6s18.ipv4.address }}"
 
 traefik_external_entrypoint:
-  host: "{{ ansible_ens19.ipv4.address }}"
+  host: "{{ ansible_enp6s19.ipv4.address }}"
 
 traefik_entrypoints:
   - "{{ traefik_default_http_entrypoint | combine(traefik_internal_entrypoint) }}"
   - "{{ traefik_default_https_entrypoint | combine(traefik_internal_entrypoint) }}"
   - name: web-http
     port: 80
-    host: "{{ ansible_ens19.ipv4.address }}"
+    host: "{{ ansible_enp6s19.ipv4.address }}"
     http:
       redirect:
         to: web-https
         scheme: 'https'
   - name: web-https
     port: 443
-    host: "{{ ansible_ens19.ipv4.address }}"
+    host: "{{ ansible_enp6s19.ipv4.address }}"
 
 traefik_routers:
   - "{{ cockpit_traefik_router }}"
