@@ -5,7 +5,7 @@ all:
     ansible_become_password: "{{ vault_ansible_user_password }}"
   children:
     # Type
-    proxmox_host:
+    proxmox:
       children:
         proxmox_8:
           hosts:
