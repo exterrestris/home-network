@@ -1,0 +1,3 @@
+---
+proxmox_additional_packages:
+  - name: ifupdown2
