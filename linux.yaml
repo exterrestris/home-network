@@ -144,7 +144,9 @@
         - zfs
     # Install/configure ZFS snapshots/replication using Sanoid
     - role: exterrestris.sanoid
-      tags: sanoid
+      tags:
+        - sanoid
+        - zfs
     # Install Cockpit ZFS Manager
     - role: cockpit_zfs
       tags: cockpit
