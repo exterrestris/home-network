@@ -192,6 +192,13 @@
         append: yes
       tags:
         - users
+    # Install packages
+    - name: install common nas packages
+      package:
+        name: "{{ item.name }}"
+        state: present
+      with_items: "{{ nas_common_packages }}"
+      tags: packages
 
 - hosts: snapraid
   roles:
