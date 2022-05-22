@@ -17,13 +17,13 @@ all:
       hosts:
         memory_alpha:
         epsilon_ix:
-        holosuite_1:
+        # holosuite_1:
         argus_array:
         midas_array:
     raspberry_pi:
       hosts:
         memory_beta:
-        holosuite_2:
+        # holosuite_2:
     pfsense:
       hosts:
         midas_array:
@@ -32,8 +32,8 @@ all:
         memory_alpha:
         memory_beta:
         argus_array:
-        holosuite_1:
-        holosuite_2:
+        # holosuite_1:
+        # holosuite_2:
     linux:
       children:
         # Roles
@@ -62,5 +62,5 @@ all:
             argus_array:
         test_machines:
           hosts:
-            holosuite_1:
-            holosuite_2:
+            # holosuite_1:
+            # holosuite_2:
