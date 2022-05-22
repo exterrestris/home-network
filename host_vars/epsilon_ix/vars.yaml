@@ -49,8 +49,6 @@ traefik_routers:
       - web-https
       - http
       - https
-    middlewares:
-      - status-proxy-public-redirect
 
 traefik_services:
   - "{{ cockpit_traefik_service }}"
@@ -64,12 +62,5 @@ traefik_services:
       - "https://ombi.{{ internal_domain }}"
   - name: status-proxy-svc
     type: http
-    passHostHeader: no
     servers:
       - "https://uptime.{{ internal_domain }}"
-
-traefik_middlewares:
-  - name: status-proxy-public-redirect
-    middleware: redirectRegex
-    regex: "^https://status.{{ internal_domain }}/(status(/.+)?)?$"
-    replacement: "https://status.{{ internal_domain }}/status/public"
