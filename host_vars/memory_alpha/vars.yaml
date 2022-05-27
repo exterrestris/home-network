@@ -412,6 +412,7 @@ docker_compose_projects:
         external: true
         alias: "{{ traefik_docker_network }}"
   - project_dir: "{{ appdata_path }}/media-downloads"
+    autostart: no
     containers:
       - service_name: sonarr
         image:
@@ -625,3 +626,33 @@ docker_compose_projects:
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
+
+### linuxserver_containers
+linuxserver_container_custom_scripts:
+  - container: "{{ appdata_path }}/media-downloads/sonarr"
+    owner: sonarr
+    group: sonarr
+    scripts:
+      - script: add-to-downloads-group.sh
+        template: add-container-user-to-group.sh.j2
+        template_vars:
+          gid: "{{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
+          group: downloads
+  - container: "{{ appdata_path }}/media-downloads/radarr"
+    owner: radarr
+    group: radarr
+    scripts:
+      - script: add-to-downloads-group.sh
+        template: add-container-user-to-group.sh.j2
+        template_vars:
+          gid: "{{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
+          group: downloads
+  - container: "{{ appdata_path }}/media-downloads/radarr-1080"
+    owner: radarr
+    group: radarr
+    scripts:
+      - script: add-to-downloads-group.sh
+        template: add-container-user-to-group.sh.j2
+        template_vars:
+          gid: "{{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
+          group: downloads

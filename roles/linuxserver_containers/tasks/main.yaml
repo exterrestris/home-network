@@ -1,0 +1,14 @@
+---
+- name: customise linuxserver containers
+  include_tasks: custom-scripts.yaml
+  loop: "{{ linuxserver_container_custom_scripts }}"
+  loop_control:
+    loop_var: container
+
+- name: start customised linuxserver containers
+  community.docker.docker_compose:
+    state: present
+    project_src: "{{ container.container }}"
+  loop: "{{ linuxserver_container_custom_scripts }}"
+  loop_control:
+    loop_var: container

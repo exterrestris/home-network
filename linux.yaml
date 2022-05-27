@@ -301,6 +301,9 @@
     - role: exterrestris.docker_compose
       tags:
         - docker-compose
+    - role: linuxserver_containers
+      tags:
+        - docker-compose
   tasks:
     - name: configure Cockpit to allow proxying
       template:
