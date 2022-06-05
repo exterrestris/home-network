@@ -17,7 +17,7 @@ chmod +x install-ansible.sh
 ./install-ansible.sh
 chmod 775 .
 make install-git-hooks
-make reqs
+make install-requirements
 if [ ! -e .vault-password ]; then
   echo '*REPLACE WITH VAULT PASSWORD*' > .vault-password
 fi
