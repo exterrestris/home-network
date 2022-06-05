@@ -7,6 +7,7 @@ fi
 
 case $DISTRO in
     ubuntu)
+        sudo apt update
         sudo apt install --yes python3 python3-pip python3-bcrypt git make sshpass
         pip3 install --upgrade ansible-base
         pip3 install --upgrade jinja2
