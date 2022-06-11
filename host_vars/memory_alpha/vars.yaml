@@ -292,7 +292,7 @@ docker_compose_projects:
       - service_name: jellyfin
         image:
           name: linuxserver/jellyfin
-          tag: bionic
+          tag: latest
         environment:
           - PUID={{ (container_users | selectattr('username', 'equalto', 'jellyfin') | list | first).uid }}
           - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
