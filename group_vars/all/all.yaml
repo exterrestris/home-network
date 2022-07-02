@@ -26,6 +26,7 @@ common_packages:
   - name: iotop
   - name: iftop
   - name: unzip
+  - name: acl
   - name: zsh
 
 internal_domain: "{{ vault_domain }}"
