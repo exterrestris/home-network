@@ -13,6 +13,7 @@ all:
         proxmox_7:
           hosts:
             utopia_planitia:
+            deep_space_9:
     proxmox_vm:
       hosts:
         memory_alpha:
