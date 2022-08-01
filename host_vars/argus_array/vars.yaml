@@ -10,7 +10,7 @@ zfs_pools:
     action: 'create'
     compression: 'lz4'
     devices:
-      - 'scsi-0QEMU_QEMU_HARDDISK_drive-scsi1'
+      - 'ata-ST2000LX001-1RG174_WCC2V2L7'
     type: 'basic'
     state: 'present'
 
