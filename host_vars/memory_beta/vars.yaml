@@ -67,6 +67,8 @@ sanoid_datasets:
     templates: backups
   - name: backup2/backups/memory-alpha/drives
     templates: backups
+  - name: backup2/backups/memory-alpha/photos
+    templates: backups
 
 ### mount_disks
 parity_disks:

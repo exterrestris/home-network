@@ -112,6 +112,9 @@ syncoid_syncs:
   - src: pool2/appdata
     dest: backup2/backups/memory-alpha/appdata
     dest_host: "memory-beta.{{ internal_domain }}"
+  - src: pool2/photos
+    dest: backup2/backups/memory-alpha/photos
+    dest_host: "memory-beta.{{ internal_domain }}"
 
 ### mount_disks
 parity_disks:
