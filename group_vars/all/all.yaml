@@ -7,7 +7,15 @@ main_user:
   update_password: on_create
   groups:
     - 'sudo'
-  github_username: exterrestris
+  ssh_keys:
+    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILIRURB3Wl7Ppl95E2H3LeLF76c4xHntO2WRwcF27oZm"
+    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK159HmQV/mVk3AFML8a+kmEE8VL94XLTJI2Genu44/t"
+    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE3OKdlxfzxvLtz9kdLRvt++7Bvn6jghXgRn/ZoOeVJ8"
+    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ5vL72HAZsSoIwSUKPiQBiP6cHb2ccsq8My+ygN6bWl"
+    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMHQwfyBLUMaMiPkCtlAbvCjpOXIPOVJMDp+AXVobH1l"
+    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH4O0umQWRU/RcbAJ472aDWoTxOFsH3b/8dhISBUFVcS"
+    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE0UaIVzdBc2LpsjOmSHCBGsSayTM2tNwYfiYTwp5or+"
+    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDyOflUAFqct5RWU8JI2HkJqOf4HB10d7hFbUvyhNY5C"
   generate_ssh_key: yes
   generate_ssh_key_type: ed25519
   generate_ssh_key_file: .ssh/id_ed25519
