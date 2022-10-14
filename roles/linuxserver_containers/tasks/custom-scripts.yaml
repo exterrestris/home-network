@@ -2,7 +2,7 @@
 - name: generate custom scripts
   template:
     src: "{{ script.template }}"
-    dest: "{{ container.container }}/custom-cont-init.d/{{ script.script }}"
+    dest: "{{ container.container }}.custom.d/custom-cont-init.d/{{ script.script }}"
     owner: root
     group: root
     mode: '744'
