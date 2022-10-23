@@ -73,6 +73,18 @@ docker_compose_projects:
         container_name: omada-controller
         image:
           name: mbentley/omada-controller
+        ports:
+          - port: 8088
+          - port: 8043
+          - port: 8843
+          - port: 27001
+            protocol: udp
+          - port: 29810
+            protocol: udp
+          - port: 29811
+          - port: 29812
+          - port: 29813
+          - port: 29814
         environment:
           - PUID={{ (container_users | selectattr('username', 'equalto', 'omada') | list | first).uid }}
           - PGID={{ (container_users | selectattr('username', 'equalto', 'omada') | list | first).gid }}
@@ -102,5 +114,4 @@ docker_compose_projects:
             group: omada
             owner: omada
             mode: "755"
-        network_mode: host
         restart: always
