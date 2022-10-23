@@ -63,6 +63,43 @@ docker_compose_projects:
           - "traefik.http.services.uptime-kuma-svc.loadBalancer.server.port=3001"
           - "traefik.http.services.uptime-kuma-svc.loadbalancer.server.scheme=http"
           - "traefik.http.services.uptime-kuma-svc.loadBalancer.passHostHeader=true"
+  - project_dir: "{{ appdata_path }}/network"
+    containers:
+      - service_name: omada-controller
+        container_name: omada-controller
+        image:
+          name: mbentley/omada-controller
+        environment:
+          - PUID={{ (container_users | selectattr('username', 'equalto', 'omada') | list | first).uid }}
+          - PGID={{ (container_users | selectattr('username', 'equalto', 'omada') | list | first).gid }}
+          - MANAGE_HTTP_PORT=8088
+          - MANAGE_HTTPS_PORT=8043
+          - PORTAL_HTTP_PORT=8088
+          - PORTAL_HTTPS_PORT=8843
+          - PORT_APP_DISCOVERY=27001
+          - PORT_ADOPT_V1=29812
+          - PORT_UPGRADE_V1=29813
+          - PORT_MANAGER_V1=29811
+          - PORT_MANAGER_V2=29814
+          - PORT_DISCOVERY=29810
+          - SHOW_SERVER_LOGS=true
+          - SHOW_MONGODB_LOGS=false
+          #- SSL_CERT_NAME=tls.crt
+          #- SSL_KEY_NAME=tls.key
+          - TZ=Etc/UTC
+        volumes:
+          - source: omada-controller/data
+            target: /opt/tplink/EAPController/data
+            group: omada
+            owner: omada
+            mode: "755"
+          - source: omada-controller/logs
+            target: /opt/tplink/EAPController/logs
+            group: omada
+            owner: omada
+            mode: "755"
+        network_mode: host
+        restart: always
     networks:
       - name: proxy
         external: true
