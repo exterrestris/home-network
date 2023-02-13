@@ -296,6 +296,7 @@
       tags:
         - traefik
         - traefik-ssl
+        - ssl
       when: "'traefik' in group_names"
     # Generate Docker Compose
     - role: exterrestris.docker_compose
