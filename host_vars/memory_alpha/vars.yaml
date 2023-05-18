@@ -608,7 +608,7 @@ docker_compose_projects:
         image:
           name: alexta69/metube
         environment:
-          - YTDL_OPTIONS={"cookiefile":"/downloads/cookies.txt"}
+          - YTDL_OPTIONS={"cookiefile":"/downloads/cookies.txt","writethumbnail":true,"postprocessors":[{"key":"FFmpegThumbnailsConvertor","format":"png"}]}
           - STATE_DIR=/state
         volumes:
           - source: /mnt/storage/downloads/metube
