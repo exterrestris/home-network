@@ -28,7 +28,6 @@ traefik_entrypoints:
     host: "{{ ansible_enp6s19.ipv4.address }}"
 
 traefik_routers:
-  - "{{ cockpit_traefik_router }}"
   - name: jellyfin-proxy
     service: "jellyfin-proxy-svc@file"
     rule: "Host(`jellyfin.{{ internal_domain }}`)"
@@ -51,7 +50,6 @@ traefik_routers:
       - https
 
 traefik_services:
-  - "{{ cockpit_traefik_service }}"
   - name: jellyfin-proxy-svc
     type: http
     servers:

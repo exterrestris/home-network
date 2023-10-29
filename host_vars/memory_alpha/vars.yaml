@@ -260,7 +260,6 @@ snapraid_config_excludes:
 
 ### exterrestris.traefik
 traefik_services:
-  - "{{ cockpit_traefik_service }}"
   - name: jellyfin-svc
     type: http
     servers:
@@ -431,6 +430,10 @@ docker_compose_projects:
             group: sonarr
             owner: sonarr
             mode: "755"
+          - source: sonarr.custom.d/custom-cont-init.d
+            target: /custom-cont-init.d
+            group: sonarr
+            owner: sonarr
           - source: /mnt/storage
             target: /storage
         expose:
@@ -462,6 +465,10 @@ docker_compose_projects:
             group: radarr
             owner: radarr
             mode: "755"
+          - source: radarr.custom.d/custom-cont-init.d
+            target: /custom-cont-init.d
+            group: radarr
+            owner: radarr
           - source: /mnt/storage
             target: /storage
         expose:
@@ -493,6 +500,10 @@ docker_compose_projects:
             group: radarr
             owner: radarr
             mode: "755"
+          - source: radarr-1080.custom.d/custom-cont-init.d
+            target: /custom-cont-init.d
+            group: radarr
+            owner: radarr
           - source: /mnt/storage
             target: /storage
         expose:
@@ -596,7 +607,7 @@ docker_compose_projects:
         image:
           name: alexta69/metube
         environment:
-          - YTDL_OPTIONS={"cookiefile":"/downloads/cookies.txt"}
+          - YTDL_OPTIONS={"cookiefile":"/downloads/cookies.txt","writethumbnail":true,"postprocessors":[{"key":"FFmpegThumbnailsConvertor","format":"png"}]}
           - STATE_DIR=/state
         volumes:
           - source: /mnt/storage/downloads/metube

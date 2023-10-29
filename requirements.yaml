@@ -33,7 +33,6 @@ roles:
   - name: ironicbadger.ansible_role_snapraid
     src: https://github.com/IronicBadger/ansible-role-snapraid
   - name: alvistack.kernel
-  - name: linux-system-roles.cockpit
   - name: exterrestris.sanoid
     src: https://github.com/exterrestris/ansible-role-sanoid
   - name: exterrestris.zsh
