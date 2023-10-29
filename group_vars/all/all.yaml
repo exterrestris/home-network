@@ -36,6 +36,7 @@ common_packages:
   - name: htop
   - name: ncdu
   - name: python3
+  - name: python3-venv
   - name: python3-pip
   - name: fzf
   - name: sysstat
