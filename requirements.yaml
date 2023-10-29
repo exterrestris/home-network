@@ -19,9 +19,7 @@ roles:
   - name: exterrestris.proxmox_ssl
     src: https://github.com/exterrestris/ansible-role-proxmox-ssl
   - name: ironicbadger.ansible_role_proxmox_nag_removal
-    # Using third-party fork for Proxmox 7.2 support
-    # see https://github.com/ironicbadger/ansible-role-proxmox-nag-removal/pull/18
-    src: https://github.com/aroberts/ansible-role-proxmox-nag-removal
+    src: https://github.com/ironicbadger/ansible-role-proxmox-nag-removal
   - name: exterrestris.ansible_users
     src: https://github.com/exterrestris/ansible-users
   - name: sprat.ansible_role_mergerfs
