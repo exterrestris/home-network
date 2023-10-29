@@ -9,7 +9,7 @@ all:
       children:
         proxmox_6:
           hosts:
-            spacedock:
+            starbase_375:
         proxmox_7:
           hosts:
             utopia_planitia:
@@ -24,6 +24,9 @@ all:
         # holosuite_1:
         argus_array:
         midas_array:
+    hp_gen_8:
+      hosts:
+        starbase_375:
     raspberry_pi:
       hosts:
         memory_beta:

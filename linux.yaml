@@ -1,6 +1,6 @@
 ---
-# Setup - Host Specific
-- hosts: spacedock
+# Setup - Groups
+- hosts: hp_gen_8:&proxmox_host
   tasks:
     # Prevent kernel updates as patch required to support IOMMU
     - name: prevent automatic kernel updates
