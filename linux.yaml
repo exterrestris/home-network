@@ -91,9 +91,6 @@
           - '.zshrc.local.pre-p10k'
         ssh_agent_keys:
           - ~/.ssh/id_ed25519
-    # Install Cockpit UI
-    - role: linux-system-roles.cockpit
-      tags: cockpit
     # Configure firewall
     - role: weareinteractive.ufw
       vars:
@@ -147,9 +144,6 @@
       tags:
         - sanoid
         - zfs
-    # Install Cockpit ZFS Manager
-    - role: cockpit_zfs
-      tags: cockpit
 
 - hosts: nas
   roles:
@@ -220,7 +214,6 @@
       vars:
         ufw_rules:
           - "{{ traefik_ufw_rules }}"
-          - "{{ cockpit_traefik_ufw_rules }}"
       tags:
         - firewall
         - traefik-firewall
@@ -229,16 +222,6 @@
       tags:
         - traefik-ssl
         - ssl
-  tasks:
-    - name: configure Cockpit to allow proxying
-      template:
-        src: cockpit.conf.j2
-        dest: "/etc/cockpit/cockpit.conf"
-      vars:
-        domain: "cockpit.{{ ansible_hostname }}.{{ internal_domain }}"
-      when: "'traefik' in group_names"
-      tags:
-        - traefik
   tags:
     - traefik
 
@@ -286,7 +269,6 @@
       vars:
         ufw_rules:
           - "{{ traefik_ufw_rules }}"
-          - "{{ cockpit_traefik_ufw_rules }}"
           - "{{ docker_ufw_rules }}"
       tags:
         - firewall
@@ -305,16 +287,6 @@
     - role: linuxserver_containers
       tags:
         - docker-compose
-  tasks:
-    - name: configure Cockpit to allow proxying
-      template:
-        src: cockpit.conf.j2
-        dest: "/etc/cockpit/cockpit.conf"
-      vars:
-        domain: "cockpit.{{ ansible_hostname }}.{{ internal_domain }}"
-      when: "'traefik' in group_names"
-      tags:
-        - traefik
   tags:
     - docker
 

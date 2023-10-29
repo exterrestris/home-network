@@ -260,7 +260,6 @@ snapraid_config_excludes:
 
 ### exterrestris.traefik
 traefik_services:
-  - "{{ cockpit_traefik_service }}"
   - name: jellyfin-svc
     type: http
     servers:

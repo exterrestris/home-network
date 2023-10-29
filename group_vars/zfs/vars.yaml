@@ -37,14 +37,3 @@ sanoid_templates:
     autoprune: 'no'
     autosnap: 'no'
     monitor: 'no'
-
-### linux-system-roles.cockpit
-cockpit_packages:
-  - cockpit-system
-  - cockpit-ws
-  - cockpit
-  - cockpit-networkmanager
-  - cockpit-packagekit
-  - cockpit-storaged
-  - cockpit-dashboard
-  - cockpit-doc
