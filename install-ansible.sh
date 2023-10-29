@@ -8,7 +8,7 @@ fi
 case $DISTRO in
     ubuntu)
         sudo apt update
-        sudo apt install --yes python3 python3-pip python3-bcrypt git make sshpass
+        sudo apt install --yes python3 python3-venv python3-pip python3-bcrypt git make sshpass
         python3 -m pip install --user pipx
         pipx install --include-deps ansible
 
