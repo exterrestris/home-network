@@ -96,25 +96,25 @@ sanoid_datasets:
   - name: pool2/photos
     templates: local
 
-syncoid_syncs:
-  - src: pool1/archive
-    dest: backup1/archive
-    dest_host: "memory-beta.{{ internal_domain }}"
-  - src: pool1/backups
-    dest: backup1/backups/memory-alpha
-    dest_host: "memory-beta.{{ internal_domain }}"
-  - src: pool1/backups/computers
-    dest: backup1/backups/memory-alpha/computers
-    dest_host: "memory-beta.{{ internal_domain }}"
-  - src: pool1/backups/drives
-    dest: backup2/backups/memory-alpha/drives
-    dest_host: "memory-beta.{{ internal_domain }}"
-  - src: pool2/appdata
-    dest: backup2/backups/memory-alpha/appdata
-    dest_host: "memory-beta.{{ internal_domain }}"
-  - src: pool2/photos
-    dest: backup2/backups/memory-alpha/photos
-    dest_host: "memory-beta.{{ internal_domain }}"
+syncoid_syncs: []
+  # - src: pool1/archive
+  #   dest: backup1/archive
+  #   dest_host: "memory-beta.{{ internal_domain }}"
+  # - src: pool1/backups
+  #   dest: backup1/backups/memory-alpha
+  #   dest_host: "memory-beta.{{ internal_domain }}"
+  # - src: pool1/backups/computers
+  #   dest: backup1/backups/memory-alpha/computers
+  #   dest_host: "memory-beta.{{ internal_domain }}"
+  # - src: pool1/backups/drives
+  #   dest: backup2/backups/memory-alpha/drives
+  #   dest_host: "memory-beta.{{ internal_domain }}"
+  # - src: pool2/appdata
+  #   dest: backup2/backups/memory-alpha/appdata
+  #   dest_host: "memory-beta.{{ internal_domain }}"
+  # - src: pool2/photos
+  #   dest: backup2/backups/memory-alpha/photos
+  #   dest_host: "memory-beta.{{ internal_domain }}"
 
 ### mount_disks
 parity_disks:
