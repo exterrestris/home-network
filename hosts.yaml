@@ -14,6 +14,9 @@ all:
           hosts:
             utopia_planitia:
             deep_space_9:
+        proxmox_8:
+          hosts:
+            spacedock:
     proxmox_vm:
       hosts:
         memory_alpha:
