@@ -41,7 +41,7 @@
       tags: updates
 
     # Install/configure ZSH
-    - role: exterrestris.zsh
+    - role: viasite-ansible.zsh
       vars:
         zsh_user: "{{ main_user.username }}"
     

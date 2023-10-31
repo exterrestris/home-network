@@ -33,9 +33,7 @@ roles:
   - name: alvistack.kernel
   - name: exterrestris.sanoid
     src: https://github.com/exterrestris/ansible-role-sanoid
-  - name: exterrestris.zsh
-    src: https://github.com/exterrestris/ansible-role-zsh
-    version: powerlevel10k
+  - name: viasite-ansible.zsh
   - name: robertdebock.update
   - name: robertdebock.reboot
   - name: exterrestris.traefik
