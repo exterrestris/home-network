@@ -13,6 +13,12 @@ scans_user_samba:
 
 appdata_path: /mnt/zfs/appdata
 
+nas_additional_users:
+  - "{{ scans_user }}"
+
+nas_additional_groups:
+  - name: "{{ scans_user.group }}"
+
 ### mrlesmithjr.zfs
 zfs_pools:
   - name: pool1
@@ -179,6 +185,9 @@ mergerfs_mounts:
     options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }},x-systemd.requires=/mnt/ext4/transient1"
 
 ### bertvv.samba
+samba_users:
+  - "{{ main_user_samba }}"
+  - "{{ scans_user_samba }}"
 samba_shares:
   - name: Archive
     path: /mnt/zfs/archive

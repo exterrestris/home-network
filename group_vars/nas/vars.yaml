@@ -1,5 +1,5 @@
 ---
-nas_groups:
+nas_common_groups:
   - name: backups
     gid: 1001
   - name: media
@@ -12,6 +12,9 @@ nas_groups:
     gid: 1005
   - name: photos
     gid: 1008
+
+nas_additional_users: []
+nas_additional_groups: []
 
 nas_common_packages:
   - name: smartmontools
@@ -29,6 +32,8 @@ samba_workgroup: FEDERATION
 samba_preferred_master: true
 # Handle Windows not being able to browse shares due to incorrectly applied mitigation (https://github.com/bertvv/ansible-role-samba/issues/62)
 samba_mitigate_cve_2017_7494: false
+samba_users:
+  - "{{ main_user_samba }}"
 
 ### exterrestris.wsdd
 wsdd_workgroup: "{{ samba_workgroup }}"
