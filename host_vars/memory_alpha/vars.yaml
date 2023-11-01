@@ -294,7 +294,7 @@ docker_compose_projects:
           tag: latest
         environment:
           - PUID={{ (container_users | selectattr('username', 'equalto', 'jellyfin') | list | first).uid }}
-          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
+          - PGID={{ (nas_common_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
           - TZ=Europe/London
         volumes:
           - source: "{{ appdata_path }}/media/jellyfin"
@@ -389,7 +389,7 @@ docker_compose_projects:
         container_name: qbittorrent
         environment:
           - PUID={{ (container_users | selectattr('username', 'equalto', 'torrents') | list | first).uid }}
-          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}
+          - PGID={{ (nas_common_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}
           - UMASK=002
           - TZ=Europe/London
           - WEBUI_PORT=8080
@@ -418,7 +418,7 @@ docker_compose_projects:
           name: linuxserver/sonarr
         environment:
           - PUID={{ (container_users | selectattr('username', 'equalto', 'sonarr') | list | first).uid }}
-          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
+          - PGID={{ (nas_common_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
           - UMASK=002
           - TZ=Europe/London
         volumes:
@@ -453,7 +453,7 @@ docker_compose_projects:
           name: linuxserver/radarr
         environment:
           - PUID={{ (container_users | selectattr('username', 'equalto', 'radarr') | list | first).uid }}
-          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
+          - PGID={{ (nas_common_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
           - UMASK=002
           - TZ=Europe/London
         volumes:
@@ -488,7 +488,7 @@ docker_compose_projects:
           name: linuxserver/radarr
         environment:
           - PUID={{ (container_users | selectattr('username', 'equalto', 'radarr') | list | first).uid }}
-          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
+          - PGID={{ (nas_common_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
           - UMASK=002
           - TZ=Europe/London
         volumes:
@@ -524,7 +524,7 @@ docker_compose_projects:
           tag: develop
         environment:
           - PUID={{ (container_users | selectattr('username', 'equalto', 'prowlarr') | list | first).uid }}
-          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
+          - PGID={{ (nas_common_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
           - UMASK=002
           - TZ=Europe/London
         volumes:
@@ -576,7 +576,7 @@ docker_compose_projects:
           name: linuxserver/ombi
         environment:
           - PUID={{ (container_users | selectattr('username', 'equalto', 'ombi') | list | first).uid }}
-          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
+          - PGID={{ (nas_common_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
           - UMASK=002
           - TZ=Europe/London
         volumes:
@@ -617,7 +617,7 @@ docker_compose_projects:
             owner: metube
             group: metube
             mode: "755"
-        user: "{{ (container_users | selectattr('username', 'equalto', 'metube') | list | first).uid }}:{{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
+        user: "{{ (container_users | selectattr('username', 'equalto', 'metube') | list | first).uid }}:{{ (nas_common_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
         expose:
           - 8081
         networks:
@@ -645,19 +645,19 @@ linuxserver_container_custom_scripts:
       - script: add-to-downloads-group.sh
         template: add-container-user-to-group.sh.j2
         template_vars:
-          gid: "{{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
+          gid: "{{ (nas_common_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
           group: downloads
   - container: "{{ appdata_path }}/media-downloads/radarr"
     scripts:
       - script: add-to-downloads-group.sh
         template: add-container-user-to-group.sh.j2
         template_vars:
-          gid: "{{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
+          gid: "{{ (nas_common_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
           group: downloads
   - container: "{{ appdata_path }}/media-downloads/radarr-1080"
     scripts:
       - script: add-to-downloads-group.sh
         template: add-container-user-to-group.sh.j2
         template_vars:
-          gid: "{{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
+          gid: "{{ (nas_common_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
           group: downloads
