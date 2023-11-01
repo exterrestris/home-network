@@ -18,6 +18,10 @@ traefik_providers:
   - "{{ traefik_default_docker_provider }}"
   - "{{ traefik_default_file_provider }}"
 
+### exterrestris.docker_compose
+docker_compose_autostart: no
+docker_compose_pull_images: no
+
 ## exterrestris.users
 all_container_users:
   - username: jellyfin
