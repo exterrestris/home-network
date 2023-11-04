@@ -151,16 +151,6 @@ data_disks:
     content: true
 
 other_disks:
-  - path: /mnt/ext4/transient1
-    data_path: /data
-    diskbyid: /dev/disk/by-uuid/cade8c26-973a-4ff1-9669-36fbcde5b97c
-    fs: ext4
-    opts: defaults
-  - path: /mnt/ext4/transient2
-    data_path: /data
-    diskbyid: /dev/disk/by-uuid/d8fb93fb-4c74-4e21-b005-942d5cd89e58
-    fs: ext4
-    opts: defaults
   - path: /mnt/ext4/scratch1
     diskbyid: /dev/disk/by-uuid/fa7d3ad4-03bc-48f1-bb5b-253399a13202
     fs: ext4
