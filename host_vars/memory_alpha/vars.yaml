@@ -181,8 +181,8 @@ mergerfs_mounts:
     options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }},x-systemd.requires=/mnt/ext4/data1,x-systemd.requires=/mnt/ext4/data2,x-systemd.requires=/mnt/ext4/data3"
   - path: /mnt/transient
     branches:
-      - /mnt/ext4/transient*/data
-    options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }},x-systemd.requires=/mnt/ext4/transient1"
+      - /mnt/ext4/scratch1/transient*/data
+    options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }},x-systemd.requires=/mnt/ext4/scratch1"
 
 ### bertvv.samba
 samba_users:
