@@ -25,7 +25,9 @@ zfs_pools:
     action: 'create'
     compression: 'lz4'
     devices:
+      # WDC_WD120EMAZ-11_8CKANMKF / wwn-0x5000cca26fef1fab
       - 'scsi-SATA_WDC_WD120EMAZ-11_8CKANMKF'
+      # WDC_WD120EMAZ-11_8CKATPYE / wwn-0x5000cca26fef2ef9
       - 'scsi-SATA_WDC_WD120EMAZ-11_8CKATPYE'
     type: 'mirror'
     state: 'present'
@@ -33,7 +35,9 @@ zfs_pools:
     action: 'create'
     compression: 'lz4'
     devices:
+      # WDC_WD60EZRZ-00G_WD-WX41D95A2NJL / wwn-0x50014ee2621c4a10
       - 'scsi-SATA_WDC_WD60EZRZ-00G_WD-WX41D95A2NJL'
+      # WDC_WD60EZRZ-00R_WD-WX11DB56ZP10 / wwn-0x50014ee20d782122
       - 'scsi-SATA_WDC_WD60EZRZ-00R_WD-WX11DB56ZP10'
     type: 'mirror'
     state: 'present'
@@ -41,7 +45,9 @@ zfs_pools:
     action: 'create'
     compression: 'lz4'
     devices:
+      # WD_Red_SN700_1000GB_23171U800295
       - 'nvme-WD_Red_SN700_1000GB_23171U800295'
+      # WD_Red_SN700_1000GB_23171U800244
       - 'nvme-WD_Red_SN700_1000GB_23171U800244'
     type: 'mirror'
     state: 'present'
@@ -138,6 +144,7 @@ syncoid_syncs: []
 ### mount_disks
 parity_disks:
   - path: /mnt/ext4/parity1
+    # WDC_WD120EMAZ-11_8CJY60HE / wwn-0x5000cca26fe9745a
     diskbyid: /dev/disk/by-uuid/13a02c9d-1344-4523-9238-a6757142f6ae
     fs: ext4
     opts: defaults
@@ -146,30 +153,35 @@ parity_disks:
 data_disks:
   - path: /mnt/ext4/data1
     data_path: /data
+    # WDC_WD120EMAZ-11_8CJX3YAF / wwn-0x5000cca26fe8f836
     diskbyid: /dev/disk/by-uuid/3eee8a73-449f-4680-ac95-a88226b27d79
     fs: ext4
     opts: defaults
     content: true
   - path: /mnt/ext4/data2
     data_path: /data
+    # ST8000DM004-2CX1_WCT00CM0 / wwn-0x5000c500a9cb6ac5-part1
     diskbyid: /dev/disk/by-uuid/7f6e6993-8f06-4cf4-8f59-ec0ba5771bea
     fs: ext4
     opts: defaults
     content: true
   - path: /mnt/ext4/data3
     data_path: /data
+    # ST8000DM004-2CX1_WCT1LZ42 / wwn-0x5000c500bffc5046-part1
     diskbyid: /dev/disk/by-uuid/f4ca6d24-5142-4583-adc4-ae791f25b4ca
     fs: ext4
     opts: defaults
     content: true
   - path: /mnt/ext4/data4
     data_path: /data
+    # ST4000LM024-2AN1_WFG0Z0DV / wwn-0x5000c500b634be49-part1
     diskbyid: /dev/disk/by-uuid/56eb9377-2ddc-4fc3-8409-d7549d4a0dab
     fs: ext4
     opts: defaults
     content: true
   - path: /mnt/ext4/data5
     data_path: /data
+    # ST4000LM024-2AN1_WFG1F9RA / wwn-0x5000c500c1050b5c-part1
     diskbyid: /dev/disk/by-uuid/e0e41243-f51b-4730-a9c7-c001279a7315
     fs: ext4
     opts: defaults
@@ -177,6 +189,7 @@ data_disks:
 
 other_disks:
   - path: /mnt/ext4/scratch1
+    # CT1000MX500SSD1_2103E4E9E4CC-part1
     diskbyid: /dev/disk/by-uuid/fa7d3ad4-03bc-48f1-bb5b-253399a13202
     fs: ext4
     opts: defaults
