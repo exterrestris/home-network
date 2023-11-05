@@ -37,6 +37,14 @@ zfs_pools:
       - 'scsi-SATA_WDC_WD60EZRZ-00R_WD-WX11DB56ZP10'
     type: 'mirror'
     state: 'present'
+  - name: ssd1
+    action: 'create'
+    compression: 'lz4'
+    devices:
+      - 'nvme-WD_Red_SN700_1000GB_23171U800295'
+      - 'nvme-WD_Red_SN700_1000GB_23171U800244'
+    type: 'mirror'
+    state: 'present'
 
 zfs_filesystems:
   - name: backups
@@ -81,6 +89,11 @@ zfs_filesystems:
     pool: pool2
     compression: lz4
     mountpoint: "/mnt/zfs/photos"
+    state: present
+  - name: appdata
+    pool: ssd1
+    compression: lz4
+    mountpoint: "/mnt/zfs/appdata-ssd"
     state: present
 
 ### exterrestris.sanoid
