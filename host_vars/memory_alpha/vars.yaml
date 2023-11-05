@@ -162,6 +162,18 @@ data_disks:
     fs: ext4
     opts: defaults
     content: true
+  - path: /mnt/ext4/data4
+    data_path: /data
+    diskbyid: /dev/disk/by-uuid/56eb9377-2ddc-4fc3-8409-d7549d4a0dab
+    fs: ext4
+    opts: defaults
+    content: true
+  - path: /mnt/ext4/data5
+    data_path: /data
+    diskbyid: /dev/disk/by-uuid/e0e41243-f51b-4730-a9c7-c001279a7315
+    fs: ext4
+    opts: defaults
+    content: true
 
 other_disks:
   - path: /mnt/ext4/scratch1
