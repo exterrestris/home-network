@@ -8,8 +8,8 @@ collections:
 # Required Galaxy Roles
 roles:
   - name: mrlesmithjr.zfs
-    src: https://github.com/mrlesmithjr/ansible-zfs
-    version: feature/universe-repo
+    src: https://github.com/exterrestris/ansible-zfs
+    version: zpool-properties
   - name: bertvv.samba
   - name: exterrestris.wsdd
     src: https://github.com/exterrestris/ansible-role-wsdd
