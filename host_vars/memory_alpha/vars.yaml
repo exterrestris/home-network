@@ -86,11 +86,6 @@ zfs_filesystems:
     compression: lz4
     mountpoint: /mnt/zfs/resources
     state: present
-  - name: appdata
-    pool: pool2
-    compression: lz4
-    mountpoint: "{{ appdata_path }}"
-    state: present
   - name: photos
     pool: pool2
     compression: lz4
@@ -99,7 +94,7 @@ zfs_filesystems:
   - name: appdata
     pool: ssd1
     compression: lz4
-    mountpoint: "/mnt/zfs/appdata-ssd"
+    mountpoint: "{{ appdata_path }}"
     state: present
 
 ### exterrestris.sanoid
