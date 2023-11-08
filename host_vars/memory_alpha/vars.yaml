@@ -21,16 +21,6 @@ nas_additional_groups:
 
 ### mrlesmithjr.zfs
 zfs_pools:
-  - name: pool1
-    action: 'create'
-    compression: 'lz4'
-    devices:
-      # WDC_WD120EMAZ-11_8CKANMKF / wwn-0x5000cca26fef1fab
-      - 'scsi-SATA_WDC_WD120EMAZ-11_8CKANMKF'
-      # WDC_WD120EMAZ-11_8CKATPYE / wwn-0x5000cca26fef2ef9
-      - 'scsi-SATA_WDC_WD120EMAZ-11_8CKATPYE'
-    type: 'mirror'
-    state: 'present'
   - name: pool2
     action: 'create'
     compression: 'lz4'
@@ -54,33 +44,54 @@ zfs_pools:
       ashift: 12
       autoexpand: 'on'
     state: 'present'
+  - name: storage1
+    action: create
+    compression: 'lz4'
+    devices:
+      # ST12000NM007G-2R_ZTN0KBAZ
+      - 'wwn-0x5000c500dccb5155'
+      # WDC_WD120EMAZ-11_8CKANMKF
+      - 'wwn-0x5000cca26fef1fab'
+      # WDC_WD120EMAZ-11_8CKATPYE
+      - 'wwn-0x5000cca26fef2ef9'
+      # WDC_WD120EMAZ-11_8CJX3YAF
+      - 'wwn-0x5000cca26fe8f836'
+      # WDC_WD120EMAZ-11_8CJY60HE
+      - 'wwn-0x5000cca26fe9745a'
+      # WDC_WD120EMAZ-11_8CK9VRKF
+      - 'wwn-0x5000cca26feec22f'
+    type: 'raidz2'
+    properties:
+      ashift: 12
+      autoexpand: 'on'
+    state: 'present'
 
 zfs_filesystems:
   - name: backups
-    pool: pool1
+    pool: storage1
     compression: lz4
     mountpoint: /mnt/zfs/backups
     state: present
   - name: backups/computers
-    pool: pool1
+    pool: storage1
     compression: lz4
     recordsize: 1M
     mountpoint: /mnt/zfs/backups/computers
     state: present
   - name: backups/drives
-    pool: pool1
+    pool: storage1
     compression: lz4
     recordsize: 1M
     mountpoint: /mnt/zfs/backups/drives
     state: present
   - name: backups/files
-    pool: pool1
+    pool: storage1
     compression: lz4
     recordsize: 1M
     mountpoint: /mnt/zfs/backups/files
     state: present
   - name: archive
-    pool: pool1
+    pool: storage1
     compression: lz4
     mountpoint: /mnt/zfs/archive
     state: present
@@ -140,22 +151,9 @@ syncoid_syncs: []
   #   dest_host: "memory-beta.{{ internal_domain }}"
 
 ### mount_disks
-parity_disks:
-  - path: /mnt/ext4/parity1
-    # WDC_WD120EMAZ-11_8CJY60HE / wwn-0x5000cca26fe9745a
-    diskbyid: /dev/disk/by-uuid/13a02c9d-1344-4523-9238-a6757142f6ae
-    fs: ext4
-    opts: defaults
-    content: true
+parity_disks: []
 
 data_disks:
-  - path: /mnt/ext4/data1
-    data_path: /data
-    # WDC_WD120EMAZ-11_8CJX3YAF / wwn-0x5000cca26fe8f836
-    diskbyid: /dev/disk/by-uuid/3eee8a73-449f-4680-ac95-a88226b27d79
-    fs: ext4
-    opts: defaults
-    content: true
   - path: /mnt/ext4/data2
     data_path: /data
     # ST8000DM004-2CX1_WCT00CM0 / wwn-0x5000c500a9cb6ac5-part1
