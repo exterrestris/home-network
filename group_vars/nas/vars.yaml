@@ -18,6 +18,7 @@ nas_additional_groups: []
 
 nas_common_packages:
   - name: smartmontools
+  - name: nvme-cli
 
 ### mount_disks
 btrfs_data_opts: compress=zstd
