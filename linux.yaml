@@ -162,11 +162,6 @@
       tags:
         - disks
         - mergerfs
-    # Configure firewall
-    - role: weareinteractive.ufw
-      vars:
-        ufw_rules: "{{ nas_ufw_rules }}"
-      tags: firewall
   tasks:
     # Add main user to groups created
     - name: additional groups for main user
@@ -288,6 +283,11 @@
     - role: bertvv.samba
       tags:
         - samba
+    # Configure firewall
+    - role: weareinteractive.ufw
+      vars:
+        ufw_rules: "{{ nas_ufw_rules }}"
+      tags: firewall
     # Set up WSDD for network discovery
     - role: exterrestris.wsdd
       tags:
