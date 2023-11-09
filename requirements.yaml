@@ -27,7 +27,6 @@ roles:
   - name: geerlingguy.pip
   - name: ironicbadger.ansible_role_snapraid
     src: https://github.com/IronicBadger/ansible-role-snapraid
-  - name: alvistack.kernel
   - name: exterrestris.sanoid
     src: https://github.com/exterrestris/ansible-role-sanoid
   - name: viasite-ansible.zsh

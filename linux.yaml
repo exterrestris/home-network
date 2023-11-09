@@ -15,17 +15,6 @@
     - kernel
     - setup
 
-- hosts: memory_alpha
-  roles:
-    # Enable LTS Hardware Enablement
-    # - improves support for Adapatec ASR71605 controller
-    - role: alvistack.kernel
-      vars:
-        kernel_release: "mainline"
-  tags:
-    - kernel
-    - setup
-
 # Main - Common
 - hosts: all:!pfsense
   tasks:
