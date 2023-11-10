@@ -112,6 +112,17 @@ zfs_filesystems:
     compression: lz4
     mountpoint: "{{ appdata_path }}"
     state: present
+  - name: media
+    pool: storage1
+    compression: lz4
+    mountpoint: /mnt/zfs/media
+    state: present
+  - name: media/reactions
+    pool: storage1
+    compression: lz4
+    mountpoint: /mnt/zfs/media/reactions
+    recordsize: 1M
+    state: present
 
 ### exterrestris.sanoid
 sanoid_datasets:
