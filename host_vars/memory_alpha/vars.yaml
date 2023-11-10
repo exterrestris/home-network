@@ -33,6 +33,7 @@ zfs_pools:
     state: 'present'
   - name: ssd1
     action: 'create'
+    import: force
     compression: 'lz4'
     devices:
       # WD_Red_SN700_1000GB_23171U800295
@@ -46,6 +47,7 @@ zfs_pools:
     state: 'present'
   - name: storage1
     action: create
+    import: force
     compression: 'lz4'
     devices:
       # ST12000NM007G-2R_ZTN0KBAZ
