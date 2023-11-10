@@ -220,6 +220,11 @@ mergerfs_mounts:
     branches:
       - /mnt/ext4/scratch1/transient*/data
     options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }},x-systemd.requires=/mnt/ext4/scratch1"
+  - path: /mnt/media
+    branches:
+      - /mnt/storage/media
+      - /mnt/zfs/media
+    options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }}"
 
 ### bertvv.samba
 samba_users:
@@ -248,7 +253,7 @@ samba_shares:
     writable: 'yes'
     guest_ok: 'yes'
   - name: Media
-    path: /mnt/storage/media
+    path: /mnt/media
     owner: "{{ main_user.username }}"
     group: media
     directory_mode: '2775'
@@ -339,19 +344,19 @@ docker_compose_projects:
             group: "jellyfin"
             owner: "jellyfin"
             mode: "755"
-          - source: /mnt/storage/media/Shows
+          - source: /mnt/media/shows
             target: /media/shows
             group: media
             mode: "g+rx"
-          - source: /mnt/storage/media/Movies
+          - source: /mnt/media/movies
             target: /media/movies
             group: media
             mode: "g+rx"
-          - source: /mnt/storage/media/Music
+          - source: /mnt/media/music
             target: /media/music
             group: media
             mode: "g+rx"
-          - source: /mnt/storage/media/Reactions
+          - source: /mnt/media/reactions
             target: /media/reactions
             group: media
             mode: "g+rx"
