@@ -141,6 +141,46 @@ zfs_filesystems:
     group: media
     mode: 2775
     state: present
+  - name: media/movies
+    pool: storage1
+    compression: lz4
+    mountpoint: /mnt/zfs/media/movies
+    owner: "{{ main_user.username }}"
+    group: media
+    mode: 2775
+    state: present
+  - name: media/movies/rips
+    pool: storage1
+    compression: lz4
+    mountpoint: /mnt/zfs/media/movies/rips
+    owner: "{{ main_user.username }}"
+    group: media
+    mode: 2775
+    state: present
+  - name: media/shows
+    pool: storage1
+    compression: lz4
+    mountpoint: /mnt/zfs/media/shows
+    owner: "{{ main_user.username }}"
+    group: media
+    mode: 2775
+    state: present
+  - name: media/shows/rips
+    pool: storage1
+    compression: lz4
+    mountpoint: /mnt/zfs/media/shows/rips
+    owner: "{{ main_user.username }}"
+    group: media
+    mode: 2775
+    state: present
+  - name: media/music
+    pool: storage1
+    compression: lz4
+    mountpoint: /mnt/zfs/media/music
+    owner: "{{ main_user.username }}"
+    group: media
+    mode: 2775
+    state: present
   - name: media/reactions
     pool: storage1
     compression: lz4
