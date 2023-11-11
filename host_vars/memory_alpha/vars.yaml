@@ -73,39 +73,60 @@ zfs_filesystems:
     pool: storage1
     compression: lz4
     mountpoint: /mnt/zfs/backups
+    owner: "{{ main_user.username }}"
+    group: backups
+    mode: 2775
     state: present
   - name: backups/computers
     pool: storage1
     compression: lz4
     recordsize: 1M
     mountpoint: /mnt/zfs/backups/computers
+    owner: "{{ main_user.username }}"
+    group: backups
+    mode: 2775
     state: present
   - name: backups/drives
     pool: storage1
     compression: lz4
     recordsize: 1M
     mountpoint: /mnt/zfs/backups/drives
+    owner: "{{ main_user.username }}"
+    group: backups
+    mode: 2775
     state: present
   - name: backups/files
     pool: storage1
     compression: lz4
     recordsize: 1M
     mountpoint: /mnt/zfs/backups/files
+    owner: "{{ main_user.username }}"
+    group: backups
+    mode: 2775
     state: present
   - name: archive
     pool: storage1
     compression: lz4
     mountpoint: /mnt/zfs/archive
+    owner: "{{ main_user.username }}"
+    group: archive
+    mode: 2775
     state: present
   - name: resources
     pool: storage1
     compression: lz4
     mountpoint: /mnt/zfs/resources
+    owner: "{{ main_user.username }}"
+    group: resources
+    mode: 2775
     state: present
   - name: photos
     pool: storage1
     compression: lz4
     mountpoint: "/mnt/zfs/photos"
+    owner: "{{ main_user.username }}"
+    group: photos
+    mode: 2775
     state: present
   - name: appdata
     pool: ssd1
@@ -116,12 +137,18 @@ zfs_filesystems:
     pool: storage1
     compression: lz4
     mountpoint: /mnt/zfs/media
+    owner: "{{ main_user.username }}"
+    group: media
+    mode: 2775
     state: present
   - name: media/reactions
     pool: storage1
     compression: lz4
-    mountpoint: /mnt/zfs/media/reactions
     recordsize: 1M
+    mountpoint: /mnt/zfs/media/reactions
+    owner: "{{ main_user.username }}"
+    group: media
+    mode: 2775
     state: present
 
 ### exterrestris.sanoid
