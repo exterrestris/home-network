@@ -306,7 +306,7 @@ mergerfs_mounts:
     options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }},x-systemd.requires=/mnt/ext4/scratch1"
   - path: /mnt/media
     branches:
-      - /mnt/storage/media
+      - /mnt/storage/media=NC
       - /mnt/zfs/media
     options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }}"
 
