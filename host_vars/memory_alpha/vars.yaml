@@ -173,6 +173,14 @@ zfs_filesystems:
     group: media
     mode: 2775
     state: present
+  - name: media/shows/recordings
+    pool: storage1
+    compression: lz4
+    mountpoint: /mnt/zfs/media/shows/recordings
+    owner: "{{ main_user.username }}"
+    group: media
+    mode: 2775
+    state: present
   - name: media/music
     pool: storage1
     compression: lz4
@@ -186,6 +194,15 @@ zfs_filesystems:
     compression: lz4
     recordsize: 1M
     mountpoint: /mnt/zfs/media/reactions
+    owner: "{{ main_user.username }}"
+    group: media
+    mode: 2775
+    state: present
+  - name: media/videos
+    pool: storage1
+    compression: lz4
+    recordsize: 1M
+    mountpoint: /mnt/zfs/media/videos
     owner: "{{ main_user.username }}"
     group: media
     mode: 2775
