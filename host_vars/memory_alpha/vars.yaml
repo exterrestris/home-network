@@ -207,6 +207,24 @@ zfs_filesystems:
     group: media
     mode: 2775
     state: present
+  - name: downloads
+    pool: storage1
+    compression: lz4
+    recordsize: 1M
+    mountpoint: /mnt/zfs/downloads
+    owner: "{{ main_user.username }}"
+    group: downloads
+    mode: 2775
+    state: present
+  - name: downloads/media
+    pool: storage1
+    compression: lz4
+    recordsize: 1M
+    mountpoint: "{{ media_downloads_mountpoint }}"
+    owner: "{{ main_user.username }}"
+    group: downloads
+    mode: 2775
+    state: present
 
 ### exterrestris.sanoid
 sanoid_datasets:
@@ -309,6 +327,11 @@ mergerfs_mounts:
       - /mnt/storage/media=NC
       - /mnt/zfs/media
     options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }}"
+  - path: /mnt/downloads
+    branches:
+      - /mnt/storage/downloads=NC
+      - /mnt/zfs/downloads
+    options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }}"
 
 ### bertvv.samba
 samba_users:
@@ -359,7 +382,7 @@ samba_shares:
     writable: 'yes'
     guest_ok: 'yes'
   - name: Downloads
-    path: /mnt/storage/downloads
+    path: /mnt/downloads
     owner: "{{ main_user.username }}"
     group: downloads
     create_mode: '775'
