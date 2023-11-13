@@ -19,6 +19,8 @@ nas_additional_users:
 nas_additional_groups:
   - name: "{{ scans_user.group }}"
 
+media_downloads_mountpoint: "/mnt/zfs/downloads/media"
+
 ### mrlesmithjr.zfs
 zfs_pools:
   - name: pool2
@@ -326,6 +328,7 @@ mergerfs_mounts:
     branches:
       - /mnt/storage/media=NC
       - /mnt/zfs/media
+      - /mnt/zfs/downloads/media/media
     options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }}"
   - path: /mnt/downloads
     branches:
@@ -548,7 +551,7 @@ docker_compose_projects:
             owner: "torrents"
             group: "torrents"
             mode: "755"
-          - source: /mnt/storage/downloads/torrents
+          - source: "{{ media_downloads_mountpoint }}/torrents"
             target: /storage/downloads/torrents
             owner: "torrents"
             group: "downloads"
@@ -580,7 +583,7 @@ docker_compose_projects:
             target: /custom-cont-init.d
             group: sonarr
             owner: sonarr
-          - source: /mnt/storage
+          - source: "{{ media_downloads_mountpoint }}"
             target: /storage
         expose:
           - 8989
@@ -615,7 +618,7 @@ docker_compose_projects:
             target: /custom-cont-init.d
             group: radarr
             owner: radarr
-          - source: /mnt/storage
+          - source: "{{ media_downloads_mountpoint }}"
             target: /storage
         expose:
           - 7878
@@ -650,7 +653,7 @@ docker_compose_projects:
             target: /custom-cont-init.d
             group: radarr
             owner: radarr
-          - source: /mnt/storage
+          - source: "{{ media_downloads_mountpoint }}"
             target: /storage
         expose:
           - 7879
@@ -756,7 +759,7 @@ docker_compose_projects:
           - YTDL_OPTIONS={"cookiefile":"/downloads/cookies.txt","writethumbnail":true,"postprocessors":[{"key":"FFmpegThumbnailsConvertor","format":"png"}]}
           - STATE_DIR=/state
         volumes:
-          - source: /mnt/storage/downloads/metube
+          - source: /mnt/downloads/metube
             target: /downloads
             owner: metube
             group: downloads
