@@ -19,7 +19,7 @@ nas_additional_users:
 nas_additional_groups:
   - name: "{{ scans_user.group }}"
 
-media_downloads_mountpoint: "/mnt/zfs/downloads/media"
+media_downloads_mountpoint: "/mnt/zfs/media-downloads"
 
 ### mrlesmithjr.zfs
 zfs_pools:
@@ -138,7 +138,7 @@ zfs_filesystems:
   - name: media
     pool: storage1
     compression: lz4
-    mountpoint: /mnt/zfs/media
+    mountpoint: /mnt/media
     owner: "{{ main_user.username }}"
     group: media
     mode: 2775
@@ -146,7 +146,6 @@ zfs_filesystems:
   - name: media/movies
     pool: storage1
     compression: lz4
-    mountpoint: /mnt/zfs/media/movies
     owner: "{{ main_user.username }}"
     group: media
     mode: 2775
@@ -154,7 +153,6 @@ zfs_filesystems:
   - name: media/movies/rips
     pool: storage1
     compression: lz4
-    mountpoint: /mnt/zfs/media/movies/rips
     owner: "{{ main_user.username }}"
     group: media
     mode: 2775
@@ -162,7 +160,6 @@ zfs_filesystems:
   - name: media/shows
     pool: storage1
     compression: lz4
-    mountpoint: /mnt/zfs/media/shows
     owner: "{{ main_user.username }}"
     group: media
     mode: 2775
@@ -170,7 +167,6 @@ zfs_filesystems:
   - name: media/shows/rips
     pool: storage1
     compression: lz4
-    mountpoint: /mnt/zfs/media/shows/rips
     owner: "{{ main_user.username }}"
     group: media
     mode: 2775
@@ -178,7 +174,6 @@ zfs_filesystems:
   - name: media/shows/recordings
     pool: storage1
     compression: lz4
-    mountpoint: /mnt/zfs/media/shows/recordings
     owner: "{{ main_user.username }}"
     group: media
     mode: 2775
@@ -186,7 +181,6 @@ zfs_filesystems:
   - name: media/music
     pool: storage1
     compression: lz4
-    mountpoint: /mnt/zfs/media/music
     owner: "{{ main_user.username }}"
     group: media
     mode: 2775
@@ -195,7 +189,6 @@ zfs_filesystems:
     pool: storage1
     compression: lz4
     recordsize: 1M
-    mountpoint: /mnt/zfs/media/reactions
     owner: "{{ main_user.username }}"
     group: media
     mode: 2775
@@ -204,7 +197,6 @@ zfs_filesystems:
     pool: storage1
     compression: lz4
     recordsize: 1M
-    mountpoint: /mnt/zfs/media/videos
     owner: "{{ main_user.username }}"
     group: media
     mode: 2775
@@ -213,7 +205,7 @@ zfs_filesystems:
     pool: storage1
     compression: lz4
     recordsize: 1M
-    mountpoint: /mnt/zfs/downloads
+    mountpoint: /mnt/downloads
     owner: "{{ main_user.username }}"
     group: downloads
     mode: 2775
@@ -316,24 +308,17 @@ remove_mounts:
 
 ### sprat.ansible-role-mergerfs
 mergerfs_mounts:
-  - path: /mnt/storage
-    branches:
-      - /mnt/ext4/data*/data
-    options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }},x-systemd.requires=/mnt/ext4/data2,x-systemd.requires=/mnt/ext4/data3"
   - path: /mnt/transient
     branches:
       - /mnt/ext4/scratch1/transient*/data
     options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }},x-systemd.requires=/mnt/ext4/scratch1"
-  - path: /mnt/media
+  - path: /mnt/media/shows/downloads
     branches:
-      - /mnt/storage/media=NC
-      - /mnt/zfs/media
-      - /mnt/zfs/downloads/media/media
+      - "{{ media_downloads_mountpoint }}/media/shows/Download*"
     options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }}"
-  - path: /mnt/downloads
+  - path: /mnt/media/movies/downloads
     branches:
-      - /mnt/storage/downloads=NC
-      - /mnt/zfs/downloads
+      - "{{ media_downloads_mountpoint }}/media/movies/Download*"
     options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }}"
 
 ### bertvv.samba
