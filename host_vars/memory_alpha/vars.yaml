@@ -83,7 +83,6 @@ zfs_filesystems:
     pool: storage1
     compression: lz4
     recordsize: 1M
-    mountpoint: /mnt/zfs/backups/computers
     owner: "{{ main_user.username }}"
     group: backups
     mode: 2775
@@ -92,7 +91,6 @@ zfs_filesystems:
     pool: storage1
     compression: lz4
     recordsize: 1M
-    mountpoint: /mnt/zfs/backups/drives
     owner: "{{ main_user.username }}"
     group: backups
     mode: 2775
@@ -101,7 +99,6 @@ zfs_filesystems:
     pool: storage1
     compression: lz4
     recordsize: 1M
-    mountpoint: /mnt/zfs/backups/files
     owner: "{{ main_user.username }}"
     group: backups
     mode: 2775
