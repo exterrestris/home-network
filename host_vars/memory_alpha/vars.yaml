@@ -83,25 +83,16 @@ zfs_filesystems:
     pool: storage1
     compression: lz4
     recordsize: 1M
-    owner: "{{ main_user.username }}"
-    group: backups
-    mode: 2775
     state: present
   - name: backups/drives
     pool: storage1
     compression: lz4
     recordsize: 1M
-    owner: "{{ main_user.username }}"
-    group: backups
-    mode: 2775
     state: present
   - name: backups/files
     pool: storage1
     compression: lz4
     recordsize: 1M
-    owner: "{{ main_user.username }}"
-    group: backups
-    mode: 2775
     state: present
   - name: archive
     pool: storage1
@@ -143,60 +134,36 @@ zfs_filesystems:
   - name: media/movies
     pool: storage1
     compression: lz4
-    owner: "{{ main_user.username }}"
-    group: media
-    mode: 2775
     state: present
   - name: media/movies/rips
     pool: storage1
     compression: lz4
-    owner: "{{ main_user.username }}"
-    group: media
-    mode: 2775
     state: present
   - name: media/shows
     pool: storage1
     compression: lz4
-    owner: "{{ main_user.username }}"
-    group: media
-    mode: 2775
     state: present
   - name: media/shows/rips
     pool: storage1
     compression: lz4
-    owner: "{{ main_user.username }}"
-    group: media
-    mode: 2775
     state: present
   - name: media/shows/recordings
     pool: storage1
     compression: lz4
-    owner: "{{ main_user.username }}"
-    group: media
-    mode: 2775
     state: present
   - name: media/music
     pool: storage1
     compression: lz4
-    owner: "{{ main_user.username }}"
-    group: media
-    mode: 2775
     state: present
   - name: media/reactions
     pool: storage1
     compression: lz4
     recordsize: 1M
-    owner: "{{ main_user.username }}"
-    group: media
-    mode: 2775
     state: present
   - name: media/videos
     pool: storage1
     compression: lz4
     recordsize: 1M
-    owner: "{{ main_user.username }}"
-    group: media
-    mode: 2775
     state: present
   - name: downloads
     pool: storage1
