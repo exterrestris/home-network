@@ -284,6 +284,10 @@ mergerfs_mounts:
     branches:
       - "{{ media_downloads_mountpoint }}/media/movies/Download*"
     options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }}"
+  - path: /mnt/downloads/torrents
+    branches:
+      - "{{ media_downloads_mountpoint }}/torrents"
+    options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }}"
 
 ### bertvv.samba
 samba_users:
