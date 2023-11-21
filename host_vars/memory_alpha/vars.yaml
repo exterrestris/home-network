@@ -501,7 +501,7 @@ docker_compose_projects:
             group: "torrents"
             mode: "755"
           - source: "{{ media_downloads_mountpoint }}/torrents"
-            target: /storage/downloads/torrents
+            target: /storage/torrents
             owner: "torrents"
             group: "downloads"
             mode: "g+rx"
