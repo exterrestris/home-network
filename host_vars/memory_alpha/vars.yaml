@@ -226,35 +226,7 @@ syncoid_syncs: []
 ### mount_disks
 parity_disks: []
 
-data_disks:
-  - path: /mnt/ext4/data2
-    data_path: /data
-    # ST8000DM004-2CX1_WCT00CM0 / wwn-0x5000c500a9cb6ac5-part1
-    diskbyid: /dev/disk/by-uuid/7f6e6993-8f06-4cf4-8f59-ec0ba5771bea
-    fs: ext4
-    opts: defaults
-    content: true
-  - path: /mnt/ext4/data3
-    data_path: /data
-    # ST8000DM004-2CX1_WCT1LZ42 / wwn-0x5000c500bffc5046-part1
-    diskbyid: /dev/disk/by-uuid/f4ca6d24-5142-4583-adc4-ae791f25b4ca
-    fs: ext4
-    opts: defaults
-    content: true
-  - path: /mnt/ext4/data4
-    data_path: /data
-    # ST4000LM024-2AN1_WFG0Z0DV / wwn-0x5000c500b634be49-part1
-    diskbyid: /dev/disk/by-uuid/56eb9377-2ddc-4fc3-8409-d7549d4a0dab
-    fs: ext4
-    opts: defaults
-    content: true
-  - path: /mnt/ext4/data5
-    data_path: /data
-    # ST4000LM024-2AN1_WFG1F9RA / wwn-0x5000c500c1050b5c-part1
-    diskbyid: /dev/disk/by-uuid/e0e41243-f51b-4730-a9c7-c001279a7315
-    fs: ext4
-    opts: defaults
-    content: true
+data_disks: []
 
 other_disks:
   - path: /mnt/ext4/scratch1
