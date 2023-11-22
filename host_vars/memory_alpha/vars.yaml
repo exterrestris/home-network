@@ -23,16 +23,6 @@ media_downloads_mountpoint: "/mnt/zfs/media-downloads"
 
 ### mrlesmithjr.zfs
 zfs_pools:
-  - name: pool2
-    action: 'create'
-    compression: 'lz4'
-    devices:
-      # WDC_WD60EZRZ-00G_WD-WX41D95A2NJL / wwn-0x50014ee2621c4a10
-      - 'scsi-SATA_WDC_WD60EZRZ-00G_WD-WX41D95A2NJL'
-      # WDC_WD60EZRZ-00R_WD-WX11DB56ZP10 / wwn-0x50014ee20d782122
-      - 'scsi-SATA_WDC_WD60EZRZ-00R_WD-WX11DB56ZP10'
-    type: 'mirror'
-    state: 'present'
   - name: ssd1
     action: 'create'
     import: force
