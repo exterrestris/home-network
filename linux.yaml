@@ -147,7 +147,7 @@
     # Mount ext4 disks
     - role: mount_disks
     # Install/configure mergerfs
-    - role: sprat.ansible_role_mergerfs
+    - role: tigattack.mergerfs
       tags:
         - disks
         - mergerfs

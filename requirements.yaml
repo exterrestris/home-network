@@ -19,8 +19,7 @@ roles:
     src: https://github.com/ironicbadger/ansible-role-proxmox-nag-removal
   - name: exterrestris.ansible_users
     src: https://github.com/exterrestris/ansible-users
-  - name: sprat.ansible_role_mergerfs
-    src: https://github.com/sprat/ansible-role-mergerfs
+  - name: tigattack.mergerfs
   - name: weareinteractive.ufw
   - name: geerlingguy.docker
   - name: geerlingguy.docker_arm
