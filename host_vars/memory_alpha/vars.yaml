@@ -241,15 +241,15 @@ mergerfs_mounts:
   - path: /mnt/media/shows/downloads
     branches:
       - "{{ media_downloads_mountpoint }}/media/shows/Download*"
-    options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }}"
+    options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }},x-systemd.requires=zfs-mount.service"
   - path: /mnt/media/movies/downloads
     branches:
       - "{{ media_downloads_mountpoint }}/media/movies/Download*"
-    options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }}"
+    options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }},x-systemd.requires=zfs-mount.service"
   - path: /mnt/downloads/torrents
     branches:
       - "{{ media_downloads_mountpoint }}/torrents"
-    options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }}"
+    options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }},x-systemd.requires=zfs-mount.service"
 
 ### bertvv.samba
 samba_users:
