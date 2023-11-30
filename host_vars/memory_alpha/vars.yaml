@@ -97,6 +97,26 @@ zfs_filesystems:
     compression: lz4
     recordsize: 1M
     state: present
+  - name: backups/computers/uss-enterprise
+    pool: storage1
+    compression: lz4
+    recordsize: 1M
+    state: present
+  - name: backups/computers/uss-bellerophon
+    pool: storage1
+    compression: lz4
+    recordsize: 1M
+    state: present
+  - name: backups/computers/uss-prometheus
+    pool: storage1
+    compression: lz4
+    recordsize: 1M
+    state: present
+  - name: backups/computers/jupiter-station
+    pool: storage1
+    compression: lz4
+    recordsize: 1M
+    state: present
   - name: backups/drives
     pool: storage1
     compression: lz4
