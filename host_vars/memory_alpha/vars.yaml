@@ -189,6 +189,7 @@ zfs_filesystems:
   - name: media/movies/rips
     pool: storage1
     compression: lz4
+    recordsize: 1M
     state: present
     owner: "{{ main_user.username }}"
     group: media
@@ -203,6 +204,7 @@ zfs_filesystems:
   - name: media/shows/rips
     pool: storage1
     compression: lz4
+    recordsize: 1M
     state: present
     owner: "{{ main_user.username }}"
     group: media
