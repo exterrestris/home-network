@@ -7,9 +7,6 @@ all:
     # Type
     proxmox_host:
       children:
-        proxmox_6:
-          hosts:
-            starbase_375:
         proxmox_7:
           hosts:
             utopia_planitia:
@@ -17,6 +14,7 @@ all:
         proxmox_8:
           hosts:
             spacedock:
+            starbase_375:
     proxmox_vm:
       hosts:
         memory_alpha:
