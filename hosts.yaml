@@ -24,9 +24,6 @@ all:
         # holosuite_1:
         argus_array:
         midas_array:
-    hp_gen_8:
-      hosts:
-        starbase_375:
     raspberry_pi:
       hosts:
         memory_beta:
