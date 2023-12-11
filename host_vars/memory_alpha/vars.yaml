@@ -525,15 +525,18 @@ docker_compose_projects:
           - proxy
         expose:
           # qBittorrent WebUI
-          - 8080 
+          - 8080
         volumes:
           - gluetun:/gluetun
         environment:
-          - VPNSP=surfshark
+          - VPN_SERVICE_PROVIDER=airvpn
+          - VPN_TYPE=wireguard
+          - WIREGUARD_PRIVATE_KEY={{ vault_airvpn_wireguard_private_key }}
+          - WIREGUARD_PRESHARED_KEY={{ vault_airvpn_wireguard_preshared_key }}
+          - WIREGUARD_ADDRESSES=10.186.35.228/32
+          - SERVER_COUNTRIES=Netherlands
+          - FIREWALL_VPN_INPUT_PORTS={{ vault_airvpn_port }}
           - TZ=Europe/London
-          - OPENVPN_USER={{ vault_surfshark_username }}
-          - OPENVPN_PASSWORD={{ vault_surfshark_password }}
-          - REGION=Netherlands Amsterdam
         restart: always
         labels:
           - "traefik.enable=true"
