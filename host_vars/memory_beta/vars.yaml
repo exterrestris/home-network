@@ -10,17 +10,17 @@ zfs_pools:
     compression: 'lz4'
     type: 'raidz2'
     devices:
-      # WDC_WD60EZRZ-00G_WD-WX11DB56ZP10
+      # WDC_WD60EZRZ-00G_WD-WX11DB56ZP10 (6TB)
       - 'wwn-0x50014ee20d782122'
-      # ST8000DM004 WCT1ENP6
+      # ST8000DM004 WCT1ENP6 (8TB)
       - 'wwn-0x5000c500bfefa856'
-      # ST8000DM004 WCT1NW5D
-      - 'wwn-0x5000c500c00d866a'
-      # ST8000DM004 WCT2EN1H
-      - 'wwn-0x5000c500cc5bcf93'
-      # ST8000DM004 WCT1LZ42
+      # WDC_WD60EZRZ-00G_WD-WX41D95A2NJL (6TB)
+      - 'wwn-0x50014ee2621c4a10'
+      # WDC_WD120EMAZ-11_Z2HGERAT (12TB) (temporary)
+      - 'wwn-0x5000cca28dd4a834'
+      # ST8000DM004 WCT1LZ42 (8TB)
       - 'wwn-0x5000c500bffc5046'
-      # ST8000DM004 WCT00CM0
+      # ST8000DM004 WCT00CM0 (8TB)
       - 'wwn-0x5000c500a9cb6ac5'
     properties:
       ashift: 12
