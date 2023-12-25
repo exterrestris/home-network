@@ -77,10 +77,11 @@
     - bootstrap-new
     - bootstrap-all
 
-- name: add SSH authorized_keys from github
+- name: add SSH authorized_keys
   authorized_key:
     user: "{{ vault_ansible_user }}"
-    key: "https://github.com/{{ vault_ansible_user_github_user }}.keys"
+    key: "{{ item }}"
+  with_items: "{{ vault_ansible_user_authorised_keys }}"
   tags:
     - bootstrap-new
     - bootstrap-all
