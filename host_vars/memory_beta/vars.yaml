@@ -81,7 +81,7 @@ other_mounts:
 
 remove_mounts:
 
-### sprat.ansible-role-mergerfs
+### tigattack.mergerfs
 mergerfs_mounts:
   - path: /mnt/backups
     branches:
