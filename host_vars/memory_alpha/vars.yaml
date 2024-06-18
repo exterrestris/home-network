@@ -42,22 +42,27 @@ zfs_pools:
     import: force
     compression: 'lz4'
     devices:
-      # ST12000NM007G-2R_ZTN0KBAZ
+      # ST12000NM007G ZTN0KBAZ (12TB)
       - 'wwn-0x5000c500dccb5155'
-      # WDC_WD120EMAZ-11_8CKANMKF
+      # WD120EMAZ 8CKANMKF (12TB)
       - 'wwn-0x5000cca26fef1fab'
-      # WDC_WD120EMAZ-11_8CKATPYE
+      # WD120EMAZ 8CKATPYE (12TB)
       - 'wwn-0x5000cca26fef2ef9'
-      # WDC_WD120EMAZ-11_8CJX3YAF
+      # WD120EMAZ 8CJX3YAF (12TB)
       - 'wwn-0x5000cca26fe8f836'
-      # WDC_WD120EMAZ-11_8CJY60HE
+      # WD120EMAZ 8CJY60HE (12TB)
       - 'wwn-0x5000cca26fe9745a'
-      # WDC_WD120EMAZ-11_8CK9VRKF
+      # WD120EMAZ 8CK9VRKF (12TB)
       - 'wwn-0x5000cca26feec22f'
+      # WD120EMAZ Z2HGERAT (12TB)
+      - 'wwn-0x5000cca28dd4a834'
+      # ST12000NM001G WTN04568 (12TB)
+      - 'wwn-0x5000c500e0b84a62'
     type: 'raidz2'
     properties:
       ashift: 12
       autoexpand: 'on'
+    recordsize: 1M
     state: 'present'
 
 zfs_filesystems:
