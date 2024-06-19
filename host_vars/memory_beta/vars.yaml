@@ -10,36 +10,32 @@ zfs_pools:
     compression: 'lz4'
     type: 'raidz2'
     devices:
-      # WDC_WD60EZRZ-00G_WD-WX11DB56ZP10 (6TB)
+      # WD60EZRZ WD-WX11DB56ZP10 (6TB)
       - 'wwn-0x50014ee20d782122'
-      # ST8000DM004 WCT1ENP6 (8TB)
-      - 'wwn-0x5000c500bfefa856'
-      # WDC_WD60EZRZ-00G_WD-WX41D95A2NJL (6TB)
+      # WD60PURZ WD-WX92DA0N82VF (6TB)
+      - 'wwn-0x50014ee2147bff7f'
+      # WD60EZRZ WD-WX41D95A2NJL (6TB)
       - 'wwn-0x50014ee2621c4a10'
-      # WDC_WD120EMAZ-11_Z2HGERAT (12TB) (temporary)
-      # - 'wwn-0x5000cca28dd4a834'
-      # ST8000DM004 WCT1LZ42 (8TB)
-      - 'wwn-0x5000c500bffc5046'
-      # ST8000DM004 WCT00CM0 (8TB)
-      - 'wwn-0x5000c500a9cb6ac5'
+      # WD63PURZ WD-WX62D22N9A9E (6TB)
+      - 'wwn-0x50014ee26a7cbb95'
+      # ST6000VX001 WSC057K7 (6TB)
+      - 'wwn-0x5000c500d55abe86'
+      # WD60PURX WD-WX22D70EJRDF (6TB)
+      - 'wwn-0x50014ee2bdc2c37a'
     properties:
       ashift: 12
       autoexpand: 'on'
-    options:
-      - '-f' # Need to force as disks are different sizes
     state: 'present'
 
 zfs_filesystems:
   - name: memory-alpha
     pool: backup1
     compression: lz4
-    recordsize: 1M
     mountpoint: /mnt/backups/memory-alpha
     state: present
   - name: argus-array
     pool: backup1
     compression: lz4
-    recordsize: 1M
     mountpoint: /mnt/backups/argus-array
     state: present
 
