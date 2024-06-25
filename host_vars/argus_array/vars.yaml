@@ -24,7 +24,7 @@ zfs_filesystems:
 ### exterrestris.sanoid
 sanoid_datasets:
   - name: data1/appdata
-    templates: frequent
+    templates: docker
 
 syncoid_syncs:
   - src: data1/appdata
