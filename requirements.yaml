@@ -9,7 +9,7 @@ collections:
 roles:
   - name: mrlesmithjr.zfs
     src: https://github.com/exterrestris/ansible-zfs
-    version: master
+    version: main
   - name: bertvv.samba
   - name: exterrestris.wsdd
     src: https://github.com/exterrestris/ansible-role-wsdd
