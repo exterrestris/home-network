@@ -278,25 +278,32 @@ sanoid_datasets:
   - name: storage1/downloads/media
     templates: minimal
 
-syncoid_syncs: []
-  # - src: pool1/archive
-  #   dest: backup1/archive
-  #   dest_host: "memory-beta.{{ internal_domain }}"
-  # - src: pool1/backups
-  #   dest: backup1/backups/memory-alpha
-  #   dest_host: "memory-beta.{{ internal_domain }}"
-  # - src: pool1/backups/computers
-  #   dest: backup1/backups/memory-alpha/computers
-  #   dest_host: "memory-beta.{{ internal_domain }}"
-  # - src: pool1/backups/drives
-  #   dest: backup2/backups/memory-alpha/drives
-  #   dest_host: "memory-beta.{{ internal_domain }}"
-  # - src: pool2/appdata
-  #   dest: backup2/backups/memory-alpha/appdata
-  #   dest_host: "memory-beta.{{ internal_domain }}"
-  # - src: pool2/photos
-  #   dest: backup2/backups/memory-alpha/photos
-  #   dest_host: "memory-beta.{{ internal_domain }}"
+syncoid_syncs:
+  - src: storage1/archive
+    dest: backup1/memory-alpha/archive
+    dest_host: "memory-beta.{{ internal_domain }}"
+  - src: storage1/backups
+    recursive: yes
+    dest: backup1/memory-alpha/backups
+    dest_host: "memory-beta.{{ internal_domain }}"
+  - src: storage1/media
+    dest: backup1/memory-alpha/media
+    dest_host: "memory-beta.{{ internal_domain }}"
+  - src: storage1/media/music
+    dest: backup1/memory-alpha/media/music
+    dest_host: "memory-beta.{{ internal_domain }}"
+  - src: storage1/media/reactions
+    dest: backup1/memory-alpha/media/reactions
+    dest_host: "memory-beta.{{ internal_domain }}"
+  - src: storage1/photos
+    dest: backup1/memory-alpha/photos
+    dest_host: "memory-beta.{{ internal_domain }}"
+  - src: storage1/resources
+    dest: backup1/memory-alpha/resources
+    dest_host: "memory-beta.{{ internal_domain }}"
+  - src: ssd1/appdata
+    dest: backup1/memory-alpha/appdata
+    dest_host: "memory-beta.{{ internal_domain }}"
 
 ### mount_disks
 parity_disks: []
