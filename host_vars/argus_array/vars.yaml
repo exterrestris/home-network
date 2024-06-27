@@ -28,7 +28,7 @@ sanoid_datasets:
 
 syncoid_syncs:
   - src: data1/appdata
-    dest: backup2/backups/argus-array/appdata
+    dest: backup1/argus-array/appdata
     dest_host: "memory-beta.{{ internal_domain }}"
 
 ### exterrestris.docker_compose
