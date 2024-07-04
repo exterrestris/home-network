@@ -8,6 +8,7 @@
             1 - single variable
             2 - all variables
             3 - group variables
+            4 - single fact
         echo: yes
       register: debug_option
     - pause:
@@ -16,6 +17,12 @@
         echo: yes
       register: selected_var
       when: debug_option.user_input == "1"
+    - pause:
+        prompt: |
+          Which fact?
+        echo: yes
+      register: selected_fact
+      when: debug_option.user_input == "4"
     - pause:
         prompt: |
           For which host(s)?
@@ -48,7 +55,8 @@
     - block:
         - debug:
             msg:
-              - "{{ selected_var.user_input}}: {{ hostvars[item][selected_var.user_input] | default('NOT DEFINED') }}"
+              - "{{ selected_var.user_input }}:"
+              - "{{ hostvars[item][selected_var.user_input] | default('NOT DEFINED') }}"
           loop: "{{ groups['debug'] }}"
       when: debug_option.user_input == "1"
     - block:
@@ -59,4 +67,17 @@
     - debug:
         var: "{{ groups[target_group.user_input] }}"
       when: debug_option.user_input == "3"
+    - block:
+        - setup:
+            gather_subset:
+              - "{{ selected_fact.user_input | replace('ansible_', '') }}"
+          delegate_to: "{{ item }}"
+          delegate_facts: true
+          loop: "{{ groups['debug'] }}"
+        - debug:
+            msg:
+             - "{{ selected_fact.user_input }}:"
+             - "{{ hostvars[item][selected_fact.user_input] | default('NOT DEFINED') }}"
+          loop: "{{ groups['debug'] }}"
+      when: debug_option.user_input == "4"
 

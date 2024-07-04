@@ -1,7 +1,11 @@
 ---
 target_os: debian #proxmox
 
-proxmox_additional_packages: []
+proxmox_additional_packages:
+  - name: lshw
+  - name: lm-sensors
+  - name: smartmontools
+  - name: nvme-cli
 
 proxmox_ssl_ssh_host: "midas-array.{{ internal_domain }}"
 proxmox_ssl_ssh_user: admin

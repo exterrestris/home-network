@@ -1,21 +1,54 @@
 ---
+zfs_additional_packages:
+  - name: smartmontools
+  - name: nvme-cli
+
 ### mrlesmithjr.zfs
 zfs_create_pools: true
+zfs_import_pools: true
 zfs_create_filesystems: true
 zfs_enable_auto_snapshots: false
+zfs_manage_filesystem_permissions: true
 
 ### exterrestris.sanoid
 sanoid_templates:
-  - name: local
+  - name: standard
     autoprune: 'yes'
     frequently: 0
     hourly: 0
     daily: 28
-    weekly: 4
+    weekly: 6
     monthly: 3
     yearly: 0
     autosnap: 'yes'
-  - name: frequent
+  - name: basic
+    autoprune: 'yes'
+    frequently: 0
+    hourly: 0
+    daily: 14
+    weekly: 4
+    monthly: 2
+    yearly: 0
+    autosnap: 'yes'
+  - name: minimal
+    autoprune: 'yes'
+    frequently: 0
+    hourly: 0
+    daily: 14
+    weekly: 0
+    monthly: 0
+    yearly: 0
+    autosnap: 'yes'
+  - name: enhanced
+    autoprune: 'yes'
+    frequently: 8
+    hourly: 48
+    daily: 28
+    weekly: 6
+    monthly: 3
+    yearly: 0
+    autosnap: 'yes'
+  - name: docker
     autoprune: 'yes'
     frequently: 24
     hourly: 48

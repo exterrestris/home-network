@@ -8,36 +8,25 @@ collections:
 # Required Galaxy Roles
 roles:
   - name: mrlesmithjr.zfs
-    # Default version does not work on Ubuntu on Raspberry Pi (as of 04/03/2021)
-    # Using third-party fork instead that allows for override
-    # see https://github.com/mrlesmithjr/ansible-zfs/pull/14
-    src: https://github.com/alexrashed/ansible-zfs
-    version: feature/universe-repo
+    src: https://github.com/exterrestris/ansible-zfs
+    version: main
   - name: bertvv.samba
   - name: exterrestris.wsdd
     src: https://github.com/exterrestris/ansible-role-wsdd
   - name: exterrestris.proxmox_ssl
     src: https://github.com/exterrestris/ansible-role-proxmox-ssl
   - name: ironicbadger.ansible_role_proxmox_nag_removal
-    # Using third-party fork for Proxmox 7.2 support
-    # see https://github.com/ironicbadger/ansible-role-proxmox-nag-removal/pull/18
-    src: https://github.com/aroberts/ansible-role-proxmox-nag-removal
+    src: https://github.com/ironicbadger/ansible-role-proxmox-nag-removal
   - name: exterrestris.ansible_users
     src: https://github.com/exterrestris/ansible-users
-  - name: sprat.ansible_role_mergerfs
-    src: https://github.com/sprat/ansible-role-mergerfs
+  - name: tigattack.mergerfs
   - name: weareinteractive.ufw
   - name: geerlingguy.docker
   - name: geerlingguy.docker_arm
   - name: geerlingguy.pip
-  - name: ironicbadger.ansible_role_snapraid
-    src: https://github.com/IronicBadger/ansible-role-snapraid
-  - name: alvistack.kernel
   - name: exterrestris.sanoid
     src: https://github.com/exterrestris/ansible-role-sanoid
-  - name: exterrestris.zsh
-    src: https://github.com/exterrestris/ansible-role-zsh
-    version: powerlevel10k
+  - name: viasite-ansible.zsh
   - name: robertdebock.update
   - name: robertdebock.reboot
   - name: exterrestris.traefik

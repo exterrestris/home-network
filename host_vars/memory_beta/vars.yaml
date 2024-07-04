@@ -5,70 +5,48 @@ target_os: ubuntu
 ### mrlesmithjr.zfs
 zfs_pools:
   - name: backup1
-    action: 'create'
+    action: create
+    import: force
     compression: 'lz4'
+    type: 'raidz2'
     devices:
-      # USB dock doesn't expose disk IDs - using partition UUIDs
-      - '1d63c541-3a7b-45ce-a2a2-dc96cecf8d11'
-      - 'c2101a06-81ad-4194-b32f-3962b92b9b00'
-    type: 'mirror'
-    state: 'present'
-  - name: backup2
-    action: 'create'
-    compression: 'lz4'
-    devices:
-      # USB dock doesn't expose disk IDs - using partition UUIDs
-      - 'f6fafa6d-897e-4129-97eb-979ea3957329'
-      - 'a6a86991-75dd-430e-921a-f2839bb38da8'
-    type: 'mirror'
+      # WD60EZRZ WD-WX11DB56ZP10 (6TB)
+      - 'wwn-0x50014ee20d782122'
+      # WD60PURZ WD-WX92DA0N82VF (6TB)
+      - 'wwn-0x50014ee2147bff7f'
+      # WD60EZRZ WD-WX41D95A2NJL (6TB)
+      - 'wwn-0x50014ee2621c4a10'
+      # WD63PURZ WD-WX62D22N9A9E (6TB)
+      - 'wwn-0x50014ee26a7cbb95'
+      # ST6000VX001 WSC057K7 (6TB)
+      - 'wwn-0x5000c500d55abe86'
+      # WD60PURX WD-WX22D70EJRDF (6TB)
+      - 'wwn-0x50014ee2bdc2c37a'
+    properties:
+      ashift: 12
+      autoexpand: 'on'
     state: 'present'
 
 zfs_filesystems:
-  - name: backups
+  - name: memory-alpha
     pool: backup1
     compression: lz4
-    mountpoint: /mnt/zfs/backups1
+    mountpoint: /mnt/backups/memory-alpha
     state: present
-  - name: backups/memory-alpha
+  - name: argus-array
     pool: backup1
     compression: lz4
-    recordsize: 1M
-    mountpoint: /mnt/zfs/backups1/memory-alpha
-    state: present
-  - name: backups
-    pool: backup2
-    compression: lz4
-    mountpoint: /mnt/zfs/backups2
-    state: present
-  - name: backups/memory-alpha
-    pool: backup2
-    compression: lz4
-    recordsize: 1M
-    mountpoint: /mnt/zfs/backups2/memory-alpha
-    state: present
-  - name: backups/argus-array
-    pool: backup2
-    compression: lz4
-    recordsize: 1M
-    mountpoint: /mnt/zfs/backups2/argus-array
+    mountpoint: /mnt/backups/argus-array
     state: present
 
 ### exterrestris.sanoid
 sanoid_datasets:
-  - name: backup1/archive
+  - name: backup1/memory-alpha
     templates: backups
-  - name: backup1/backups/memory-alpha
+    recursive: yes
+  - name: backup1/argus-array
     templates: backups
-  - name: backup1/backups/memory-alpha/computers
-    templates: backups
-  - name: backup2/backups/memory-alpha
-    templates: backups
-  - name: backup2/backups/memory-alpha/appdata
-    templates: backups
-  - name: backup2/backups/memory-alpha/drives
-    templates: backups
-  - name: backup2/backups/memory-alpha/photos
-    templates: backups
+    recursive: yes
 
 ### mount_disks
 parity_disks:
@@ -78,29 +56,12 @@ ntfs_data_disks:
 
 other_mounts:
   - path: /mnt/zfs
+  - path: /mnt/backups
 
 remove_mounts:
 
-### sprat.ansible-role-mergerfs
-mergerfs_mounts:
-  - path: /mnt/backups
-    branches:
-      - /mnt/zfs/backups*
-    options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }}"
+### tigattack.mergerfs
+mergerfs_mounts: []
 
 ### bertvv.samba
-samba_shares:
-  - name: Archive
-    path: /mnt/zfs/archive
-    owner: "{{ main_user.username }}"
-    group: archive
-    mode: '2775'
-    writable: 'no'
-    guest_ok: 'yes'
-  - name: Backups
-    path: /mnt/backups
-    owner: "{{ main_user.username }}"
-    group: backups
-    mode: '2775'
-    writable: 'no'
-    guest_ok: 'yes'
+samba_shares: []
