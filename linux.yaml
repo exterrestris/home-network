@@ -161,17 +161,6 @@
       with_items: "{{ nas_common_packages }}"
       tags: packages
 
-- hosts: snapraid
-  roles:
-    # Install Docker (needed by ironicbadger.ansible_role_snapraid)
-    - role: geerlingguy.docker
-      tags:
-        - docker
-    # Build and configure snapraid
-    - role: ironicbadger.ansible_role_snapraid
-      tags:
-        - snapraid
-
 - hosts: traefik:!docker
   roles:
     # Install Traefik

@@ -48,9 +48,6 @@ all:
           hosts:
             memory_alpha:
             memory_beta:
-        snapraid:
-          hosts:
-            memory_alpha:
         traefik:
           hosts:
             epsilon_ix:

@@ -409,11 +409,6 @@ samba_shares:
     guest_ok: 'yes'
     browseable: 'yes'
 
-### ironicbadger.ansible_role_snapraid
-snapraid_email_address: "memory-alpha@{{ internal_domain }}"
-snapraid_config_excludes:
-  - /downloads/
-
 ### exterrestris.traefik
 traefik_services:
   - name: jellyfin-svc
