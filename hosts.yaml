@@ -9,12 +9,12 @@ all:
       children:
         proxmox_7:
           hosts:
-            utopia_planitia:
             deep_space_9:
         proxmox_8:
           hosts:
             spacedock:
             starbase_375:
+            utopia_planitia:
     proxmox_vm:
       hosts:
         memory_alpha:
