@@ -32,6 +32,7 @@ all:
         memory_alpha:
         memory_beta:
         argus_array:
+        epsilon_ix:
         # deep_space_9:
         # holosuite_1:
         # holosuite_2:
