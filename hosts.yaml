@@ -7,9 +7,6 @@ all:
     # Type
     proxmox_host:
       children:
-        proxmox_7:
-          hosts:
-            deep_space_9:
         proxmox_8:
           hosts:
             spacedock:
@@ -23,6 +20,7 @@ all:
         # holosuite_1:
         argus_array:
         midas_array:
+        # deep_space_9:
     raspberry_pi:
       hosts:
         # holosuite_2:
@@ -34,6 +32,7 @@ all:
         memory_alpha:
         memory_beta:
         argus_array:
+        # deep_space_9:
         # holosuite_1:
         # holosuite_2:
     linux:
