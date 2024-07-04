@@ -1,4 +1,8 @@
 ---
+zfs_additional_packages:
+  - name: smartmontools
+  - name: nvme-cli
+
 ### mrlesmithjr.zfs
 zfs_create_pools: true
 zfs_import_pools: true

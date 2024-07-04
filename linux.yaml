@@ -120,6 +120,13 @@
       tags:
         - sanoid
         - zfs
+  tasks:
+    - name: install additional packages
+      package:
+        name: "{{ item.name }}"
+        state: present
+      with_items: "{{ zfs_additional_packages }}"
+      tags: packages
 
 - hosts: nas
   roles:
