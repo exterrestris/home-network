@@ -8,10 +8,17 @@ appdata_path: /mnt/appdata
 zfs_pools:
   - name: data1
     action: 'create'
+    import: force
     compression: 'lz4'
     devices:
-      - 'ata-ST2000LX001-1RG174_WCC2V2L7'
-    type: 'basic'
+      # WD_Red_SN700_1000GB_24112Y801074
+      - 'nvme-WD_Red_SN700_1000GB_24112Y801074'
+      # WD_Red_SN700_1000GB_24112Y801475
+      - 'nvme-WD_Red_SN700_1000GB_24112Y801475'
+    type: 'mirror'
+    properties:
+      ashift: 12
+      autoexpand: 'on'
     state: 'present'
 
 zfs_filesystems:
