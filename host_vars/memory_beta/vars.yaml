@@ -63,5 +63,5 @@ remove_mounts:
 ### tigattack.mergerfs
 mergerfs_mounts: []
 
-### bertvv.samba
+### vladgh.samba.server
 samba_shares: []

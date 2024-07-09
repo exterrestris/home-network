@@ -251,7 +251,7 @@
 - hosts: nas
   roles:
     # Install/configure Samba shares/users
-    - role: bertvv.samba
+    - role: vladgh.samba.server
       tags:
         - samba
     # Configure firewall

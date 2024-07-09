@@ -343,7 +343,7 @@ mergerfs_mounts:
       - "{{ media_downloads_mountpoint }}/torrents"
     options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }},x-systemd.requires=zfs-mount.service"
 
-### bertvv.samba
+### vladgh.samba.server
 samba_users:
   - "{{ main_user_samba }}"
   - "{{ scans_user_samba }}"

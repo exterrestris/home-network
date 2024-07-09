@@ -4,13 +4,13 @@ collections:
   - ansible.posix
   - community.general
   - community.docker
+  - vladgh.samba
 
 # Required Galaxy Roles
 roles:
   - name: mrlesmithjr.zfs
     src: https://github.com/exterrestris/ansible-zfs
     version: main
-  - name: bertvv.samba
   - name: exterrestris.wsdd
     src: https://github.com/exterrestris/ansible-role-wsdd
   - name: exterrestris.proxmox_ssl

@@ -29,7 +29,7 @@ mergerfs_policy: mfs
 mergerfs_opts: allow_other,use_ino,cache.files=off,dropcacheonclose=true
 mergerfs_remove_undefined_mounts: true
 
-### bertvv.samba
+### vladgh.samba.server
 samba_workgroup: FEDERATION
 samba_preferred_master: true
 # Handle Windows not being able to browse shares due to incorrectly applied mitigation (https://github.com/bertvv/ansible-role-samba/issues/62)
