@@ -347,67 +347,70 @@ mergerfs_mounts:
 samba_users:
   - "{{ main_user_samba }}"
   - "{{ scans_user_samba }}"
+
+samba_map_to_guest: 'bad user'
+
 samba_shares:
   - name: Archive
     path: /mnt/zfs/archive
     owner: "{{ main_user.username }}"
     group: archive
     directory_mode: '2775'
-    writable: 'yes'
-    guest_ok: 'yes'
+    writable: yes
+    guest_ok: no
   - name: Backups
     path: /mnt/zfs/backups
     owner: "{{ main_user.username }}"
     group: backups
     directory_mode: '2775'
-    writable: 'yes'
-    guest_ok: 'yes'
+    writable: yes
+    guest_ok: no
   - name: Photos
     path: /mnt/zfs/photos
     owner: "{{ main_user.username }}"
     group: photos
     directory_mode: '2775'
-    writable: 'yes'
-    guest_ok: 'yes'
+    writable: yes
+    guest_ok: yes
   - name: Media
     path: /mnt/media
     owner: "{{ main_user.username }}"
     group: media
     directory_mode: '2775'
-    writable: 'yes'
-    guest_ok: 'yes'
+    writable: yes
+    guest_ok: yes
   - name: Jellyfin DVR
     path: /mnt/transient/dvr
     owner: "jellyfin"
     group: media
     directory_mode: '2775'
-    writable: 'no'
-    guest_ok: 'yes'
+    writable: no
+    guest_ok: yes
   - name: Resources
     path: /mnt/zfs/resources
     owner: "{{ main_user.username }}"
     group: resources
     create_mode: '775'
     directory_mode: '2775'
-    writable: 'yes'
-    guest_ok: 'yes'
+    writable: yes
+    public: yes
+    guest_ok: yes
   - name: Downloads
     path: /mnt/downloads
     owner: "{{ main_user.username }}"
     group: downloads
     create_mode: '775'
     directory_mode: '2775'
-    writable: 'yes'
-    guest_ok: 'yes'
-    browseable: 'yes'
+    writable: yes
+    public: yes
+    guest_ok: yes
   - name: Scans
     path: /mnt/transient/Scans
     owner: "{{ scans_user.username }}"
     group: "{{ scans_user.group }}"
     directory_mode: '2775'
-    writable: 'yes'
-    guest_ok: 'yes'
-    browseable: 'yes'
+    writable: yes
+    guest_ok: yes
 
 ### exterrestris.traefik
 traefik_services:
