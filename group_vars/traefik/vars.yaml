@@ -12,32 +12,7 @@ traefik_tls_certificates:
 traefik_providers:
   - "{{ traefik_default_file_provider }}"
 
-cockpit_traefik_service:
-  name: cockpit-svc
-  type: http
-  servers:
-    - "http://{{ ansible_hostname }}.{{ internal_domain }}:9090"
-
-cockpit_traefik_router:
-  name: cockpit
-  service: "cockpit-svc@file"
-  rule: "Host(`cockpit.{{ ansible_hostname }}.{{ internal_domain }}`)"
-  entrypoints:
-    - http
-    - https
-
-traefik_routers:
-  - "{{ cockpit_traefik_router }}"
-traefik_services:
-  - "{{ cockpit_traefik_service }}"
-
 ### weareinteractive.ufw
-cockpit_traefik_ufw_rules:
-  - rule: allow
-    to_port: 9090
-    proto: tcp
-    delete: yes
-
 traefik_ufw_rules:
   - rule: allow
     to_port: 80

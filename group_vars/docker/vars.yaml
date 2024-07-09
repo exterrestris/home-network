@@ -6,15 +6,6 @@ docker_users:
   - "{{ main_user.username }}"
 
 ### weareinteractive.ufw
-cockpit_traefik_ufw_rules:
-  - rule: allow
-    to_port: 9090
-    proto: tcp
-    delete: yes
-  - rule: allow
-    to_port: 9090
-    proto: tcp
-    interface_in: "{{ traefik_docker_network_bridge_name }}"
 docker_ufw_rules: []
 
 ### exterrestris.traefik
@@ -26,6 +17,10 @@ traefik_docker_network_driver_options:
 traefik_providers:
   - "{{ traefik_default_docker_provider }}"
   - "{{ traefik_default_file_provider }}"
+
+### exterrestris.docker_compose
+docker_compose_autostart: no
+docker_compose_pull_images: no
 
 ## exterrestris.users
 all_container_users:

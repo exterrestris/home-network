@@ -8,10 +8,17 @@ appdata_path: /mnt/appdata
 zfs_pools:
   - name: data1
     action: 'create'
+    import: force
     compression: 'lz4'
     devices:
-      - 'ata-ST2000LX001-1RG174_WCC2V2L7'
-    type: 'basic'
+      # WD_Red_SN700_1000GB_24112Y801074
+      - 'nvme-WD_Red_SN700_1000GB_24112Y801074'
+      # WD_Red_SN700_1000GB_24112Y801475
+      - 'nvme-WD_Red_SN700_1000GB_24112Y801475'
+    type: 'mirror'
+    properties:
+      ashift: 12
+      autoexpand: 'on'
     state: 'present'
 
 zfs_filesystems:
@@ -24,11 +31,11 @@ zfs_filesystems:
 ### exterrestris.sanoid
 sanoid_datasets:
   - name: data1/appdata
-    templates: frequent
+    templates: docker
 
 syncoid_syncs:
   - src: data1/appdata
-    dest: backup2/backups/argus-array/appdata
+    dest: backup1/argus-array/appdata
     dest_host: "memory-beta.{{ internal_domain }}"
 
 ### exterrestris.docker_compose

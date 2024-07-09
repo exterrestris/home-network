@@ -7,7 +7,23 @@ main_user:
   update_password: on_create
   groups:
     - 'sudo'
-  github_username: exterrestris
+  ssh_key:
+    # USS Enterprise
+    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ5vL72HAZsSoIwSUKPiQBiP6cHb2ccsq8My+ygN6bWl"
+    # USS Enterprise (WSL)
+    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE3OKdlxfzxvLtz9kdLRvt++7Bvn6jghXgRn/ZoOeVJ8"
+    # USS Bellerophon
+    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE0UaIVzdBc2LpsjOmSHCBGsSayTM2tNwYfiYTwp5or+"
+    # USS Bellerophon (WSL)
+    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDyOflUAFqct5RWU8JI2HkJqOf4HB10d7hFbUvyhNY5C"
+    # USS Prometheus
+    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH4O0umQWRU/RcbAJ472aDWoTxOFsH3b/8dhISBUFVcS"
+    # USS Prometheus (WSL)
+    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMHQwfyBLUMaMiPkCtlAbvCjpOXIPOVJMDp+AXVobH1l"
+    # Samsung Galaxy Tab S8
+    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICeBAAGaHxzH+c5ff8I5U72ypMioR8toi9Z+abeFkcMu"
+    # Samsung Galaxy S20 FE
+    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDoJw21yo2UC4h8N/Ob+3gOBG1h0rlZlJ0LqkRgcx8KN"
   generate_ssh_key: yes
   generate_ssh_key_type: ed25519
   generate_ssh_key_file: .ssh/id_ed25519
@@ -83,7 +99,3 @@ zsh_path:
 common_ufw_rules:
   - rule: allow
     name: OpenSSH
-    # Cockpit
-  - rule: allow
-    to_port: 9090
-    proto: tcp

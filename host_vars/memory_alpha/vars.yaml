@@ -13,161 +13,306 @@ scans_user_samba:
 
 appdata_path: /mnt/zfs/appdata
 
+nas_additional_users:
+  - "{{ scans_user }}"
+
+nas_additional_groups:
+  - name: "{{ scans_user.group }}"
+
+media_downloads_mountpoint: "/mnt/zfs/media-downloads"
+
 ### mrlesmithjr.zfs
 zfs_pools:
-  - name: pool1
+  - name: ssd1
     action: 'create'
+    import: force
     compression: 'lz4'
     devices:
-      - 'scsi-SATA_WDC_WD120EMAZ-11_8CKANMKF'
-      - 'scsi-SATA_WDC_WD120EMAZ-11_8CKATPYE'
+      # WD_Red_SN700_1000GB_23171U800295
+      - 'nvme-WD_Red_SN700_1000GB_23171U800295'
+      # WD_Red_SN700_1000GB_23171U800244
+      - 'nvme-WD_Red_SN700_1000GB_23171U800244'
     type: 'mirror'
+    properties:
+      ashift: 12
+      autoexpand: 'on'
     state: 'present'
-  - name: pool2
-    action: 'create'
+  - name: storage1
+    action: create
+    import: force
     compression: 'lz4'
     devices:
-      - 'scsi-SATA_WDC_WD60EZRZ-00G_WD-WX41D95A2NJL'
-      - 'scsi-SATA_WDC_WD60EZRZ-00R_WD-WX11DB56ZP10'
-    type: 'mirror'
+      # ST12000NM007G ZTN0KBAZ (12TB)
+      - 'wwn-0x5000c500dccb5155'
+      # WD120EMAZ 8CKANMKF (12TB)
+      - 'wwn-0x5000cca26fef1fab'
+      # WD120EMAZ 8CKATPYE (12TB)
+      - 'wwn-0x5000cca26fef2ef9'
+      # WD120EMAZ 8CJX3YAF (12TB)
+      - 'wwn-0x5000cca26fe8f836'
+      # WD120EMAZ 8CJY60HE (12TB)
+      - 'wwn-0x5000cca26fe9745a'
+      # WD120EMAZ 8CK9VRKF (12TB)
+      - 'wwn-0x5000cca26feec22f'
+      # WD120EMAZ Z2HGERAT (12TB)
+      - 'wwn-0x5000cca28dd4a834'
+      # ST12000NM001G WTN04568 (12TB)
+      - 'wwn-0x5000c500e0b84a62'
+    type: 'raidz2'
+    properties:
+      ashift: 12
+      autoexpand: 'on'
+    recordsize: 1M
     state: 'present'
 
 zfs_filesystems:
   - name: backups
-    pool: pool1
+    pool: storage1
     compression: lz4
     mountpoint: /mnt/zfs/backups
+    owner: "{{ main_user.username }}"
+    group: backups
+    mode: 2775
     state: present
   - name: backups/computers
-    pool: pool1
+    pool: storage1
     compression: lz4
     recordsize: 1M
-    mountpoint: /mnt/zfs/backups/computers
     state: present
-  - name: backups/drives
-    pool: pool1
+    owner: "{{ main_user.username }}"
+    group: backups
+    mode: 2775
+  - name: backups/computers/uss-enterprise
+    pool: storage1
     compression: lz4
     recordsize: 1M
-    mountpoint: /mnt/zfs/backups/drives
+    state: present
+    owner: "{{ main_user.username }}"
+    group: backups
+    mode: 2775
+  - name: backups/computers/uss-bellerophon
+    pool: storage1
+    compression: lz4
+    recordsize: 1M
+    state: present
+    owner: "{{ main_user.username }}"
+    group: backups
+    mode: 2775
+  - name: backups/computers/uss-prometheus
+    pool: storage1
+    compression: lz4
+    recordsize: 1M
+    state: present
+    owner: "{{ main_user.username }}"
+    group: backups
+    mode: 2775
+  - name: backups/computers/jupiter-station
+    pool: storage1
+    compression: lz4
+    recordsize: 1M
+    state: present
+    owner: "{{ main_user.username }}"
+    group: backups
+    mode: 2775
+  - name: backups/drives
+    pool: storage1
+    compression: lz4
+    recordsize: 1M
     state: present
   - name: backups/files
-    pool: pool1
+    pool: storage1
     compression: lz4
     recordsize: 1M
-    mountpoint: /mnt/zfs/backups/files
     state: present
   - name: archive
-    pool: pool1
+    pool: storage1
     compression: lz4
     mountpoint: /mnt/zfs/archive
+    owner: "{{ main_user.username }}"
+    group: archive
+    mode: 2775
     state: present
   - name: resources
-    pool: pool2
+    pool: storage1
     compression: lz4
     mountpoint: /mnt/zfs/resources
+    owner: "{{ main_user.username }}"
+    group: resources
+    mode: 2775
+    state: present
+  - name: photos
+    pool: storage1
+    compression: lz4
+    mountpoint: "/mnt/zfs/photos"
+    owner: "{{ main_user.username }}"
+    group: photos
+    mode: 2775
     state: present
   - name: appdata
-    pool: pool2
+    pool: ssd1
     compression: lz4
     mountpoint: "{{ appdata_path }}"
     state: present
-  - name: photos
-    pool: pool2
+  - name: media
+    pool: storage1
     compression: lz4
-    mountpoint: "/mnt/zfs/photos"
+    mountpoint: /mnt/media
+    owner: "{{ main_user.username }}"
+    group: media
+    mode: 2775
+    state: present
+  - name: media/movies
+    pool: storage1
+    compression: lz4
+    state: present
+    owner: "{{ main_user.username }}"
+    group: media
+    mode: 2775
+  - name: media/movies/rips
+    pool: storage1
+    compression: lz4
+    recordsize: 1M
+    state: present
+    owner: "{{ main_user.username }}"
+    group: media
+    mode: 2775
+  - name: media/shows
+    pool: storage1
+    compression: lz4
+    state: present
+    owner: "{{ main_user.username }}"
+    group: media
+    mode: 2775
+  - name: media/shows/rips
+    pool: storage1
+    compression: lz4
+    recordsize: 1M
+    state: present
+    owner: "{{ main_user.username }}"
+    group: media
+    mode: 2775
+  - name: media/shows/recordings
+    pool: storage1
+    compression: lz4
+    state: present
+    owner: "{{ main_user.username }}"
+    group: media
+    mode: 2775
+  - name: media/music
+    pool: storage1
+    compression: lz4
+    state: present
+    owner: "{{ main_user.username }}"
+    group: media
+    mode: 2775
+  - name: media/reactions
+    pool: storage1
+    compression: lz4
+    recordsize: 1M
+    state: present
+    owner: "{{ main_user.username }}"
+    group: media
+    mode: 2775
+  - name: media/videos
+    pool: storage1
+    compression: lz4
+    recordsize: 1M
+    state: present
+    owner: "{{ main_user.username }}"
+    group: media
+    mode: 2775
+  - name: downloads
+    pool: storage1
+    compression: lz4
+    recordsize: 1M
+    mountpoint: /mnt/downloads
+    owner: "{{ main_user.username }}"
+    group: downloads
+    mode: 2775
+    state: present
+  - name: downloads/media
+    pool: storage1
+    compression: lz4
+    recordsize: 1M
+    mountpoint: "{{ media_downloads_mountpoint }}"
+    owner: "{{ main_user.username }}"
+    group: downloads
+    mode: 2775
     state: present
 
 ### exterrestris.sanoid
 sanoid_datasets:
-  - name: pool1/archive
-    templates: local
-  - name: pool1/backups
-    templates: local
-  - name: pool1/backups/computers
-    templates: local
-  - name: pool1/backups/files
+  - name: storage1/archive
+    templates: enhanced
+  - name: storage1/backups
+    templates: standard
+  - name: storage1/backups/computers
+    templates: standard
+    recursive: yes
+  - name: storage1/backups/files
     templates: ignore
-  - name: pool1/backups/drives
-    templates: local
-  - name: pool2/appdata
-    templates: frequent
-  - name: pool2/resources
-    templates: ignore
-  - name: pool2/photos
-    templates: local
+  - name: storage1/backups/drives
+    templates: standard
+  - name: ssd1/appdata
+    templates: docker
+  - name: storage1/resources
+    templates: basic
+  - name: storage1/photos
+    templates: enhanced
+  - name: storage1/media
+    templates: minimal
+  - name: storage1/media/music
+    templates: enhanced
+  - name: storage1/media/reactions
+    templates: standard
+  - name: storage1/media/movies
+    templates: minimal
+    recursive: yes
+  - name: storage1/media/shows
+    templates: minimal
+    recursive: yes
+  - name: storage1/media/videos
+    templates: minimal
+  - name: storage1/downloads
+    templates: basic
+  - name: storage1/downloads/media
+    templates: minimal
 
 syncoid_syncs:
-  - src: pool1/archive
-    dest: backup1/archive
+  - src: storage1/archive
+    dest: backup1/memory-alpha/archive
     dest_host: "memory-beta.{{ internal_domain }}"
-  - src: pool1/backups
-    dest: backup1/backups/memory-alpha
+  - src: storage1/backups
+    recursive: yes
+    dest: backup1/memory-alpha/backups
     dest_host: "memory-beta.{{ internal_domain }}"
-  - src: pool1/backups/computers
-    dest: backup1/backups/memory-alpha/computers
+  - src: storage1/media
+    dest: backup1/memory-alpha/media
     dest_host: "memory-beta.{{ internal_domain }}"
-  - src: pool1/backups/drives
-    dest: backup2/backups/memory-alpha/drives
+  - src: storage1/media/music
+    dest: backup1/memory-alpha/media/music
     dest_host: "memory-beta.{{ internal_domain }}"
-  - src: pool2/appdata
-    dest: backup2/backups/memory-alpha/appdata
+  - src: storage1/media/reactions
+    dest: backup1/memory-alpha/media/reactions
     dest_host: "memory-beta.{{ internal_domain }}"
-  - src: pool2/photos
-    dest: backup2/backups/memory-alpha/photos
+  - src: storage1/photos
+    dest: backup1/memory-alpha/photos
+    dest_host: "memory-beta.{{ internal_domain }}"
+  - src: storage1/resources
+    dest: backup1/memory-alpha/resources
+    dest_host: "memory-beta.{{ internal_domain }}"
+  - src: ssd1/appdata
+    dest: backup1/memory-alpha/appdata
     dest_host: "memory-beta.{{ internal_domain }}"
 
 ### mount_disks
-parity_disks:
-  - path: /mnt/ext4/parity1
-    diskbyid: /dev/disk/by-uuid/13a02c9d-1344-4523-9238-a6757142f6ae
-    fs: ext4
-    opts: defaults
-    content: true
+parity_disks: []
 
-data_disks:
-  - path: /mnt/ext4/data1
-    data_path: /data
-    diskbyid: /dev/disk/by-uuid/3eee8a73-449f-4680-ac95-a88226b27d79
-    fs: ext4
-    opts: defaults
-    content: true
-  - path: /mnt/ext4/data2
-    data_path: /data
-    diskbyid: /dev/disk/by-uuid/7f6e6993-8f06-4cf4-8f59-ec0ba5771bea
-    fs: ext4
-    opts: defaults
-    content: true
-  - path: /mnt/ext4/data3
-    data_path: /data
-    diskbyid: /dev/disk/by-uuid/f4ca6d24-5142-4583-adc4-ae791f25b4ca
-    fs: ext4
-    opts: defaults
-    content: true
-  - path: /mnt/ext4/data4
-    data_path: /data
-    diskbyid: /dev/disk/by-uuid/56eb9377-2ddc-4fc3-8409-d7549d4a0dab
-    fs: ext4
-    opts: defaults
-    content: true
-  - path: /mnt/ext4/data5
-    data_path: /data
-    diskbyid: /dev/disk/by-uuid/e0e41243-f51b-4730-a9c7-c001279a7315
-    fs: ext4
-    opts: defaults
-    content: true
+data_disks: []
 
 other_disks:
-  - path: /mnt/ext4/transient1
-    data_path: /data
-    diskbyid: /dev/disk/by-uuid/cade8c26-973a-4ff1-9669-36fbcde5b97c
-    fs: ext4
-    opts: defaults
-  - path: /mnt/ext4/transient2
-    data_path: /data
-    diskbyid: /dev/disk/by-uuid/d8fb93fb-4c74-4e21-b005-942d5cd89e58
-    fs: ext4
-    opts: defaults
   - path: /mnt/ext4/scratch1
+    # CT1000MX500SSD1_2103E4E9E4CC-part1
     diskbyid: /dev/disk/by-uuid/fa7d3ad4-03bc-48f1-bb5b-253399a13202
     fs: ext4
     opts: defaults
@@ -179,18 +324,29 @@ other_mounts:
 
 remove_mounts:
 
-### sprat.ansible-role-mergerfs
+### tigattack.mergerfs
 mergerfs_mounts:
-  - path: /mnt/storage
-    branches:
-      - /mnt/ext4/data*/data
-    options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }},x-systemd.requires=/mnt/ext4/data1,x-systemd.requires=/mnt/ext4/data2,x-systemd.requires=/mnt/ext4/data3"
   - path: /mnt/transient
     branches:
-      - /mnt/ext4/transient*/data
-    options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }},x-systemd.requires=/mnt/ext4/transient1"
+      - /mnt/ext4/scratch1/transient*/data
+    options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }},x-systemd.requires=/mnt/ext4/scratch1"
+  - path: /mnt/media/shows/downloads
+    branches:
+      - "{{ media_downloads_mountpoint }}/media/shows/Download*"
+    options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }},x-systemd.requires=zfs-mount.service"
+  - path: /mnt/media/movies/downloads
+    branches:
+      - "{{ media_downloads_mountpoint }}/media/movies/Download*"
+    options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }},x-systemd.requires=zfs-mount.service"
+  - path: /mnt/downloads/torrents
+    branches:
+      - "{{ media_downloads_mountpoint }}/torrents"
+    options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }},x-systemd.requires=zfs-mount.service"
 
 ### bertvv.samba
+samba_users:
+  - "{{ main_user_samba }}"
+  - "{{ scans_user_samba }}"
 samba_shares:
   - name: Archive
     path: /mnt/zfs/archive
@@ -214,7 +370,7 @@ samba_shares:
     writable: 'yes'
     guest_ok: 'yes'
   - name: Media
-    path: /mnt/storage/media
+    path: /mnt/media
     owner: "{{ main_user.username }}"
     group: media
     directory_mode: '2775'
@@ -236,7 +392,7 @@ samba_shares:
     writable: 'yes'
     guest_ok: 'yes'
   - name: Downloads
-    path: /mnt/storage/downloads
+    path: /mnt/downloads
     owner: "{{ main_user.username }}"
     group: downloads
     create_mode: '775'
@@ -253,14 +409,8 @@ samba_shares:
     guest_ok: 'yes'
     browseable: 'yes'
 
-### ironicbadger.ansible_role_snapraid
-snapraid_email_address: "memory-alpha@{{ internal_domain }}"
-snapraid_config_excludes:
-  - /downloads/
-
 ### exterrestris.traefik
 traefik_services:
-  - "{{ cockpit_traefik_service }}"
   - name: jellyfin-svc
     type: http
     servers:
@@ -298,7 +448,7 @@ docker_compose_projects:
           tag: latest
         environment:
           - PUID={{ (container_users | selectattr('username', 'equalto', 'jellyfin') | list | first).uid }}
-          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
+          - PGID={{ (nas_common_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
           - TZ=Europe/London
         volumes:
           - source: "{{ appdata_path }}/media/jellyfin"
@@ -306,19 +456,19 @@ docker_compose_projects:
             group: "jellyfin"
             owner: "jellyfin"
             mode: "755"
-          - source: /mnt/storage/media/Shows
+          - source: /mnt/media/shows
             target: /media/shows
             group: media
             mode: "g+rx"
-          - source: /mnt/storage/media/Movies
+          - source: /mnt/media/movies
             target: /media/movies
             group: media
             mode: "g+rx"
-          - source: /mnt/storage/media/Music
+          - source: /mnt/media/music
             target: /media/music
             group: media
             mode: "g+rx"
-          - source: /mnt/storage/media/Reactions
+          - source: /mnt/media/reactions
             target: /media/reactions
             group: media
             mode: "g+rx"
@@ -366,15 +516,18 @@ docker_compose_projects:
           - proxy
         expose:
           # qBittorrent WebUI
-          - 8080 
+          - 8080
         volumes:
           - gluetun:/gluetun
         environment:
-          - VPNSP=surfshark
+          - VPN_SERVICE_PROVIDER=airvpn
+          - VPN_TYPE=wireguard
+          - WIREGUARD_PRIVATE_KEY={{ vault_airvpn_wireguard_private_key }}
+          - WIREGUARD_PRESHARED_KEY={{ vault_airvpn_wireguard_preshared_key }}
+          - WIREGUARD_ADDRESSES=10.186.35.228/32
+          - SERVER_COUNTRIES=Netherlands
+          - FIREWALL_VPN_INPUT_PORTS={{ vault_airvpn_port }}
           - TZ=Europe/London
-          - OPENVPN_USER={{ vault_surfshark_username }}
-          - OPENVPN_PASSWORD={{ vault_surfshark_password }}
-          - REGION=Netherlands Amsterdam
         restart: always
         labels:
           - "traefik.enable=true"
@@ -393,7 +546,7 @@ docker_compose_projects:
         container_name: qbittorrent
         environment:
           - PUID={{ (container_users | selectattr('username', 'equalto', 'torrents') | list | first).uid }}
-          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}
+          - PGID={{ (nas_common_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}
           - UMASK=002
           - TZ=Europe/London
           - WEBUI_PORT=8080
@@ -403,8 +556,8 @@ docker_compose_projects:
             owner: "torrents"
             group: "torrents"
             mode: "755"
-          - source: /mnt/storage/downloads/torrents
-            target: /storage/downloads/torrents
+          - source: "{{ media_downloads_mountpoint }}/torrents"
+            target: /storage/torrents
             owner: "torrents"
             group: "downloads"
             mode: "g+rx"
@@ -422,7 +575,7 @@ docker_compose_projects:
           name: linuxserver/sonarr
         environment:
           - PUID={{ (container_users | selectattr('username', 'equalto', 'sonarr') | list | first).uid }}
-          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
+          - PGID={{ (nas_common_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
           - UMASK=002
           - TZ=Europe/London
         volumes:
@@ -435,7 +588,7 @@ docker_compose_projects:
             target: /custom-cont-init.d
             group: sonarr
             owner: sonarr
-          - source: /mnt/storage
+          - source: "{{ media_downloads_mountpoint }}"
             target: /storage
         expose:
           - 8989
@@ -457,7 +610,7 @@ docker_compose_projects:
           name: linuxserver/radarr
         environment:
           - PUID={{ (container_users | selectattr('username', 'equalto', 'radarr') | list | first).uid }}
-          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
+          - PGID={{ (nas_common_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
           - UMASK=002
           - TZ=Europe/London
         volumes:
@@ -470,7 +623,7 @@ docker_compose_projects:
             target: /custom-cont-init.d
             group: radarr
             owner: radarr
-          - source: /mnt/storage
+          - source: "{{ media_downloads_mountpoint }}"
             target: /storage
         expose:
           - 7878
@@ -492,7 +645,7 @@ docker_compose_projects:
           name: linuxserver/radarr
         environment:
           - PUID={{ (container_users | selectattr('username', 'equalto', 'radarr') | list | first).uid }}
-          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
+          - PGID={{ (nas_common_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
           - UMASK=002
           - TZ=Europe/London
         volumes:
@@ -505,7 +658,7 @@ docker_compose_projects:
             target: /custom-cont-init.d
             group: radarr
             owner: radarr
-          - source: /mnt/storage
+          - source: "{{ media_downloads_mountpoint }}"
             target: /storage
         expose:
           - 7879
@@ -528,7 +681,7 @@ docker_compose_projects:
           tag: develop
         environment:
           - PUID={{ (container_users | selectattr('username', 'equalto', 'prowlarr') | list | first).uid }}
-          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
+          - PGID={{ (nas_common_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
           - UMASK=002
           - TZ=Europe/London
         volumes:
@@ -580,7 +733,7 @@ docker_compose_projects:
           name: linuxserver/ombi
         environment:
           - PUID={{ (container_users | selectattr('username', 'equalto', 'ombi') | list | first).uid }}
-          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
+          - PGID={{ (nas_common_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
           - UMASK=002
           - TZ=Europe/London
         volumes:
@@ -608,10 +761,10 @@ docker_compose_projects:
         image:
           name: alexta69/metube
         environment:
-          - YTDL_OPTIONS={"cookiefile":"/downloads/cookies.txt"}
+          - YTDL_OPTIONS={"cookiefile":"/downloads/cookies.txt","writethumbnail":true,"postprocessors":[{"key":"FFmpegThumbnailsConvertor","format":"png"}]}
           - STATE_DIR=/state
         volumes:
-          - source: /mnt/storage/downloads/metube
+          - source: /mnt/downloads/metube
             target: /downloads
             owner: metube
             group: downloads
@@ -621,7 +774,7 @@ docker_compose_projects:
             owner: metube
             group: metube
             mode: "755"
-        user: "{{ (container_users | selectattr('username', 'equalto', 'metube') | list | first).uid }}:{{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
+        user: "{{ (container_users | selectattr('username', 'equalto', 'metube') | list | first).uid }}:{{ (nas_common_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
         expose:
           - 8081
         networks:
@@ -649,19 +802,19 @@ linuxserver_container_custom_scripts:
       - script: add-to-downloads-group.sh
         template: add-container-user-to-group.sh.j2
         template_vars:
-          gid: "{{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
+          gid: "{{ (nas_common_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
           group: downloads
   - container: "{{ appdata_path }}/media-downloads/radarr"
     scripts:
       - script: add-to-downloads-group.sh
         template: add-container-user-to-group.sh.j2
         template_vars:
-          gid: "{{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
+          gid: "{{ (nas_common_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
           group: downloads
   - container: "{{ appdata_path }}/media-downloads/radarr-1080"
     scripts:
       - script: add-to-downloads-group.sh
         template: add-container-user-to-group.sh.j2
         template_vars:
-          gid: "{{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
+          gid: "{{ (nas_common_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
           group: downloads

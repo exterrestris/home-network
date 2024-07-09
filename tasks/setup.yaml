@@ -22,16 +22,26 @@
             repo: "{{ item }}"
             filename: pve-enterprise
             state: absent
+            update_cache: false
           with_items:
             - "deb https://enterprise.proxmox.com/debian {{ ansible_distribution_release }} pve-enterprise"
             - "deb https://enterprise.proxmox.com/debian/pve {{ ansible_distribution_release }} pve-enterprise"
+            - "deb https://enterprise.proxmox.com/debian/ceph-quincy {{ ansible_distribution_release }} enterprise"
         - name: add community repo
           apt_repository:
             repo: "{{ item }}"
             filename: pve-community
             state: present
           with_items:
-            - " deb http://download.proxmox.com/debian/pve {{ ansible_distribution_release }} pve-no-subscription"
+            - "deb http://download.proxmox.com/debian/pve {{ ansible_distribution_release }} pve-no-subscription"
+        - name: add community ceph repo
+          apt_repository:
+            repo: "{{ item }}"
+            filename: ceph
+            state: present
+          with_items:
+            - "deb http://download.proxmox.com/debian/ceph-quincy {{ ansible_distribution_release }} no-subscription"
+          when: "ansible_facts.packages['proxmox-ve'][0].version is version('8.0', '>=')"
       when: "'proxmox-ve' in ansible_facts.packages"
   when: ansible_distribution == 'Debian'
   tags:
@@ -77,10 +87,11 @@
     - bootstrap-new
     - bootstrap-all
 
-- name: add SSH authorized_keys from github
+- name: add SSH authorized_keys
   authorized_key:
     user: "{{ vault_ansible_user }}"
-    key: "https://github.com/{{ vault_ansible_user_github_user }}.keys"
+    key: "{{ item }}"
+  with_items: "{{ vault_ansible_user_authorised_keys }}"
   tags:
     - bootstrap-new
     - bootstrap-all

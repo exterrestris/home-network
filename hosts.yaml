@@ -7,23 +7,22 @@ all:
     # Type
     proxmox_host:
       children:
-        proxmox_6:
+        proxmox_8:
           hosts:
             spacedock:
-        proxmox_7:
-          hosts:
+            starbase_375:
             utopia_planitia:
-            deep_space_9:
     proxmox_vm:
       hosts:
         memory_alpha:
+        memory_beta:
         epsilon_ix:
         # holosuite_1:
         argus_array:
         midas_array:
+        # deep_space_9:
     raspberry_pi:
       hosts:
-        memory_beta:
         # holosuite_2:
     pfsense:
       hosts:
@@ -33,6 +32,8 @@ all:
         memory_alpha:
         memory_beta:
         argus_array:
+        epsilon_ix:
+        # deep_space_9:
         # holosuite_1:
         # holosuite_2:
     linux:
@@ -47,9 +48,6 @@ all:
           hosts:
             memory_alpha:
             memory_beta:
-        snapraid:
-          hosts:
-            memory_alpha:
         traefik:
           hosts:
             epsilon_ix:

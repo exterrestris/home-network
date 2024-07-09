@@ -1,29 +1,5 @@
 ---
-# Setup - Host Specific
-- hosts: spacedock
-  tasks:
-    # Prevent kernel updates as patch required to support IOMMU
-    - name: prevent automatic kernel updates
-      dpkg_selections:
-        name: "{{ item }}"
-        selection: hold
-      loop:
-        - pve-kernel-5.4
-        - pve-kernel-helper
-        - pve-kernel-libc-dev
-  tags:
-    - kernel
-    - setup
-
-- hosts: memory_alpha
-  roles:
-    # Update kernel to HWE (5.8) to add support for Renesas USB controller
-    - role: alvistack.kernel
-      vars:
-        kernel_release: "mainline"
-  tags:
-    - kernel
-    - setup
+# Setup - Groups
 
 # Main - Common
 - hosts: all:!pfsense
@@ -78,7 +54,7 @@
       tags:
         - users
     # Install/configure ZSH
-    - role: exterrestris.zsh
+    - role: viasite-ansible.zsh
       vars:
         zsh_user: "{{ main_user.username }}"
       tags: zsh
@@ -91,9 +67,6 @@
           - '.zshrc.local.pre-p10k'
         ssh_agent_keys:
           - ~/.ssh/id_ed25519
-    # Install Cockpit UI
-    - role: linux-system-roles.cockpit
-      tags: cockpit
     # Configure firewall
     - role: weareinteractive.ufw
       vars:
@@ -147,48 +120,36 @@
       tags:
         - sanoid
         - zfs
-    # Install Cockpit ZFS Manager
-    - role: cockpit_zfs
-      tags: cockpit
+  tasks:
+    - name: install additional packages
+      package:
+        name: "{{ item.name }}"
+        state: present
+      with_items: "{{ zfs_additional_packages }}"
+      tags: packages
 
 - hosts: nas
   roles:
     # Set up groups needed for file permissions
     - role: exterrestris.ansible_users
       vars:
-        groups_to_create: "{{ nas_groups }}"
+        users: "{{ nas_additional_users }}"
+        groups_to_create: "{{ nas_common_groups + nas_additional_groups }}"
       tags:
         - users
     # Mount ext4 disks
     - role: mount_disks
     # Install/configure mergerfs
-    - role: sprat.ansible_role_mergerfs
+    - role: tigattack.mergerfs
       tags:
         - disks
         - mergerfs
-    # Install/configure Samba shares/users
-    - role: bertvv.samba
-      vars:
-        samba_users:
-          - "{{ main_user_samba }}"
-      tags:
-        - samba
-    # Configure firewall
-    - role: weareinteractive.ufw
-      vars:
-        ufw_rules: "{{ nas_ufw_rules }}"
-      tags: firewall
-    # Set up WSDD for network discovery
-    - role: exterrestris.wsdd
-      tags:
-        - wsdd
-        - samba
   tasks:
     # Add main user to groups created
     - name: additional groups for main user
       user:
         name: "{{ main_user.username }}"
-        groups: "{{ nas_groups | map(attribute='name') }}"
+        groups: "{{ nas_common_groups | map(attribute='name') }}"
         append: yes
       tags:
         - users
@@ -200,17 +161,6 @@
       with_items: "{{ nas_common_packages }}"
       tags: packages
 
-- hosts: snapraid
-  roles:
-    # Install Docker (needed by ironicbadger.ansible_role_snapraid)
-    - role: geerlingguy.docker
-      tags:
-        - docker
-    # Build and configure snapraid
-    - role: ironicbadger.ansible_role_snapraid
-      tags:
-        - snapraid
-
 - hosts: traefik:!docker
   roles:
     # Install Traefik
@@ -220,7 +170,6 @@
       vars:
         ufw_rules:
           - "{{ traefik_ufw_rules }}"
-          - "{{ cockpit_traefik_ufw_rules }}"
       tags:
         - firewall
         - traefik-firewall
@@ -229,16 +178,6 @@
       tags:
         - traefik-ssl
         - ssl
-  tasks:
-    - name: configure Cockpit to allow proxying
-      template:
-        src: cockpit.conf.j2
-        dest: "/etc/cockpit/cockpit.conf"
-      vars:
-        domain: "cockpit.{{ ansible_hostname }}.{{ internal_domain }}"
-      when: "'traefik' in group_names"
-      tags:
-        - traefik
   tags:
     - traefik
 
@@ -247,22 +186,24 @@
     # Install Docker (x64)
     - role: geerlingguy.docker
       when: "'raspberry_pi' not in group_names"
-    # Install PIP
-    - role: geerlingguy.pip
-      vars:
-        pip_install_packages:
-          - name: docker
-          - name: docker-compose
-  tags: docker-install
+    # Install Docker/Docker Compose PIP packages (needed for Ansible to control Docker)
+    # - role: geerlingguy.pip
+    #   vars:
+    #     pip_install_packages:
+    #       - name: docker
+    #       - name: docker-compose
+  tags:
+    - docker
+    - docker-install
 
 - hosts: docker:&raspberry_pi
   roles:
-    # Install PIP
-    - role: geerlingguy.pip
-      vars:
-        pip_install_packages:
-          - name: docker
-            # geerlingguy.docker_arm will install docker-compose pip package
+    # # Install PIP
+    # - role: geerlingguy.pip
+    #   vars:
+    #     pip_install_packages:
+    #       - name: docker
+    #         # geerlingguy.docker_arm will install docker-compose pip package
     # Install Docker (arm)
     - role: geerlingguy.docker_arm
       when: "'raspberry_pi' in group_names"
@@ -275,7 +216,7 @@
       vars:
         users: "{{ container_users | map('combine', container_user_opts) }}"
       tags:
-        - container-users    
+        - container-users
     # Install Traefik
     - role: exterrestris.traefik
       tags:
@@ -286,7 +227,6 @@
       vars:
         ufw_rules:
           - "{{ traefik_ufw_rules }}"
-          - "{{ cockpit_traefik_ufw_rules }}"
           - "{{ docker_ufw_rules }}"
       tags:
         - firewall
@@ -296,6 +236,7 @@
       tags:
         - traefik
         - traefik-ssl
+        - ssl
       when: "'traefik' in group_names"
     # Generate Docker Compose
     - role: exterrestris.docker_compose
@@ -304,37 +245,28 @@
     - role: linuxserver_containers
       tags:
         - docker-compose
-  tasks:
-    - name: configure Cockpit to allow proxying
-      template:
-        src: cockpit.conf.j2
-        dest: "/etc/cockpit/cockpit.conf"
-      vars:
-        domain: "cockpit.{{ ansible_hostname }}.{{ internal_domain }}"
-      when: "'traefik' in group_names"
-      tags:
-        - traefik
   tags:
     - docker
 
+- hosts: nas
+  roles:
+    # Install/configure Samba shares/users
+    - role: bertvv.samba
+      tags:
+        - samba
+    # Configure firewall
+    - role: weareinteractive.ufw
+      vars:
+        ufw_rules: "{{ nas_ufw_rules }}"
+      tags: firewall
+    # Set up WSDD for network discovery
+    - role: exterrestris.wsdd
+      tags:
+        - wsdd
+        - samba
+
 # Main - Host Specific
 - hosts: memory_alpha
-  roles:
-    # Create 'Scans' user
-    - role: exterrestris.ansible_users
-      vars:
-        users:
-          - "{{ scans_user }}"
-        groups_to_create:
-          - name: "{{ scans_user.group }}"
-      tags:
-        - users
-    # Set up Samba user for 'Scans'
-    - role: bertvv.samba
-      vars:
-        samba_users:
-          - "{{ scans_user_samba }}"
-      tags: samba
   tasks:
     # Add 'Scans' role to main user
     - name: additional groups for main user
