@@ -24,6 +24,10 @@ main_user:
     - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICeBAAGaHxzH+c5ff8I5U72ypMioR8toi9Z+abeFkcMu"
     # Samsung Galaxy S20 FE
     - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDoJw21yo2UC4h8N/Ob+3gOBG1h0rlZlJ0LqkRgcx8KN"
+    # Samsung Galaxy S24+
+    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFQR22gFrtR5IwdUqblgVDzfH92K6rHhHZwgLy0dNfjU"
+    # Samsung Galaxy Tab S6 Lite
+    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEx0RABkNuBAaj3+jLE7oBh3H5Aqf3EtoVfHtFrX4rO1"
   generate_ssh_key: yes
   generate_ssh_key_type: ed25519
   generate_ssh_key_file: .ssh/id_ed25519
