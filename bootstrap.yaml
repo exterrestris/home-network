@@ -12,6 +12,41 @@
         groups: setup
       changed_when: False
 
+# Bootstrap single host from inventory
+- hosts: localhost
+  gather_facts: no
+  tags: bootstrap-host
+  tasks:
+    - pause:
+        prompt: Inventory host to bootstrap
+        echo: yes
+      register: target_host
+    - ansible.builtin.assert:
+        fail_msg: "{{ target_host.user_input }} is not a valid host in the inventory" 
+        that: target_host.user_input in hostvars
+    - add_host:
+        name: "{{ target_host.user_input }}"
+        groups: setup
+      changed_when: False
+
+# Bootstrap group from inventory
+- hosts: localhost
+  gather_facts: no
+  tags: bootstrap-group
+  tasks:
+    - pause:
+        prompt: Inventory group to bootstrap
+        echo: yes
+      register: target_host
+    - ansible.builtin.assert:
+        fail_msg: "{{ target_host.user_input }} is not a valid group in the inventory" 
+        that: target_host.user_input in groups
+    - add_host:
+        name: "{{ item }}"
+        groups: setup
+      loop: "{{ groups[target_host.user_input] }}"
+      changed_when: False
+
 # Bootstrap all hosts in inventory
 - hosts: localhost
   gather_facts: no
@@ -28,6 +63,8 @@
   serial: 1
   tags:
     - bootstrap-new
+    - bootstrap-host
+    - bootstrap-group
     - bootstrap-all
   tasks:
     - include_tasks: tasks/check-ansible-user.yaml
@@ -49,6 +86,8 @@
 - hosts: setup
   tags:
     - bootstrap-new
+    - bootstrap-host
+    - bootstrap-group
     - bootstrap-all
   tasks:
     - include_tasks: tasks/setup.yaml
