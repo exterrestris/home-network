@@ -772,8 +772,13 @@ docker_compose_projects:
             owner: metube
             group: downloads
             mode: "775"
-          - source: metube
+          - source: metube/state
             target: /state
+            owner: metube
+            group: metube
+            mode: "755"
+          - source: metube/yt-dlp
+            target: /etc/yt-dlp
             owner: metube
             group: metube
             mode: "755"
