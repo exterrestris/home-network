@@ -34,6 +34,7 @@ samba_workgroup: FEDERATION
 samba_preferred_master: true
 # Handle Windows not being able to browse shares due to incorrectly applied mitigation (https://github.com/bertvv/ansible-role-samba/issues/62)
 samba_mitigate_cve_2017_7494: false
+samba_global_include: smb-extras.conf
 samba_guest_account: nobody
 samba_users:
   - "{{ main_user_samba }}"
