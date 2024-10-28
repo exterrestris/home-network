@@ -764,7 +764,7 @@ docker_compose_projects:
         image:
           name: alexta69/metube
         environment:
-          - YTDL_OPTIONS={"cookiefile":"/downloads/cookies.txt","writethumbnail":true,"postprocessors":[{"key":"FFmpegThumbnailsConvertor","format":"png"}]}
+          - YTDL_OPTIONS={"cookiefile":"/downloads/cookies.txt","writethumbnail":true,"postprocessors":[]}
           - STATE_DIR=/state
         volumes:
           - source: /mnt/downloads/metube
@@ -772,8 +772,13 @@ docker_compose_projects:
             owner: metube
             group: downloads
             mode: "775"
-          - source: metube
+          - source: metube/state
             target: /state
+            owner: metube
+            group: metube
+            mode: "755"
+          - source: metube/yt-dlp
+            target: /etc/yt-dlp
             owner: metube
             group: metube
             mode: "755"
