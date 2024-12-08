@@ -16,9 +16,9 @@ main_user:
     - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE0UaIVzdBc2LpsjOmSHCBGsSayTM2tNwYfiYTwp5or+"
     # USS Bellerophon (WSL)
     - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDyOflUAFqct5RWU8JI2HkJqOf4HB10d7hFbUvyhNY5C"
-    # USS Prometheus
+    # USS Rio Grande
     - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH4O0umQWRU/RcbAJ472aDWoTxOFsH3b/8dhISBUFVcS"
-    # USS Prometheus (WSL)
+    # USS Rio Grande (WSL)
     - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMHQwfyBLUMaMiPkCtlAbvCjpOXIPOVJMDp+AXVobH1l"
     # Samsung Galaxy Tab S8
     - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICeBAAGaHxzH+c5ff8I5U72ypMioR8toi9Z+abeFkcMu"

@@ -98,7 +98,7 @@ zfs_filesystems:
     owner: "{{ main_user.username }}"
     group: backups
     mode: 2775
-  - name: backups/computers/uss-prometheus
+  - name: backups/computers/uss-rio-grande
     pool: storage1
     compression: lz4
     recordsize: 1M
