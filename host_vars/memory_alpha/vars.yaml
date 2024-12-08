@@ -522,6 +522,8 @@ docker_compose_projects:
           - 8080
         volumes:
           - gluetun:/gluetun
+        devices:
+          - "/dev/net/tun:/dev/net/tun"
         environment:
           - VPN_SERVICE_PROVIDER=airvpn
           - VPN_TYPE=wireguard
