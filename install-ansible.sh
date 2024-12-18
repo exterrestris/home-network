@@ -8,10 +8,10 @@ fi
 case $DISTRO in
     ubuntu)
         sudo apt update
-        sudo apt install --yes python3 python3-venv python3-pip python3-bcrypt git make sshpass
-        python3 -m pip install --user pipx
+        sudo apt install --yes python3 python3-venv python3-pip python3-bcrypt git make sshpass pipx
         pipx install --include-deps ansible
         pipx inject --include-apps ansible argcomplete
+        pipx inject ansible passlib
         export PATH=~/.local/bin:$PATH
         grep -qxF 'export PATH=~/.local/bin:$PATH' ~/.bashrc || echo -n 'export PATH=~/.local/bin:$PATH' >> ~/.bashrc
         ;;
