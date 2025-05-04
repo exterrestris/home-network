@@ -86,6 +86,11 @@ all_container_users:
     gid: 210
     hosts:
       - argus_array
+  - username: omada
+    uid: 211
+    gid: 211
+    hosts:
+      - argus_array
 
 container_users: "{{ (all_container_users | selectattr('hosts', 'superset', [ inventory_hostname ]) | list) }}"
 
