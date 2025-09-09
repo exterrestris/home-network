@@ -775,6 +775,7 @@ docker_compose_projects:
           name: alexta69/metube
         environment:
           - YTDL_OPTIONS={"cookiefile":"/downloads/cookies.txt","writethumbnail":true,"postprocessors":[{"key":"FFmpegMetadata","add_chapters":true}],"sleep_interval":2,"max_sleep_interval":5}
+          - DEFAULT_OPTION_PLAYLIST_STRICT_MODE=true
           - STATE_DIR=/state
           - UMASK=002
         volumes:
