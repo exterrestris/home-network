@@ -52,12 +52,14 @@ zfs_pools:
       - 'wwn-0x5000cca26fe8f836'
       # WD120EMAZ 8CJY60HE (12TB)
       - 'wwn-0x5000cca26fe9745a'
-      # WD120EMAZ 8CK9VRKF (12TB)
-      - 'wwn-0x5000cca26feec22f'
-      # WD120EMAZ Z2HGERAT (12TB)
-      - 'wwn-0x5000cca28dd4a834'
       # ST12000NM001G WTN04568 (12TB)
       - 'wwn-0x5000c500e0b84a62'
+      # ST12000NM001G WTN02E3D (12TB)
+      - 'wwn-0x5000c500e03309cf'
+      # ST16000NM001G ZL2PV9FM (16TB)
+      - 'wwn-0x5000c500e54d7b9b'
+      # WD121PURP D7J5A86N (12TB)
+      - 'wwn-0x5000cca2dfde9b65'
     type: 'raidz2'
     properties:
       ashift: 12
