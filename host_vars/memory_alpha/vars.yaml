@@ -331,12 +331,7 @@ parity_disks: []
 
 data_disks: []
 
-other_disks:
-  - path: /mnt/ext4/scratch1
-    # CT1000MX500SSD1_2103E4E9E4CC-part1
-    diskbyid: /dev/disk/by-uuid/fa7d3ad4-03bc-48f1-bb5b-253399a13202
-    fs: ext4
-    opts: defaults
+other_disks: []
 
 ntfs_data_disks:
 
@@ -347,10 +342,6 @@ remove_mounts:
 
 ### tigattack.mergerfs
 mergerfs_mounts:
-  - path: /mnt/transient
-    branches:
-      - /mnt/ext4/scratch1/transient*/data
-    options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }},x-systemd.requires=/mnt/ext4/scratch1"
   - path: /mnt/media/shows/downloads
     branches:
       - "{{ media_downloads_mountpoint }}/media/shows/Download*"
