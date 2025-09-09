@@ -22,6 +22,12 @@ zfs_pools:
       - 'wwn-0x5000c500d55abe86'
       # WD60PURX WD-WX22D70EJRDF (6TB)
       - 'wwn-0x50014ee2bdc2c37a'
+      # MG08ADA6 7450A07NFD0H (6TB)
+      - 'wwn-0x5000039d68c973f7'
+      # WD64PURZ WD-WX52DA31RU5U (6TB)
+      - 'wwn-0x50014ee26b7f3af9'
+      # WD62PURZ WD-C80DD0PG (6TB)
+      - 'wwn-0x50014ee213a9708f'
     properties:
       ashift: 12
       autoexpand: 'on'
