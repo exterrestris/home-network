@@ -49,11 +49,13 @@ zfs_filesystems:
   - name: memory-alpha
     pool: backup1
     compression: lz4
+    recordsize: 1M
     mountpoint: /mnt/backups/memory-alpha
     state: present
   - name: argus-array
     pool: backup1
     compression: lz4
+    recordsize: 1M
     mountpoint: /mnt/backups/argus-array
     state: present
 
