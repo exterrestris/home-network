@@ -52,6 +52,8 @@ common_packages:
   - name: unzip
   - name: acl
   - name: zsh
+  - name: tree
+  - name: btop
 
 internal_domain: "{{ vault_domain }}"
 
