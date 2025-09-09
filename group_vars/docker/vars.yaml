@@ -86,6 +86,13 @@ all_container_users:
     gid: 210
     hosts:
       - argus_array
+  - username: minecraft
+    groups:
+      - games
+    uid: 211
+    gid: 211
+    hosts:
+      - memory_alpha
 
 container_users: "{{ (all_container_users | selectattr('hosts', 'superset', [ inventory_hostname ]) | list) }}"
 

@@ -12,6 +12,8 @@ nas_common_groups:
     gid: 1005
   - name: photos
     gid: 1008
+  - name: games
+    gid: 1009
 
 nas_additional_users: []
 nas_additional_groups: []
