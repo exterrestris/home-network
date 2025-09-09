@@ -68,6 +68,12 @@ zfs_filesystems:
     recordsize: 1M
     mountpoint: /mnt/backups/memory-alpha
     state: present
+  - name: memory-alpha
+    pool: backup2
+    compression: lz4
+    recordsize: 1M
+    mountpoint: /mnt/aux-backups/memory-alpha
+    state: present
   - name: argus-array
     pool: backup1
     compression: lz4
@@ -93,6 +99,7 @@ ntfs_data_disks:
 other_mounts:
   - path: /mnt/zfs
   - path: /mnt/backups
+  - path: /mnt/aux-backups
 
 remove_mounts:
 
