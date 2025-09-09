@@ -12,8 +12,7 @@ case $DISTRO in
         pipx install --include-deps ansible
         pipx inject --include-apps ansible argcomplete
         pipx inject ansible passlib
-        export PATH=~/.local/bin:$PATH
-        grep -qxF 'export PATH=~/.local/bin:$PATH' ~/.bashrc || echo -n 'export PATH=~/.local/bin:$PATH' >> ~/.bashrc
+        pipx ensurepath
         ;;
     *)
         echo "Unsupported Linux distribution: $DISTRO"
