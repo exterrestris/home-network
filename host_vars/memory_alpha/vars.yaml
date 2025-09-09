@@ -776,6 +776,7 @@ docker_compose_projects:
         environment:
           - YTDL_OPTIONS={"cookiefile":"/downloads/cookies.txt","writethumbnail":true,"postprocessors":[]}
           - STATE_DIR=/state
+          - UMASK=002
         volumes:
           - source: /mnt/downloads/metube
             target: /downloads
