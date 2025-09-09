@@ -166,11 +166,6 @@ zfs_filesystems:
     compression: lz4
     recordsize: 1M
     state: present
-  - name: backups/files
-    pool: storage1
-    compression: lz4
-    recordsize: 1M
-    state: present
   - name: archive
     pool: storage1
     compression: lz4
