@@ -297,14 +297,10 @@ sanoid_datasets:
   - name: storage1/backups/computers
     templates: standard
     recursive: yes
-  - name: storage1/backups/files
-    templates: ignore
   - name: storage1/backups/drives
     templates: standard
-  - name: ssd1/appdata
-    templates: docker
   - name: storage1/resources
-    templates: basic
+    templates: standard
   - name: storage1/photos
     templates: enhanced
   - name: storage1/media
@@ -325,6 +321,10 @@ sanoid_datasets:
     templates: basic
   - name: storage1/downloads/media
     templates: minimal
+  - name: ssd1/appdata
+    templates: docker
+  - name: ssd2/transient
+    templates: interim
 
 syncoid_syncs:
   - src: storage1/archive
@@ -352,6 +352,7 @@ syncoid_syncs:
   - src: ssd1/appdata
     dest: backup1/memory-alpha/appdata
     dest_host: "memory-beta.{{ internal_domain }}"
+    send_options: ''
 
 ### mount_disks
 parity_disks: []
