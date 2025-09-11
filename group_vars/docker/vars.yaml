@@ -91,6 +91,11 @@ all_container_users:
     gid: 211
     hosts:
       - argus_array
+  - username: healthchecks
+    uid: 212
+    gid: 212
+    hosts:
+      - argus_array
 
 container_users: "{{ (all_container_users | selectattr('hosts', 'superset', [ inventory_hostname ]) | list) }}"
 

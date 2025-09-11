@@ -57,6 +57,10 @@ common_packages:
 
 internal_domain: "{{ vault_domain }}"
 
+migadu_smtp_server: smtp.migadu.com
+migadu_smtp_port: 465
+migadu_smtp_tls_port: 587
+
 ### viasite-ansible.zsh
 zsh_antigen_theme: "romkatv/powerlevel10k powerlevel10k"
 
