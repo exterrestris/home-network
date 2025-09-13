@@ -81,3 +81,7 @@ sanoid_templates:
     monitor: 'no'
 
 syncoid_send_options: 'L'
+
+syncoid_healthchecks_install_runitor: true
+syncoid_healthchecks_api_url: "https://healthchecks.{{ internal_domain }}/ping"
+syncoid_healthchecks_ping_key: "{{ vault_syncoid_healthchecks_ping_key }}"

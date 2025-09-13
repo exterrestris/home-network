@@ -327,32 +327,56 @@ sanoid_datasets:
     templates: interim
 
 syncoid_syncs:
-  - src: storage1/archive
+  - name: backup-archive
+    src: storage1/archive
     dest: backup1/memory-alpha/archive
     dest_host: "memory-beta.{{ internal_domain }}"
-  - src: storage1/backups
+    healthchecks:
+      slug: memory-alpha-backup-archive
+  - name: backup-backups
+    src: storage1/backups
     recursive: yes
     dest: backup1/memory-alpha/backups
     dest_host: "memory-beta.{{ internal_domain }}"
-  - src: storage1/media
+    healthchecks:
+      slug: memory-alpha-backup-backups
+  - name: backup-media
+    src: storage1/media
     dest: backup1/memory-alpha/media
     dest_host: "memory-beta.{{ internal_domain }}"
-  - src: storage1/media/music
+    healthchecks:
+      slug: memory-alpha-backup-media
+  - name: backup-music
+    src: storage1/media/music
     dest: backup1/memory-alpha/media/music
     dest_host: "memory-beta.{{ internal_domain }}"
-  - src: storage1/media/reactions
+    healthchecks:
+      slug: memory-alpha-backup-music
+  - name: backup-reactions
+    src: storage1/media/reactions
     dest: backup1/memory-alpha/media/reactions
     dest_host: "memory-beta.{{ internal_domain }}"
-  - src: storage1/photos
+    healthchecks:
+      slug: memory-alpha-backup-reactions
+  - name: backup-photos
+    src: storage1/photos
     dest: backup1/memory-alpha/photos
     dest_host: "memory-beta.{{ internal_domain }}"
-  - src: storage1/resources
+    healthchecks:
+      slug: memory-alpha-backup-photos
+  - name: backup-resources
+    src: storage1/resources
     dest: backup1/memory-alpha/resources
     dest_host: "memory-beta.{{ internal_domain }}"
-  - src: ssd1/appdata
+    healthchecks:
+      slug: memory-alpha-backup-resources
+  - name: backup-appdata
+    src: ssd1/appdata
     dest: backup1/memory-alpha/appdata
     dest_host: "memory-beta.{{ internal_domain }}"
     send_options: ''
+    healthchecks:
+      slug: memory-alpha-backup-appdata
 
 ### mount_disks
 parity_disks: []
