@@ -377,6 +377,30 @@ syncoid_syncs:
     send_options: ''
     healthchecks:
       slug: memory-alpha-backup-appdata
+  - name: backup-media
+    src: storage1/media
+    dest: backup2/memory-alpha/media
+    dest_host: "memory-beta.{{ internal_domain }}"
+    healthchecks:
+      slug: memory-alpha-backup-media-aux
+  - name: backup-movies
+    src: storage1/media/movies
+    dest: backup2/memory-alpha/media/movies
+    dest_host: "memory-beta.{{ internal_domain }}"
+    healthchecks:
+      slug: memory-alpha-backup-movies
+  - name: backup-shows
+    src: storage1/media/shows
+    dest: backup2/memory-alpha/media/shows
+    dest_host: "memory-beta.{{ internal_domain }}"
+    healthchecks:
+      slug: memory-alpha-backup-shows
+  - name: backup-videos
+    src: storage1/media/videos
+    dest: backup2/memory-alpha/media/videos
+    dest_host: "memory-beta.{{ internal_domain }}"
+    healthchecks:
+      slug: memory-alpha-backup-videos
 
 ### mount_disks
 parity_disks: []
