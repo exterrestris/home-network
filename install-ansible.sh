@@ -19,4 +19,6 @@ case $DISTRO in
         exit 1
 esac
 
+export PATH=$PATH:~/.local/bin
+
 ansible --version
