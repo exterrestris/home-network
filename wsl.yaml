@@ -7,7 +7,7 @@
     - name: check is WSL
       assert:
         that:
-          - "lookup('env', 'WSL_DISTRO_NAME')"
+          - "lookup('env', 'WSL_DISTRO_NAME') is truthy"
 
 - hosts: localhost
   become: yes
