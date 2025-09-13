@@ -10,16 +10,20 @@ main_user:
   ssh_key:
     # USS Enterprise
     - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ5vL72HAZsSoIwSUKPiQBiP6cHb2ccsq8My+ygN6bWl"
-    # USS Enterprise (WSL)
+    # USS Enterprise (WSL: Ubuntu-22.04)
     - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE3OKdlxfzxvLtz9kdLRvt++7Bvn6jghXgRn/ZoOeVJ8"
+    # USS Enterprise (WSL: Ubuntu-24.04)
+    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG0OQJSDORbmVPvwZj4KZsRd68oCyG/mPnYvFGd7/Ccp"
     # USS Bellerophon
     - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE0UaIVzdBc2LpsjOmSHCBGsSayTM2tNwYfiYTwp5or+"
-    # USS Bellerophon (WSL)
+    # USS Bellerophon (WSL: Ubuntu-20.04)
     - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDyOflUAFqct5RWU8JI2HkJqOf4HB10d7hFbUvyhNY5C"
+    # USS Bellerophon (WSL: Ubuntu-24.04)
+    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOA2rT82sj/nt+np29f0PMzcCxnBs/8ZgqavO95PFnwy"
     # USS Prometheus
     - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEc73jCV4Npb1maDi17/IWcoT/zDQiit6bkl6SvpJ9dM"
-    # USS Prometheus (WSL)
-    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC5nRCocb/nZOpbRJAT8anO2yTHQWWnrGhnveCni5RmF"
+    # USS Prometheus (WSL: Ubuntu-24.04)
+    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII7N63NIHOUF9YV35Q7HKSq2USpeWxn7hERP/gvYUL73"
     # USS Rio Grande
     - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH4O0umQWRU/RcbAJ472aDWoTxOFsH3b/8dhISBUFVcS"
     # USS Rio Grande (WSL)
