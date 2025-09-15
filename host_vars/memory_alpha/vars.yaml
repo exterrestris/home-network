@@ -256,6 +256,15 @@ zfs_filesystems:
     owner: "{{ main_user.username }}"
     group: media
     mode: 2775
+  - name: media/reactions/raw
+    pool: storage1
+    compression: lz4
+    recordsize: 1M
+    state: present
+    owner: "{{ main_user.username }}"
+    mountpoint: /mnt/zfs/archive/reactions
+    group: media
+    mode: 2775  
   - name: media/videos
     pool: storage1
     compression: lz4
@@ -310,6 +319,8 @@ sanoid_datasets:
     templates: enhanced
   - name: storage1/media/reactions
     templates: standard
+  - name: storage1/media/reactions/raw
+    templates: basic
   - name: storage1/media/movies
     templates: minimal
     recursive: yes
@@ -355,6 +366,7 @@ syncoid_syncs:
       slug: memory-alpha-backup-music
   - name: backup-reactions
     src: storage1/media/reactions
+    recursive: yes
     dest: backup1/memory-alpha/media/reactions
     dest_host: "memory-beta.{{ internal_domain }}"
     healthchecks:
