@@ -102,6 +102,14 @@
         state: present
       with_items: "{{ proxmox_additional_packages }}"
       tags: packages
+    # Copy IOMMU groups script
+    - name: copy iommu.sh script
+      copy:
+        src: "iommu.sh"
+        dest: "/root/iommu.sh"
+        owner: "root"
+        group: "root"
+        mode: '0755'
       
 - hosts: proxmox_vm:&linux
   roles:
