@@ -19,6 +19,8 @@ nas_additional_users:
 nas_additional_groups:
   - name: "{{ scans_user.group }}"
     gid: 1009
+  - name: transient
+    gid: 1010
 
 media_downloads_mountpoint: "/mnt/zfs/media-downloads"
 
@@ -296,6 +298,9 @@ zfs_filesystems:
     pool: ssd2
     compression: lz4
     mountpoint: /mnt/transient
+    owner: root
+    group: transient
+    mode: 2775
     state: present
 
 
