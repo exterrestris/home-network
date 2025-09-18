@@ -307,6 +307,7 @@ zfs_filesystems:
   - name: transient/scratch
     pool: ssd2
     compression: lz4
+    recordsize: 1M
     owner: "root"
     group: scratch
     mode: 2777
