@@ -18,6 +18,7 @@ nas_additional_users:
 
 nas_additional_groups:
   - name: "{{ scans_user.group }}"
+    gid: 1009
 
 media_downloads_mountpoint: "/mnt/zfs/media-downloads"
 
