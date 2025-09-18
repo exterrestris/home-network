@@ -118,7 +118,6 @@
     # Install/configure ZFS snapshots/replication using Sanoid
     - role: exterrestris.sanoid
       tags:
-        - sanoid
         - zfs
   tasks:
     - name: install additional packages

@@ -39,6 +39,15 @@ sanoid_templates:
     monthly: 0
     yearly: 0
     autosnap: 'yes'
+  - name: interim
+    autoprune: 'yes'
+    frequently: 4
+    hourly: 12
+    daily: 14
+    weekly: 0
+    monthly: 0
+    yearly: 0
+    autosnap: 'yes'
   - name: enhanced
     autoprune: 'yes'
     frequently: 8
@@ -70,3 +79,9 @@ sanoid_templates:
     autoprune: 'no'
     autosnap: 'no'
     monitor: 'no'
+
+syncoid_send_options: 'L'
+
+syncoid_healthchecks_install_runitor: true
+syncoid_healthchecks_api_url: "https://healthchecks.{{ internal_domain }}/ping"
+syncoid_healthchecks_ping_key: "{{ vault_syncoid_healthchecks_ping_key }}"
