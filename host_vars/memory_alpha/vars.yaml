@@ -21,6 +21,8 @@ nas_additional_groups:
     gid: 1009
   - name: transient
     gid: 1010
+  - name: scratch
+    gid: 1011
 
 media_downloads_mountpoint: "/mnt/zfs/media-downloads"
 
@@ -302,6 +304,13 @@ zfs_filesystems:
     group: transient
     mode: 2775
     state: present
+  - name: transient/scratch
+    pool: ssd2
+    compression: lz4
+    owner: "root"
+    group: scratch
+    mode: 2777
+    state: present
 
 
 ### exterrestris.sanoid
@@ -342,6 +351,8 @@ sanoid_datasets:
   - name: ssd1/appdata
     templates: docker
   - name: ssd2/transient
+    templates: interim
+  - name: ssd2/transient/scratch
     templates: interim
 
 syncoid_syncs:
@@ -491,6 +502,13 @@ samba_shares:
     path: /mnt/transient/scans
     owner: "{{ scans_user.username }}"
     group: "{{ scans_user.group }}"
+    directory_mode: '2775'
+    writable: yes
+    guest_ok: yes
+  - name: Scratch
+    path: /mnt/transient/scratch
+    owner: root
+    group: scratch
     directory_mode: '2775'
     writable: yes
     guest_ok: yes
