@@ -3,7 +3,7 @@
   package:
     name: "{{ item.name }}"
     state: present
-  with_items: 
+  with_items:
     - name: ntfs-3g
     - name: btrfs-progs
   tags:
@@ -16,10 +16,10 @@
     owner: nobody
     group: nogroup
     mode: 0777
-  when: 
+  when:
     - item
     - ansible_mounts | selectattr('mount', 'equalto', item.path) | list | length == 0
-  with_items: 
+  with_items:
     - "{{ parity_disks }}"
     - "{{ data_disks }}"
     - "{{ other_disks }}"

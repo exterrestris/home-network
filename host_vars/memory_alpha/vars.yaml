@@ -269,7 +269,7 @@ zfs_filesystems:
     owner: "{{ main_user.username }}"
     mountpoint: /mnt/zfs/archive/reactions
     group: media
-    mode: 2775  
+    mode: 2775
   - name: media/videos
     pool: storage1
     compression: lz4
@@ -900,7 +900,7 @@ docker_compose_projects:
           ## Service
           - "traefik.http.services.metube-svc.loadBalancer.server.port=8081"
           - "traefik.http.services.metube-svc.loadbalancer.server.scheme=http"
-          - "traefik.http.services.metube-svc.loadBalancer.passHostHeader=true"  
+          - "traefik.http.services.metube-svc.loadBalancer.passHostHeader=true"
     networks:
       - name: proxy
         external: true
