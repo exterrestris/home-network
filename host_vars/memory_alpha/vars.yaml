@@ -482,7 +482,7 @@ samba_shares:
     public: yes
     guest_ok: yes
   - name: Scans
-    path: /mnt/transient/Scans
+    path: /mnt/transient/scans
     owner: "{{ scans_user.username }}"
     group: "{{ scans_user.group }}"
     directory_mode: '2775'
