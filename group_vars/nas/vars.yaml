@@ -19,6 +19,7 @@ nas_additional_groups: []
 nas_common_packages:
   - name: smartmontools
   - name: nvme-cli
+  - name: iperf3
 
 ### mount_disks
 btrfs_data_opts: compress=zstd
