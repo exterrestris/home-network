@@ -73,10 +73,10 @@ zfs_pools:
     devices:
       # INTEL SSDSC2KB24 BTYF93620B8Y240AGN (240GB)
       - 'wwn-0x55cd2e415163f97a'
-      # INTEL SSDSC2BB16 PHWL510301JX160MGN (160GB) (temp)
-      - 'wwn-0x55cd2e404c4f1b91'
-      # SAMSUNG MZ7KM480 S3F4NX0K702570 (480GB) (temp)
-      - 'wwn-0x5002538c40b0f69a'
+      # INTEL SSDSC2KG240G8R PHYG9485046V240AGN (240GB)
+      - 'wwn-0x55cd2e41520282f9'
+      # INTEL SSDSC2KB24 BTYF935307WW240AGN (240GB)
+      - 'wwn-0x55cd2e41515ecfa8'
     state: present
   - name: ssd2
     action: 'create'
