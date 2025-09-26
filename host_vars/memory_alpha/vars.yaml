@@ -869,11 +869,30 @@ docker_compose_projects:
             group: metube
             mode: "755"
         user: "{{ (container_users | selectattr('username', 'equalto', 'metube') | list | first).uid }}:{{ (nas_common_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
-        expose:
-          - 8081
+        network_mode: "service:metube-vpn"
+        restart: unless-stopped
+      - service_name: metube-vpn
+        image: qmcgaw/gluetun
+        cap_add:
+          - NET_ADMIN
         networks:
           - proxy
-        restart: unless-stopped
+        expose:
+          # Metube WebUI
+          - 8081
+        volumes:
+          - gluetun:/gluetun
+        devices:
+          - "/dev/net/tun:/dev/net/tun"
+        environment:
+          - VPN_SERVICE_PROVIDER=airvpn
+          - VPN_TYPE=wireguard
+          - WIREGUARD_PRIVATE_KEY={{ vault_metube_airvpn_wireguard_private_key }}
+          - WIREGUARD_PRESHARED_KEY={{ vault_metube_airvpn_wireguard_preshared_key }}
+          - WIREGUARD_ADDRESSES=10.146.107.47/32
+          - SERVER_REGIONS=Europe
+          - TZ=Europe/London
+        restart: always
         labels:
           - "traefik.enable=true"
           ## Router
