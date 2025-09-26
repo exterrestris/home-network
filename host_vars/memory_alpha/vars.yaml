@@ -843,7 +843,7 @@ docker_compose_projects:
         image:
           name: alexta69/metube
         environment:
-          - YTDL_OPTIONS={"cookiefile":"/downloads/cookies.txt","writethumbnail":true,"postprocessors":[{"key":"FFmpegMetadata","add_chapters":true}],"sleep_interval":2,"max_sleep_interval":5}
+          - YTDL_OPTIONS_FILE=/etc/ytdlp-options.json
           - DEFAULT_OPTION_PLAYLIST_STRICT_MODE=true
           - STATE_DIR=/state
           - UMASK=002
@@ -860,6 +860,12 @@ docker_compose_projects:
             mode: "755"
           - source: metube/yt-dlp
             target: /etc/yt-dlp
+            owner: metube
+            group: metube
+            mode: "755"
+          - source: metube/ytdlp-options.json
+            target: /etc/ytdlp-options.json
+            file: metube/ytdlp-options.json
             owner: metube
             group: metube
             mode: "755"
