@@ -22,20 +22,40 @@ zfs_pools:
       - 'wwn-0x5000c500d55abe86'
       # WD60PURX WD-WX22D70EJRDF (6TB)
       - 'wwn-0x50014ee2bdc2c37a'
+      # MG08ADA6 7450A07NFD0H (6TB)
+      - 'wwn-0x5000039d68c973f7'
+      # WD64PURZ WD-WX52DA31RU5U (6TB)
+      - 'wwn-0x50014ee26b7f3af9'
+      # WD62PURZ WD-C80DD0PG (6TB)
+      - 'wwn-0x50014ee213a9708f'
     properties:
       ashift: 12
       autoexpand: 'on'
+    state: 'present'
+  - name: backup1
+    action: add
+    compression: 'lz4'
+    type: 'special mirror'
+    devices:
+      # INTEL SSDSC2BB16 PHWL510301K5160MGN (160GB)
+      - 'wwn-0x55cd2e404c4f1b94'
+      # INTEL SSDSC2BB16 PHWL510301JX160MGN (160GB)
+      - 'wwn-0x55cd2e404c4f1b91'
+      # INTEL SSDSC2KG240G8R PHYG948504MH240AGN (240GB) (temp)
+      - 'wwn-0x55cd2e4152027fc8'
     state: 'present'
 
 zfs_filesystems:
   - name: memory-alpha
     pool: backup1
     compression: lz4
+    recordsize: 1M
     mountpoint: /mnt/backups/memory-alpha
     state: present
   - name: argus-array
     pool: backup1
     compression: lz4
+    recordsize: 1M
     mountpoint: /mnt/backups/argus-array
     state: present
 

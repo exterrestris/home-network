@@ -102,7 +102,7 @@
         state: present
       with_items: "{{ proxmox_additional_packages }}"
       tags: packages
-      
+
 - hosts: proxmox_vm:&linux
   roles:
     # Install qemu-guest-agent
@@ -118,7 +118,6 @@
     # Install/configure ZFS snapshots/replication using Sanoid
     - role: exterrestris.sanoid
       tags:
-        - sanoid
         - zfs
   tasks:
     - name: install additional packages

@@ -22,7 +22,7 @@
         echo: yes
       register: target_host
     - ansible.builtin.assert:
-        fail_msg: "{{ target_host.user_input }} is not a valid host in the inventory" 
+        fail_msg: "{{ target_host.user_input }} is not a valid host in the inventory"
         that: target_host.user_input in hostvars
     - add_host:
         name: "{{ target_host.user_input }}"
@@ -39,7 +39,7 @@
         echo: yes
       register: target_host
     - ansible.builtin.assert:
-        fail_msg: "{{ target_host.user_input }} is not a valid group in the inventory" 
+        fail_msg: "{{ target_host.user_input }} is not a valid group in the inventory"
         that: target_host.user_input in groups
     - add_host:
         name: "{{ item }}"

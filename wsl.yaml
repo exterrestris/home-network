@@ -20,7 +20,7 @@
         name: "{{ item.name }}"
         state: present
       with_items: "{{ common_packages }}"
-    
+
     # Install ZSH Powerlevel10k config
     - name: copy p10k config
       copy:
@@ -44,7 +44,7 @@
     - role: viasite-ansible.zsh
       vars:
         zsh_user: "{{ main_user.username }}"
-    
+
     # Run ssh-agent automatically on login
     - role: ssh_agent
       vars:
