@@ -48,6 +48,12 @@ traefik_routers:
       - web-https
       - http
       - https
+  - name: home-assistant-proxy
+    service: "home-assistant-proxy-svc@file"
+    rule: "Host(`home-assistant.{{ internal_domain }}`)"
+    entrypoints:
+      - web-http
+      - web-https
 
 traefik_services:
   - name: jellyfin-proxy-svc
@@ -62,3 +68,7 @@ traefik_services:
     type: http
     servers:
       - "https://uptime.{{ internal_domain }}"
+  - name: home-assistant-proxy-svc
+    type: http
+    servers:
+      - "https://home-assistant.{{ internal_domain }}"
