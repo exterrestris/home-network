@@ -13,14 +13,21 @@ if [ ! -e /etc/wsl.conf ]; then
   done
   cd $DIR
 fi
+
 chmod +x install-ansible.sh
 ./install-ansible.sh
+
+export PATH=$PATH:~/.local/bin
+
 chmod 775 .
 make install-git-hooks
 make install-requirements
+
 if [ ! -e .vault-password ]; then
   echo '*REPLACE WITH VAULT PASSWORD*' > .vault-password
 fi
+
 nano .vault-password
 chmod -x .vault-password
+
 make wsl

@@ -36,7 +36,7 @@ zfs_pools:
     properties:
       ashift: 12
       autoexpand: 'on'
-    state: 'present'
+    state: present
   - name: storage1
     action: create
     import: force
@@ -65,7 +65,7 @@ zfs_pools:
       ashift: 12
       autoexpand: 'on'
     recordsize: 1M
-    state: 'present'
+    state: present
   - name: storage1
     action: add
     compression: 'lz4'
@@ -73,10 +73,11 @@ zfs_pools:
     devices:
       # INTEL SSDSC2KB24 BTYF93620B8Y240AGN (240GB)
       - 'wwn-0x55cd2e415163f97a'
-      # INTEL SSDSC2BB16 PHWL510301JX160MGN (160GB) (temp)
-      - 'wwn-0x55cd2e404c4f1b91'
-      # SAMSUNG MZ7KM480 S3F4NX0K702570 (480GB) (temp)
-      - 'wwn-0x5002538c40b0f69a'
+      # INTEL SSDSC2KG240G8R PHYG9485046V240AGN (240GB)
+      - 'wwn-0x55cd2e41520282f9'
+      # INTEL SSDSC2KB24 BTYF935307WW240AGN (240GB)
+      - 'wwn-0x55cd2e41515ecfa8'
+    state: present
   - name: ssd2
     action: 'create'
     import: force
@@ -90,7 +91,7 @@ zfs_pools:
     properties:
       ashift: 12
       autoexpand: 'on'
-    state: 'present'
+    state: present
   - name: ssd2
     action: 'add'
     compression: 'lz4'
@@ -100,7 +101,7 @@ zfs_pools:
       # Micron 5400 Pro 240646CF197D (1.92TB)
       - 'wwn-0x500a075146cf197d'
     type: 'mirror'
-    state: 'present'
+    state: present
     properties:
       ashift: 12
 
@@ -255,6 +256,15 @@ zfs_filesystems:
     owner: "{{ main_user.username }}"
     group: media
     mode: 2775
+  - name: media/reactions/raw
+    pool: storage1
+    compression: lz4
+    recordsize: 1M
+    state: present
+    owner: "{{ main_user.username }}"
+    mountpoint: /mnt/zfs/archive/reactions
+    group: media
+    mode: 2775
   - name: media/videos
     pool: storage1
     compression: lz4
@@ -309,6 +319,8 @@ sanoid_datasets:
     templates: enhanced
   - name: storage1/media/reactions
     templates: standard
+  - name: storage1/media/reactions/raw
+    templates: basic
   - name: storage1/media/movies
     templates: minimal
     recursive: yes
@@ -354,6 +366,7 @@ syncoid_syncs:
       slug: memory-alpha-backup-music
   - name: backup-reactions
     src: storage1/media/reactions
+    recursive: yes
     dest: backup1/memory-alpha/media/reactions
     dest_host: "memory-beta.{{ internal_domain }}"
     healthchecks:
@@ -863,7 +876,7 @@ docker_compose_projects:
           ## Service
           - "traefik.http.services.metube-svc.loadBalancer.server.port=8081"
           - "traefik.http.services.metube-svc.loadbalancer.server.scheme=http"
-          - "traefik.http.services.metube-svc.loadBalancer.passHostHeader=true"  
+          - "traefik.http.services.metube-svc.loadBalancer.passHostHeader=true"
     networks:
       - name: proxy
         external: true

@@ -37,12 +37,12 @@ zfs_pools:
     compression: 'lz4'
     type: 'special mirror'
     devices:
-      # INTEL SSDSC2KB24 BTYF935307WW240AGN (240GB)
-      - 'wwn-0x55cd2e41515ecfa8'
-      # INTEL SSDSC2BB16 PHWL510301K5160MGN (160GB) (temp)
+      # INTEL SSDSC2BB16 PHWL510301K5160MGN (160GB)
       - 'wwn-0x55cd2e404c4f1b94'
-      # INTEL SSDSC2BX48 BTHC629309CD480MGN (480GB) (temp)
-      - 'wwn-0x55cd2e404c2892c5'
+      # INTEL SSDSC2BB16 PHWL510301JX160MGN (160GB)
+      - 'wwn-0x55cd2e404c4f1b91'
+      # INTEL SSDSC2KG240G8R PHYG948504MH240AGN (240GB) (temp)
+      - 'wwn-0x55cd2e4152027fc8'
     state: 'present'
 
 zfs_filesystems:
