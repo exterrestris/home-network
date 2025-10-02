@@ -1,6 +1,0 @@
----
-cluster_services:
-  - name: pve-ha-lrm
-  - name: pve-ha-crm
-
-cluster_services_enabled: no
