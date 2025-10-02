@@ -5,9 +5,14 @@
   tasks:
     # Verify this is a WSL environment
     - name: check is WSL
-      assert:
+      ansible.builtin.assert:
         that:
           - "lookup('env', 'WSL_DISTRO_NAME') is truthy"
+    # Get username
+    - ansible.builtin.pause:
+        prompt: WSL username
+        echo: yes
+      register: wsl_username
 
 - hosts: localhost
   become: yes
@@ -16,7 +21,7 @@
   tasks:
     # Install packages
     - name: install common packages
-      package:
+      ansible.builtin.package:
         name: "{{ item.name }}"
         state: present
       with_items: "{{ common_packages }}"
@@ -24,8 +29,8 @@
     # Generate SSH key
     - name: generate ssh key
       ansible.builtin.user:
-        name: "{{ main_user.username }}"
-        group: "{{ main_user.username }}"
+        name: "{{ wsl_username.user_input }}"
+        group: "{{ wsl_username.user_input }}"
         shell: /bin/zsh
         generate_ssh_key: yes
         ssh_key_type: ed25519
@@ -33,11 +38,11 @@
 
     # Install ZSH Powerlevel10k config
     - name: copy p10k config
-      copy:
+      ansible.builtin.copy:
         src: "p10k.zsh"
-        dest: "/home/{{ main_user.username }}/.p10k.zsh"
-        owner: "{{ main_user.username }}"
-        group: "{{ main_user.username }}"
+        dest: "/home/{{ wsl_username.user_input }}/.p10k.zsh"
+        owner: "{{ wsl_username.user_input }}"
+        group: "{{ wsl_username.user_input }}"
         mode: '0644'
   roles:
     # Install any available package updates
@@ -53,12 +58,12 @@
     # Install/configure ZSH
     - role: viasite-ansible.zsh
       vars:
-        zsh_user: "{{ main_user.username }}"
+        zsh_user: "{{ wsl_username.user_input }}"
 
     # Run ssh-agent automatically on login
     - role: ssh_agent
       vars:
-        user: "{{ main_user.username }}"
+        user: "{{ wsl_username.user_input }}"
         ssh_agent_source_files:
           - '.bashrc'
           - '.zshrc.local.pre-p10k'
