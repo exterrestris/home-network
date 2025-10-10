@@ -21,6 +21,7 @@ traefik_providers:
 ### exterrestris.docker_compose
 docker_compose_autostart: no
 docker_compose_pull_images: no
+docker_compose_compose_file: docker-compose.yaml
 
 ## exterrestris.users
 all_container_users:
