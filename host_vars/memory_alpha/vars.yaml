@@ -18,6 +18,11 @@ nas_additional_users:
 
 nas_additional_groups:
   - name: "{{ scans_user.group }}"
+    gid: 1009
+  - name: transient
+    gid: 1010
+  - name: scratch
+    gid: 1011
 
 media_downloads_mountpoint: "/mnt/zfs/media-downloads"
 
@@ -295,6 +300,17 @@ zfs_filesystems:
     pool: ssd2
     compression: lz4
     mountpoint: /mnt/transient
+    owner: root
+    group: transient
+    mode: 2775
+    state: present
+  - name: transient/scratch
+    pool: ssd2
+    compression: lz4
+    recordsize: 1M
+    owner: "root"
+    group: scratch
+    mode: 2777
     state: present
 
 
@@ -336,6 +352,8 @@ sanoid_datasets:
   - name: ssd1/appdata
     templates: docker
   - name: ssd2/transient
+    templates: interim
+  - name: ssd2/transient/scratch
     templates: interim
 
 syncoid_syncs:
@@ -482,9 +500,16 @@ samba_shares:
     public: yes
     guest_ok: yes
   - name: Scans
-    path: /mnt/transient/Scans
+    path: /mnt/transient/scans
     owner: "{{ scans_user.username }}"
     group: "{{ scans_user.group }}"
+    directory_mode: '2775'
+    writable: yes
+    guest_ok: yes
+  - name: Scratch
+    path: /mnt/transient/scratch
+    owner: root
+    group: scratch
     directory_mode: '2775'
     writable: yes
     guest_ok: yes
