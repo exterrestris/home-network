@@ -12,6 +12,7 @@ scans_user_samba:
   password: "{{ vault_scans_user_password }}"
 
 appdata_path: /mnt/zfs/appdata
+archive_path: /mnt/zfs/archive
 
 nas_additional_users:
   - "{{ scans_user }}"
@@ -175,7 +176,7 @@ zfs_filesystems:
   - name: archive
     pool: storage1
     compression: lz4
-    mountpoint: /mnt/zfs/archive
+    mountpoint: "{{ archive_path }}"
     owner: "{{ main_user.username }}"
     group: archive
     mode: 2775
@@ -506,6 +507,13 @@ samba_shares:
     directory_mode: '2775'
     writable: yes
     guest_ok: yes
+  - name: Paperless-ngx
+    path: /mnt/transient/paperless
+    owner: paperless
+    group: archive
+    directory_mode: '2775'
+    writable: yes
+    guest_ok: yes
   - name: Scratch
     path: /mnt/transient/scratch
     owner: root
@@ -545,6 +553,133 @@ docker_ufw_rules:
 
 ### exterrestris.docker_compose
 docker_compose_projects:
+  - project_label: paperless
+    project_dir: "{{ appdata_path }}/paperless"
+    compose_file: compose.yaml
+    containers:
+      - service_name: paperless-ngx
+        image:
+          name: ghcr.io/paperless-ngx/paperless-ngx
+          tag: latest
+        environment:
+          PAPERLESS_REDIS: redis://redis:6379
+          PAPERLESS_DBHOST: db
+          PAPERLESS_TIKA_ENABLED: 1
+          PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://gotenberg:3000
+          PAPERLESS_TIKA_ENDPOINT: http://tika:9998
+          USERMAP_UID: "{{ (container_users | selectattr('username', 'equalto', 'paperless') | list | first).uid }}"
+          USERMAP_GID: "{{ (container_users | selectattr('username', 'equalto', 'paperless') | list | first).gid }}"
+        env_file:
+          - data: |
+              PAPERLESS_DBPASS='{{ vault_paperless_db_password }}'
+              PAPERLESS_URL=https://paperless-ngx.{{ internal_domain }}
+              PAPERLESS_SECRET_KEY='{{ vault_paperless_secret_key }}'
+              PAPERLESS_TIME_ZONE=Europe/London
+              PAPERLESS_OCR_LANGUAGE=eng
+              PAPERLESS_CONSUMER_ENABLE_BARCODES=1
+        volumes:
+          - source: data
+            target: /usr/src/paperless/data
+            owner: paperless
+            group: paperless
+            mode: "u+rwx"
+          - source: "{{ archive_path }}/paperless"
+            target: /usr/src/paperless/media
+            owner: paperless
+            group: archive
+            mode: 2775
+          - source: /mnt/transient/paperless/export
+            target: /usr/src/paperless/export
+            owner: paperless
+            group: archive
+            mode: "u+rwx,g+rwx"
+          - source: /mnt/transient/paperless/consume
+            target: /usr/src/paperless/consume
+            owner: paperless
+            group: scanners
+            mode: "u+rwx,g+rwx"
+        expose:
+          - 8000
+        networks:
+          - proxy
+          - paperless
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=true"
+          - "traefik.docker.network={{ traefik_docker_network }}"
+          ## Router
+          - "traefik.http.routers.paperless-ngx.entryPoints=https"
+          - "traefik.http.routers.paperless-ngx.rule=Host(`paperless-ngx.{{ internal_domain }}`)"
+          - "traefik.http.routers.paperless-ngx.tls=true"
+          ## Service
+          - "traefik.http.services.paperless-ngx-svc.loadBalancer.server.port=8000"
+          - "traefik.http.services.paperless-ngx-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.paperless-ngx-svc.loadBalancer.passHostHeader=true"
+      - service_name: redis
+        image:
+          name: docker.io/library/redis
+          tag: 8
+        volumes:
+          - source: redis
+            target: /data
+            owner: redis
+            group: redis
+        networks:
+          - paperless
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=false"
+      - service_name: db
+        image:
+          name: docker.io/library/postgres
+          tag: 17
+        user:
+          user: "{{ (container_users | selectattr('username', 'equalto', 'postgres') | list | first).uid }}"
+          group: "{{ (container_users | selectattr('username', 'equalto', 'postgres') | list | first).gid }}"
+        volumes:
+          - source: postgres
+            target: /var/lib/postgresql/data
+            owner: postgres
+            group: postgres
+            mode: 2775
+        environment:
+          - POSTGRES_DB=paperless
+          - POSTGRES_USER=paperless
+        env_file:
+          - data: |
+              POSTGRES_PASSWORD='{{ vault_paperless_db_password }}'
+        networks:
+          - paperless
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=false"
+      - service_name: gotenberg
+        image:
+          name: docker.io/gotenberg/gotenberg
+          tag: 8.22
+        command:
+          - "gotenberg"
+          - "--chromium-disable-javascript=true"
+          - "--chromium-allow-list=file:///tmp/.*"
+        networks:
+          - paperless
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=false"
+      - service_name: tika
+        image:
+          name: docker.io/apache/tika
+          tag: latest
+        networks:
+          - paperless
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=false"
+    networks:
+      - name: paperless
+      - name: proxy
+        external: true
+        alias: "{{ traefik_docker_network }}"
   - project_label: media
     project_dir: "{{ appdata_path }}/media"
     containers:

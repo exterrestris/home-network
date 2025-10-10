@@ -97,6 +97,24 @@ all_container_users:
     gid: 212
     hosts:
       - argus_array
+  - username: paperless
+    uid: 213
+    gid: 213
+    groups:
+      - archive
+      - scanners
+    hosts:
+      - memory_alpha
+  - username: redis
+    uid: 214
+    gid: 214
+    hosts:
+      - memory_alpha
+  - username: postgres
+    uid: 215
+    gid: 215
+    hosts:
+      - memory_alpha
 
 container_users: "{{ (all_container_users | selectattr('hosts', 'superset', [ inventory_hostname ]) | list) }}"
 
