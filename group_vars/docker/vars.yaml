@@ -116,9 +116,9 @@ all_container_users:
     hosts:
       - memory_alpha
 
-container_users: "{{ (all_container_users | selectattr('hosts', 'superset', [ inventory_hostname ]) | list) }}"
-
 container_user_opts:
   shell: /usr/sbin/nologin
   home: /nonexistent
   createhome: no
+
+container_users: "{{ all_container_users | selectattr('hosts', 'superset', [ inventory_hostname ]) | list | map('combine', container_user_opts) }}"
