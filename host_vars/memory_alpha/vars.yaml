@@ -614,9 +614,8 @@ docker_compose_projects:
   - project_label: torrents
     project_dir: "{{ appdata_path }}/torrents"
     containers:
-      - service_name: vpn
+      - service_name: torrents-vpn
         image: qmcgaw/gluetun
-        container_name: gluetun
         cap_add:
           - NET_ADMIN
         networks:
@@ -631,11 +630,11 @@ docker_compose_projects:
         environment:
           - VPN_SERVICE_PROVIDER=airvpn
           - VPN_TYPE=wireguard
-          - WIREGUARD_PRIVATE_KEY={{ vault_airvpn_wireguard_private_key }}
-          - WIREGUARD_PRESHARED_KEY={{ vault_airvpn_wireguard_preshared_key }}
+          - WIREGUARD_PRIVATE_KEY={{ vault_torrents_airvpn_wireguard_private_key }}
+          - WIREGUARD_PRESHARED_KEY={{ vault_torrents_airvpn_wireguard_preshared_key }}
           - WIREGUARD_ADDRESSES=10.186.35.228/32
           - SERVER_COUNTRIES=Netherlands
-          - FIREWALL_VPN_INPUT_PORTS={{ vault_airvpn_port }}
+          - FIREWALL_VPN_INPUT_PORTS={{ vault_torrents_airvpn_port }}
           - TZ=Europe/London
         restart: always
         labels:
@@ -670,7 +669,7 @@ docker_compose_projects:
             owner: "torrents"
             group: "downloads"
             mode: "g+rx"
-        network_mode: "service:vpn"
+        network_mode: "service:torrents-vpn"
         restart: unless-stopped
     networks:
       - name: proxy
@@ -871,8 +870,10 @@ docker_compose_projects:
         image:
           name: alexta69/metube
         environment:
-          - YTDL_OPTIONS={"cookiefile":"/downloads/cookies.txt","writethumbnail":true,"postprocessors":[]}
+          - YTDL_OPTIONS_FILE=/etc/ytdlp-options.json
+          - DEFAULT_OPTION_PLAYLIST_STRICT_MODE=true
           - STATE_DIR=/state
+          - UMASK=002
         volumes:
           - source: /mnt/downloads/metube
             target: /downloads
@@ -889,12 +890,37 @@ docker_compose_projects:
             owner: metube
             group: metube
             mode: "755"
+          - source: metube/ytdlp-options.json
+            target: /etc/ytdlp-options.json
+            file: metube/ytdlp-options.json
+            owner: metube
+            group: metube
+            mode: "755"
         user: "{{ (container_users | selectattr('username', 'equalto', 'metube') | list | first).uid }}:{{ (nas_common_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
-        expose:
-          - 8081
+        network_mode: "service:metube-vpn"
+        restart: unless-stopped
+      - service_name: metube-vpn
+        image: qmcgaw/gluetun
+        cap_add:
+          - NET_ADMIN
         networks:
           - proxy
-        restart: unless-stopped
+        expose:
+          # Metube WebUI
+          - 8081
+        volumes:
+          - gluetun:/gluetun
+        devices:
+          - "/dev/net/tun:/dev/net/tun"
+        environment:
+          - VPN_SERVICE_PROVIDER=airvpn
+          - VPN_TYPE=wireguard
+          - WIREGUARD_PRIVATE_KEY={{ vault_metube_airvpn_wireguard_private_key }}
+          - WIREGUARD_PRESHARED_KEY={{ vault_metube_airvpn_wireguard_preshared_key }}
+          - WIREGUARD_ADDRESSES=10.146.107.47/32
+          - SERVER_REGIONS=Europe
+          - TZ=Europe/London
+        restart: always
         labels:
           - "traefik.enable=true"
           ## Router
