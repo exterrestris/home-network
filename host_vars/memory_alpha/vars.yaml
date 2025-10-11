@@ -547,13 +547,17 @@ docker_compose_projects:
           PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://gotenberg:3000
           PAPERLESS_TIKA_ENDPOINT: http://tika:9998
         env_file:
-          - data: |
-              PAPERLESS_DBPASS='{{ vault_paperless_db_password }}'
-              PAPERLESS_URL=https://paperless-ngx.{{ internal_domain }}
-              PAPERLESS_SECRET_KEY='{{ vault_paperless_secret_key }}'
-              PAPERLESS_TIME_ZONE=Europe/London
-              PAPERLESS_OCR_LANGUAGE=eng
-              PAPERLESS_CONSUMER_ENABLE_BARCODES=1
+          - lines:
+              - PAPERLESS_DBPASS='{{ vault_paperless_db_password }}'
+              - PAPERLESS_URL=https://paperless-ngx.{{ internal_domain }}
+              - PAPERLESS_SECRET_KEY='{{ vault_paperless_secret_key }}'
+              - PAPERLESS_TIME_ZONE=Europe/London
+              - PAPERLESS_OCR_LANGUAGE=eng
+              - PAPERLESS_CONSUMER_ENABLE_BARCODES=true
+              - PAPERLESS_CONSUMER_RECURSIVE=true
+              - PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS=true
+              - PAPERLESS_FILENAME_FORMAT_REMOVE_NONE=true
+              - !unsafe 'PAPERLESS_FILENAME_FORMAT="{{ correspondent }}/{{ document_type }}/{{ created }} - {{ title }}"'
         volumes:
           - source: data
             target: /usr/src/paperless/data
