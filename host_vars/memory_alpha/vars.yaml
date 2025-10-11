@@ -558,6 +558,8 @@ docker_compose_projects:
               - PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS=true
               - PAPERLESS_FILENAME_FORMAT_REMOVE_NONE=true
               - !unsafe 'PAPERLESS_FILENAME_FORMAT="{{ correspondent }}/{{ document_type }}/{{ created }} - {{ title }}"'
+              - PAPERLESS_GMAIL_OAUTH_CLIENT_ID={{ vault_paperless_gmail_oauth_client_id }}
+              - PAPERLESS_GMAIL_OAUTH_CLIENT_SECRET={{ vault_paperless_gmail_oauth_client_secret }}
         volumes:
           - source: data
             target: /usr/src/paperless/data
