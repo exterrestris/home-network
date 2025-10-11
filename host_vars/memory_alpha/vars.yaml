@@ -537,14 +537,15 @@ docker_compose_projects:
         image:
           name: ghcr.io/paperless-ngx/paperless-ngx
           tag: latest
+        user:
+          user: "{{ (container_users | selectattr('username', 'equalto', 'paperless') | list | first).uid }}"
+          group: "{{ (container_users | selectattr('username', 'equalto', 'paperless') | list | first).gid }}"
         environment:
           PAPERLESS_REDIS: redis://redis:6379
           PAPERLESS_DBHOST: db
           PAPERLESS_TIKA_ENABLED: 1
           PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://gotenberg:3000
           PAPERLESS_TIKA_ENDPOINT: http://tika:9998
-          USERMAP_UID: "{{ (container_users | selectattr('username', 'equalto', 'paperless') | list | first).uid }}"
-          USERMAP_GID: "{{ (container_users | selectattr('username', 'equalto', 'paperless') | list | first).gid }}"
         env_file:
           - data: |
               PAPERLESS_DBPASS='{{ vault_paperless_db_password }}'
@@ -558,7 +559,7 @@ docker_compose_projects:
             target: /usr/src/paperless/data
             owner: paperless
             group: paperless
-            mode: "u+rwx"
+            mode: 2775
           - source: "{{ archive_path }}/paperless"
             target: /usr/src/paperless/media
             owner: paperless
@@ -595,11 +596,15 @@ docker_compose_projects:
         image:
           name: docker.io/library/redis
           tag: 8
+        user:
+          user: "{{ (container_users | selectattr('username', 'equalto', 'redis') | list | first).uid }}"
+          group: "{{ (container_users | selectattr('username', 'equalto', 'redis') | list | first).gid }}"
         volumes:
           - source: redis
             target: /data
             owner: redis
             group: redis
+            mode: 2775
         networks:
           - paperless
         restart: unless-stopped
@@ -617,7 +622,7 @@ docker_compose_projects:
             target: /var/lib/postgresql/data
             owner: postgres
             group: postgres
-            mode: 2775
+            mode: 2700
         environment:
           - POSTGRES_DB=paperless
           - POSTGRES_USER=paperless
