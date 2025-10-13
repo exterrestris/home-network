@@ -540,6 +540,9 @@ docker_compose_projects:
         user:
           user: "{{ (container_users | selectattr('username', 'equalto', 'paperless') | list | first).uid }}"
           group: "{{ (container_users | selectattr('username', 'equalto', 'paperless') | list | first).gid }}"
+          groups:
+            - "{{ (nas_groups | selectattr('name', 'equalto', 'archive') | list | first).gid }}"
+            - "{{ (nas_groups | selectattr('name', 'equalto', 'scanners') | list | first).gid }}"
         environment:
           PAPERLESS_REDIS: redis://redis:6379
           PAPERLESS_DBHOST: db
