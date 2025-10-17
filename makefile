@@ -5,7 +5,10 @@ test-machines holosuite-1 holosuite-2:
 	ansible-playbook -b linux.yaml --limit $(subst -,_,$@) --skip-tags "setup" --vault-password-file .vault-password
 
 wsl:
-	ansible-playbook -b wsl.yaml --inventory "localhost," --vault-password-file .vault-password --ask-become-pass
+	ansible-playbook -b wsl.yaml --inventory "localhost," --skip-tags "updates" --vault-password-file .vault-password --ask-become-pass
+
+update-wsl:
+	ansible-playbook -b wsl.yaml --inventory "localhost," --tags "updates" --vault-password-file .vault-password --ask-become-pass
 
 bootstrap-new bootstrap-host bootstrap-group bootstrap-all:
 	ansible-playbook -b bootstrap.yaml --tags "$@" --vault-password-file .vault-password
