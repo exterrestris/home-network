@@ -555,6 +555,7 @@ docker_compose_projects:
               - PAPERLESS_URL=https://paperless-ngx.{{ internal_domain }}
               - PAPERLESS_SECRET_KEY='{{ vault_paperless_secret_key }}'
               - PAPERLESS_TIME_ZONE=Europe/London
+              - PAPERLESS_TASK_WORKERS=4
               - PAPERLESS_OCR_LANGUAGE=eng
               - PAPERLESS_CONSUMER_ENABLE_BARCODES=true
               - PAPERLESS_CONSUMER_RECURSIVE=true
