@@ -536,7 +536,7 @@ docker_compose_projects:
       - service_name: paperless-ngx
         image:
           name: ghcr.io/paperless-ngx/paperless-ngx
-          tag: latest
+          tag: '2.18'
         user:
           user: "{{ (container_users | selectattr('username', 'equalto', 'paperless') | list | first).uid }}"
           group: "{{ (container_users | selectattr('username', 'equalto', 'paperless') | list | first).gid }}"
