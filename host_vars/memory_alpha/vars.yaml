@@ -536,7 +536,7 @@ docker_compose_projects:
       - service_name: paperless-ngx
         image:
           name: ghcr.io/paperless-ngx/paperless-ngx
-          tag: '2.18'
+          tag: 2.19
         user:
           user: "{{ (container_users | selectattr('username', 'equalto', 'paperless') | list | first).uid }}"
           group: "{{ (container_users | selectattr('username', 'equalto', 'paperless') | list | first).gid }}"
@@ -623,13 +623,13 @@ docker_compose_projects:
       - service_name: db
         image:
           name: docker.io/library/postgres
-          tag: 17
+          tag: 18
         user:
           user: "{{ (container_users | selectattr('username', 'equalto', 'postgres') | list | first).uid }}"
           group: "{{ (container_users | selectattr('username', 'equalto', 'postgres') | list | first).gid }}"
         volumes:
           - source: postgres
-            target: /var/lib/postgresql/data
+            target: /var/lib/postgresql
             owner: postgres
             group: postgres
             mode: 2700
@@ -647,7 +647,7 @@ docker_compose_projects:
       - service_name: gotenberg
         image:
           name: docker.io/gotenberg/gotenberg
-          tag: 8.22
+          tag: 8.24
         command:
           - "gotenberg"
           - "--chromium-disable-javascript=true"
