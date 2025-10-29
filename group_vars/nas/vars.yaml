@@ -16,6 +16,15 @@ all_nas_users:
     gid: 2000
     hosts:
       - memory_alpha
+  - username: brother-ads2800w
+    password: "{{ vault_brother_user_password | password_hash('sha512', 65534 | random(seed=inventory_hostname) | string) }}"
+    samba_password: "{{ vault_brother_user_password }}"
+    groups:
+      - scanners
+    uid: 2001
+    gid: 2001
+    hosts:
+      - memory_alpha
 
 nas_user_opts:
   shell: /usr/sbin/nologin
