@@ -4,6 +4,7 @@ target_os: ubuntu
 
 appdata_path: /mnt/zfs/appdata
 archive_path: /mnt/zfs/archive
+paperless_consume_path: /mnt/transient/paperless/consume
 
 media_downloads_mountpoint: "/mnt/zfs/media-downloads"
 
@@ -580,7 +581,7 @@ docker_compose_projects:
             owner: paperless
             group: archive
             mode: "u+rwx,g+rwx"
-          - source: /mnt/transient/paperless/consume
+          - source: "{{ paperless_consume_path }}"
             target: /usr/src/paperless/consume
             owner: paperless
             group: scanners
@@ -666,8 +667,33 @@ docker_compose_projects:
         restart: unless-stopped
         labels:
           - "traefik.enable=false"
+      - service_name: virtual-printer
+        build:
+          context: virtual-printer
+          src: paperless-virtual-printer
+        restart: unless-stopped
+        environment:
+          USERMAP_UID: "{{ (container_users | selectattr('username', 'equalto', 'paperless-printer') | list | first).uid }}"
+          USERMAP_GID: "{{ (nas_groups | selectattr('name', 'equalto', 'scanners') | list | first).gid }}"
+        networks:
+          - virtual-printer-vlan
+        volumes:
+          - source: "{{ paperless_consume_path }}"
+            target: /mnt/output
+            create: false
+        ports:
+          - 631:631
     networks:
       - name: paperless
+      - name: virtual-printer-vlan
+        driver: macvlan
+        driver_opts:
+          parent: "{{ ansible_default_ipv4.interface }}"
+        ipam:
+          config:
+            - subnet: "192.168.5.0/24"
+              ip_range: "192.168.5.134/32" # Static IP
+              gateway: "192.168.5.1"
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
