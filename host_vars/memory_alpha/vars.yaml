@@ -656,6 +656,65 @@ docker_compose_projects:
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
+  - project_label: stirling-pdf
+    project_dir: "{{ appdata_path }}/stirling-pdf"
+    compose_file: compose.yaml
+    containers:
+      - service_name: stirling-pdf
+        image:
+          name: docker.stirlingpdf.com/stirlingtools/stirling-pdf
+          tag: latest
+        environment:
+          DISABLE_ADDITIONAL_FEATURES: 'false'
+          LANGS: en_GB
+          PUID: "{{ (container_users | selectattr('username', 'equalto', 'stirling-pdf') | list | first).uid }}"
+          PGID: "{{ (container_users | selectattr('username', 'equalto', 'stirling-pdf') | list | first).gid }}"
+        volumes:
+          - source: training-data
+            target: /usr/share/tessdata
+            owner: stirling-pdf
+            group: stirling-pdf
+            mode: 755
+          - source: config
+            target: /configs
+            owner: stirling-pdf
+            group: stirling-pdf
+            mode: 755
+          - source: custom-files
+            target: /customFiles
+            owner: stirling-pdf
+            group: stirling-pdf
+            mode: 755
+          - source: logs
+            target: /logs
+            owner: stirling-pdf
+            group: stirling-pdf
+            mode: 755
+          - source: pipeline
+            target: /pipeline
+            owner: stirling-pdf
+            group: stirling-pdf
+            mode: 755
+        expose:
+          - 8080
+        networks:
+          - proxy
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=true"
+          - "traefik.docker.network={{ traefik_docker_network }}"
+          ## Router
+          - "traefik.http.routers.stirling-pdf.entryPoints=https"
+          - "traefik.http.routers.stirling-pdf.rule=Host(`stirling-pdf.{{ internal_domain }}`)"
+          - "traefik.http.routers.stirling-pdf.tls=true"
+          ## Service
+          - "traefik.http.services.stirling-pdf-svc.loadBalancer.server.port=8080"
+          - "traefik.http.services.stirling-pdf-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.stirling-pdf-svc.loadBalancer.passHostHeader=true"
+    networks:
+      - name: proxy
+        external: true
+        alias: "{{ traefik_docker_network }}"
   - project_label: media
     project_dir: "{{ appdata_path }}/media"
     containers:
