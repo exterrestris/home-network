@@ -115,6 +115,14 @@ all_container_users:
     gid: 215
     hosts:
       - memory_alpha
+  - username: paperless-printer
+    uid: 216
+    gid: 216
+    groups:
+      - archive
+      - scanners
+    hosts:
+      - memory_alpha
 
 container_user_opts:
   shell: /usr/sbin/nologin
