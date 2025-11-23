@@ -1022,7 +1022,7 @@ docker_compose_projects:
             owner: metube
             group: metube
             mode: "755"
-        user: "{{ (container_users | selectattr('username', 'equalto', 'metube') | list | first).uid }}:{{ (nas_common_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
+        user: "{{ (container_users | selectattr('username', 'equalto', 'metube') | list | first).uid }}:{{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
         network_mode: "service:metube-vpn"
         restart: unless-stopped
       - service_name: metube-vpn
