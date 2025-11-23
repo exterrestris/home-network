@@ -120,6 +120,13 @@ all_container_users:
     gid: 216
     hosts:
       - memory_alpha
+  - username: sabnzbd
+    uid: 217
+    gid: 217
+    groups:
+      - downloads
+    hosts:
+      - memory_alpha
 
 container_user_opts:
   shell: /usr/sbin/nologin
