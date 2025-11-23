@@ -113,8 +113,8 @@
     # Set up groups needed for file permissions
     - role: exterrestris.ansible_users
       vars:
-        users: "{{ nas_additional_users }}"
-        groups_to_create: "{{ nas_common_groups + nas_additional_groups }}"
+        users: "{{ nas_users }}"
+        groups_to_create: "{{ nas_groups }}"
       tags:
         - users
         - nas-users
@@ -125,7 +125,7 @@
     - name: additional groups for main user
       user:
         name: "{{ main_user.username }}"
-        groups: "{{ nas_common_groups | map(attribute='name') }}"
+        groups: "{{ nas_groups | map(attribute='name') }}"
         append: yes
       tags:
         - users
@@ -216,7 +216,7 @@
     # Set up users specific to containers
     - role: exterrestris.ansible_users
       vars:
-        users: "{{ container_users | map('combine', container_user_opts) }}"
+        users: "{{ container_users }}"
       tags:
         - container-users
     # Install Traefik
@@ -266,15 +266,3 @@
       tags:
         - wsdd
         - samba
-
-# Main - Host Specific
-- hosts: memory_alpha
-  tasks:
-    # Add 'Scans' role to main user
-    - name: additional groups for main user
-      user:
-        name: "{{ main_user.username }}"
-        groups: "{{ scans_user.group }}"
-        append: yes
-      tags:
-        - users
