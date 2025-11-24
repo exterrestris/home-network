@@ -3,29 +3,9 @@
 collections:
   - ansible.posix
   - community.general
-  - community.docker
-  - vladgh.samba
 
 # Required Galaxy Roles
 roles:
-  - name: mrlesmithjr.zfs
-    src: https://github.com/exterrestris/ansible-zfs
-    version: main
-  - name: exterrestris.wsdd
-  - name: exterrestris.proxmox_ssl
-  - name: ironicbadger.ansible_role_proxmox_nag_removal
-    src: https://github.com/ironicbadger/ansible-role-proxmox-nag-removal
-  - name: exterrestris.ansible_users
-    src: https://github.com/exterrestris/ansible-users
-  - name: tigattack.mergerfs
-  - name: weareinteractive.ufw
-  - name: geerlingguy.docker
-  - name: geerlingguy.docker_arm
-  - name: geerlingguy.pip
-  - name: exterrestris.sanoid
   - name: viasite-ansible.zsh
   - name: robertdebock.update
   - name: robertdebock.reboot
-  - name: exterrestris.traefik
-  - name: exterrestris.fetch_ssl
-  - name: exterrestris.docker_compose

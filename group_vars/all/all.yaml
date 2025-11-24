@@ -1,49 +1,9 @@
 ---
 main_user:
   username: sean
-  name: Sean Ellingham
-  password: "{{ vault_main_user_password | password_hash('sha512', 65534 | random(seed=inventory_hostname) | string) }}"
-  shell: /bin/zsh
-  update_password: on_create
-  groups:
-    - 'sudo'
-  append: true
-  ssh_key:
-    # USS Enterprise
-    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ5vL72HAZsSoIwSUKPiQBiP6cHb2ccsq8My+ygN6bWl"
-    # USS Enterprise (WSL: Ubuntu-22.04)
-    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE3OKdlxfzxvLtz9kdLRvt++7Bvn6jghXgRn/ZoOeVJ8"
-    # USS Enterprise (WSL: Ubuntu-24.04)
-    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG0OQJSDORbmVPvwZj4KZsRd68oCyG/mPnYvFGd7/Ccp"
-    # USS Bellerophon
-    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE0UaIVzdBc2LpsjOmSHCBGsSayTM2tNwYfiYTwp5or+"
-    # USS Bellerophon (WSL: Ubuntu-20.04)
-    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDyOflUAFqct5RWU8JI2HkJqOf4HB10d7hFbUvyhNY5C"
-    # USS Bellerophon (WSL: Ubuntu-24.04)
-    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOA2rT82sj/nt+np29f0PMzcCxnBs/8ZgqavO95PFnwy"
-    # USS Prometheus
-    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEc73jCV4Npb1maDi17/IWcoT/zDQiit6bkl6SvpJ9dM"
-    # USS Prometheus (WSL: Ubuntu-24.04)
-    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII7N63NIHOUF9YV35Q7HKSq2USpeWxn7hERP/gvYUL73"
-    # USS Rio Grande
-    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH4O0umQWRU/RcbAJ472aDWoTxOFsH3b/8dhISBUFVcS"
-    # USS Rio Grande (WSL)
-    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMHQwfyBLUMaMiPkCtlAbvCjpOXIPOVJMDp+AXVobH1l"
-    # Samsung Galaxy Tab S8
-    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICeBAAGaHxzH+c5ff8I5U72ypMioR8toi9Z+abeFkcMu"
-    # Samsung Galaxy S20 FE
-    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDoJw21yo2UC4h8N/Ob+3gOBG1h0rlZlJ0LqkRgcx8KN"
-    # Samsung Galaxy S24+
-    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFQR22gFrtR5IwdUqblgVDzfH92K6rHhHZwgLy0dNfjU"
-    # Samsung Galaxy Tab S6 Lite
-    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEx0RABkNuBAaj3+jLE7oBh3H5Aqf3EtoVfHtFrX4rO1"
   generate_ssh_key: yes
   generate_ssh_key_type: ed25519
   generate_ssh_key_file: .ssh/id_ed25519
-
-main_user_samba:
-  name: Sean
-  password: "{{ vault_main_user_password }}"
 
 common_packages:
   - name: htop
@@ -51,20 +11,9 @@ common_packages:
   - name: python3
   - name: python3-pip
   - name: fzf
-  - name: sysstat
-  - name: iotop
-  - name: iftop
   - name: unzip
-  - name: acl
   - name: zsh
   - name: tree
-  - name: btop
-
-internal_domain: "{{ vault_domain }}"
-
-migadu_smtp_server: smtp.migadu.com
-migadu_smtp_port: 465
-migadu_smtp_tls_port: 587
 
 ### viasite-ansible.zsh
 zsh_antigen_theme: "romkatv/powerlevel10k powerlevel10k"
@@ -98,11 +47,7 @@ zsh_antigen_bundles:
 
 zsh_editor: nano
 
-zsh_aliases:
-  - alias: 'lsdisk'
-    action: 'lsblk --output NAME,UUID,LABEL,FSTYPE,MOUNTPOINT,SIZE,FSAVAIL'
-  - alias: 'dfused'
-    action: 'df -h -x tmpfs -t zfs -t fuse.mergerfs -t xfs -t ext4 -t btrfs --output=target,source,fstype,size,used,avail,pcent | (read -r; printf \"%s\n\" \"\$REPLY\"; sort)'
+zsh_aliases: []
 
 zsh_path:
   - "{{ zsh_fzf_path }}"
@@ -113,8 +58,3 @@ zsh_path:
   - /usr/bin
   - /sbin
   - /bin
-
-### weareinteractive.ufw
-common_ufw_rules:
-  - rule: allow
-    name: OpenSSH
