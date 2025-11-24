@@ -418,6 +418,10 @@ mergerfs_mounts:
     branches:
       - "{{ media_downloads_mountpoint }}/torrents"
     options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }},x-systemd.requires=zfs-mount.service"
+  - path: /mnt/downloads/usenet
+    branches:
+      - "{{ media_downloads_mountpoint }}/usenet"
+    options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }},x-systemd.requires=zfs-mount.service"
 
 ### vladgh.samba.server
 samba_map_to_guest: 'bad user'
@@ -1054,6 +1058,40 @@ docker_compose_projects:
           - "traefik.http.services.ombi-svc.loadBalancer.server.port=3579"
           - "traefik.http.services.ombi-svc.loadbalancer.server.scheme=http"
           - "traefik.http.services.ombi-svc.loadBalancer.passHostHeader=true"
+      - service_name: sabnzbd
+        image:
+          name: linuxserver/sabnzbd
+        environment:
+          - PUID={{ (container_users | selectattr('username', 'equalto', 'sabnzbd') | list | first).uid }}
+          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
+          - UMASK=002
+          - TZ=Europe/London
+        volumes:
+          - source: sabnzbd
+            target: /config
+            group: sabnzbd
+            owner: sabnzbd
+            mode: "755"
+          - source: "{{ media_downloads_mountpoint }}/usenet"
+            target: /storage/usenet
+            owner: sabnzbd
+            group: downloads
+            mode: "g+rx"
+        expose:
+          - 8080
+        networks:
+          - proxy
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=true"
+          ## Router
+          - "traefik.http.routers.sabnzbd.entryPoints=https"
+          - "traefik.http.routers.sabnzbd.rule=Host(`sabnzbd.{{ ansible_hostname }}.{{ internal_domain }}`)"
+          - "traefik.http.routers.sabnzbd.tls=true"
+          ## Service
+          - "traefik.http.services.sabnzbd-svc.loadBalancer.server.port=8080"
+          - "traefik.http.services.sabnzbd-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.sabnzbd-svc.loadBalancer.passHostHeader=true"
       - service_name: metube
         image:
           name: alexta69/metube
