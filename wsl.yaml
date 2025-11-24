@@ -55,6 +55,11 @@
     - role: robertdebock.reboot
       tags: updates
 
+    # Set locale
+    - role: robertdebock.locale
+      vars:
+        locale_lang: en_GB.UTF-8
+
     # Install/configure ZSH
     - role: viasite-ansible.zsh
       vars:

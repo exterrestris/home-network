@@ -9,3 +9,4 @@ roles:
   - name: viasite-ansible.zsh
   - name: robertdebock.update
   - name: robertdebock.reboot
+  - name: robertdebock.locale
