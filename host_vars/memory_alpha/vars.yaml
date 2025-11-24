@@ -884,6 +884,7 @@ docker_compose_projects:
             owner: sonarr
           - source: "{{ media_downloads_mountpoint }}"
             target: /storage
+            create: false
         expose:
           - 8989
         networks:
@@ -919,6 +920,7 @@ docker_compose_projects:
             owner: radarr
           - source: "{{ media_downloads_mountpoint }}"
             target: /storage
+            create: false
         expose:
           - 7878
         networks:
@@ -954,6 +956,7 @@ docker_compose_projects:
             owner: radarr
           - source: "{{ media_downloads_mountpoint }}"
             target: /storage
+            create: false
         expose:
           - 7879
         networks:
