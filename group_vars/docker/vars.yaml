@@ -115,6 +115,11 @@ all_container_users:
     gid: 215
     hosts:
       - memory_alpha
+  - username: stirling-pdf
+    uid: 216
+    gid: 216
+    hosts:
+      - memory_alpha
 
 container_user_opts:
   shell: /usr/sbin/nologin
