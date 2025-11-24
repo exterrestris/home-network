@@ -14,6 +14,7 @@ common_packages:
   - name: unzip
   - name: zsh
   - name: tree
+  - name: cloc
 
 ### viasite-ansible.zsh
 zsh_antigen_theme: "romkatv/powerlevel10k powerlevel10k"
