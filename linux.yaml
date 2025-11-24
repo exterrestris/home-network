@@ -108,6 +108,36 @@
     # Install qemu-guest-agent
     - role: proxmox_vm
 
+- hosts: nas
+  roles:
+    # Set up groups needed for file permissions
+    - role: exterrestris.ansible_users
+      vars:
+        users: "{{ nas_users }}"
+        groups_to_create: "{{ nas_groups }}"
+      tags:
+        - users
+        - nas-users
+    # Mount ext4 disks
+    - role: mount_disks
+  tasks:
+    # Add main user to groups created
+    - name: additional groups for main user
+      user:
+        name: "{{ main_user.username }}"
+        groups: "{{ nas_groups | map(attribute='name') }}"
+        append: yes
+      tags:
+        - users
+        - nas-users
+    # Install packages
+    - name: install common nas packages
+      package:
+        name: "{{ item.name }}"
+        state: present
+      with_items: "{{ nas_common_packages }}"
+      tags: packages
+
 - hosts: zfs
   roles:
     # Install/configure ZFS pools
@@ -117,8 +147,6 @@
         - zfs
     # Install/configure ZFS snapshots/replication using Sanoid
     - role: exterrestris.sanoid
-      tags:
-        - zfs
   tasks:
     - name: install additional packages
       package:
@@ -129,36 +157,11 @@
 
 - hosts: nas
   roles:
-    # Set up groups needed for file permissions
-    - role: exterrestris.ansible_users
-      vars:
-        users: "{{ nas_additional_users }}"
-        groups_to_create: "{{ nas_common_groups + nas_additional_groups }}"
-      tags:
-        - users
-    # Mount ext4 disks
-    - role: mount_disks
     # Install/configure mergerfs
     - role: tigattack.mergerfs
       tags:
         - disks
         - mergerfs
-  tasks:
-    # Add main user to groups created
-    - name: additional groups for main user
-      user:
-        name: "{{ main_user.username }}"
-        groups: "{{ nas_common_groups | map(attribute='name') }}"
-        append: yes
-      tags:
-        - users
-    # Install packages
-    - name: install common nas packages
-      package:
-        name: "{{ item.name }}"
-        state: present
-      with_items: "{{ nas_common_packages }}"
-      tags: packages
 
 - hosts: traefik:!docker
   roles:
@@ -213,7 +216,7 @@
     # Set up users specific to containers
     - role: exterrestris.ansible_users
       vars:
-        users: "{{ container_users | map('combine', container_user_opts) }}"
+        users: "{{ container_users }}"
       tags:
         - container-users
     # Install Traefik
@@ -263,15 +266,3 @@
       tags:
         - wsdd
         - samba
-
-# Main - Host Specific
-- hosts: memory_alpha
-  tasks:
-    # Add 'Scans' role to main user
-    - name: additional groups for main user
-      user:
-        name: "{{ main_user.username }}"
-        groups: "{{ scans_user.group }}"
-        append: yes
-      tags:
-        - users

@@ -34,6 +34,12 @@ traefik_routers:
     entrypoints:
       - web-http
       - web-https
+  - name: paperless-proxy
+    service: "paperless-proxy-svc@file"
+    rule: "Host(`paperless.{{ internal_domain }}`)"
+    entrypoints:
+      - web-http
+      - web-https
   - name: ombi-proxy
     service: "ombi-proxy-svc@file"
     rule: "Host(`ombi.{{ internal_domain }}`)"
@@ -54,6 +60,10 @@ traefik_services:
     type: http
     servers:
       - "https://jellyfin.{{ internal_domain }}"
+  - name: paperless-proxy-svc
+    type: http
+    servers:
+      - "https://paperless.{{ internal_domain }}"
   - name: ombi-proxy-svc
     type: http
     servers:

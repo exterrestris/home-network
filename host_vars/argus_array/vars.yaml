@@ -44,7 +44,8 @@ syncoid_syncs:
 
 ### exterrestris.docker_compose
 docker_compose_projects:
-  - project_dir: "{{ appdata_path }}/monitoring"
+  - project_label: monitoring
+    project_dir: "{{ appdata_path }}/monitoring"
     containers:
       - service_name: uptime-kuma
         container_name: uptime-kuma
@@ -126,7 +127,8 @@ docker_compose_projects:
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
-  - project_dir: "{{ appdata_path }}/network"
+  - project_label: network
+    project_dir: "{{ appdata_path }}/network"
     containers:
       - service_name: omada-controller
         container_name: omada-controller

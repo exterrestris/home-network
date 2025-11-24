@@ -2,22 +2,8 @@
 ansible_host: 192.168.5.132
 target_os: ubuntu
 
-scans_user:
-  username: scans
-  password: "{{ vault_scans_user_password | password_hash('sha512', 65534 | random(seed=inventory_hostname) | string) }}"
-  group: scans
-
-scans_user_samba:
-  name: Scans
-  password: "{{ vault_scans_user_password }}"
-
 appdata_path: /mnt/zfs/appdata
-
-nas_additional_users:
-  - "{{ scans_user }}"
-
-nas_additional_groups:
-  - name: "{{ scans_user.group }}"
+archive_path: /mnt/zfs/archive
 
 media_downloads_mountpoint: "/mnt/zfs/media-downloads"
 
@@ -170,7 +156,7 @@ zfs_filesystems:
   - name: archive
     pool: storage1
     compression: lz4
-    mountpoint: /mnt/zfs/archive
+    mountpoint: "{{ archive_path }}"
     owner: "{{ main_user.username }}"
     group: archive
     mode: 2775
@@ -295,6 +281,17 @@ zfs_filesystems:
     pool: ssd2
     compression: lz4
     mountpoint: /mnt/transient
+    owner: root
+    group: transient
+    mode: 2775
+    state: present
+  - name: transient/scratch
+    pool: ssd2
+    compression: lz4
+    recordsize: 1M
+    owner: "root"
+    group: scratch
+    mode: 2777
     state: present
 
 
@@ -336,6 +333,8 @@ sanoid_datasets:
   - name: ssd1/appdata
     templates: docker
   - name: ssd2/transient
+    templates: interim
+  - name: ssd2/transient/scratch
     templates: interim
 
 syncoid_syncs:
@@ -421,10 +420,6 @@ mergerfs_mounts:
     options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }},x-systemd.requires=zfs-mount.service"
 
 ### vladgh.samba.server
-samba_users:
-  - "{{ main_user_samba }}"
-  - "{{ scans_user_samba }}"
-
 samba_map_to_guest: 'bad user'
 
 samba_shares:
@@ -482,9 +477,23 @@ samba_shares:
     public: yes
     guest_ok: yes
   - name: Scans
-    path: /mnt/transient/Scans
-    owner: "{{ scans_user.username }}"
-    group: "{{ scans_user.group }}"
+    path: /mnt/transient/scans
+    owner: "{{ main_user.username }}"
+    group: scanners
+    directory_mode: '2775'
+    writable: yes
+    guest_ok: yes
+  - name: Paperless-ngx
+    path: /mnt/transient/paperless
+    owner: paperless
+    group: archive
+    directory_mode: '2775'
+    writable: yes
+    guest_ok: yes
+  - name: Scratch
+    path: /mnt/transient/scratch
+    owner: root
+    group: scratch
     directory_mode: '2775'
     writable: yes
     guest_ok: yes
@@ -520,7 +529,209 @@ docker_ufw_rules:
 
 ### exterrestris.docker_compose
 docker_compose_projects:
-  - project_dir: "{{ appdata_path }}/media"
+  - project_label: paperless
+    project_dir: "{{ appdata_path }}/paperless"
+    compose_file: compose.yaml
+    containers:
+      - service_name: paperless-ngx
+        image:
+          name: ghcr.io/paperless-ngx/paperless-ngx
+          tag: 2.19
+        user:
+          user: "{{ (container_users | selectattr('username', 'equalto', 'paperless') | list | first).uid }}"
+          group: "{{ (container_users | selectattr('username', 'equalto', 'paperless') | list | first).gid }}"
+          groups:
+            - "{{ (nas_groups | selectattr('name', 'equalto', 'archive') | list | first).gid }}"
+            - "{{ (nas_groups | selectattr('name', 'equalto', 'scanners') | list | first).gid }}"
+        environment:
+          PAPERLESS_REDIS: redis://redis:6379
+          PAPERLESS_DBHOST: db
+          PAPERLESS_TIKA_ENABLED: 1
+          PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://gotenberg:3000
+          PAPERLESS_TIKA_ENDPOINT: http://tika:9998
+        env_file:
+          - lines:
+              - PAPERLESS_DBPASS='{{ vault_paperless_db_password }}'
+              - PAPERLESS_URL=https://paperless-ngx.{{ internal_domain }}
+              - PAPERLESS_SECRET_KEY='{{ vault_paperless_secret_key }}'
+              - PAPERLESS_TIME_ZONE=Europe/London
+              - PAPERLESS_TASK_WORKERS=4
+              - PAPERLESS_OCR_LANGUAGE=eng
+              - PAPERLESS_CONSUMER_ENABLE_BARCODES=true
+              - PAPERLESS_CONSUMER_RECURSIVE=true
+              - PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS=true
+              - PAPERLESS_FILENAME_FORMAT_REMOVE_NONE=true
+              - !unsafe 'PAPERLESS_FILENAME_FORMAT="{{ correspondent }}/{{ document_type }}/{{ created }} - {{ title }}"'
+              - PAPERLESS_GMAIL_OAUTH_CLIENT_ID={{ vault_paperless_gmail_oauth_client_id }}
+              - PAPERLESS_GMAIL_OAUTH_CLIENT_SECRET={{ vault_paperless_gmail_oauth_client_secret }}
+        volumes:
+          - source: data
+            target: /usr/src/paperless/data
+            owner: paperless
+            group: paperless
+            mode: 2775
+          - source: "{{ archive_path }}/paperless"
+            target: /usr/src/paperless/media
+            owner: paperless
+            group: archive
+            mode: 2775
+          - source: /mnt/transient/paperless/export
+            target: /usr/src/paperless/export
+            owner: paperless
+            group: archive
+            mode: "u+rwx,g+rwx"
+          - source: /mnt/transient/paperless/consume
+            target: /usr/src/paperless/consume
+            owner: paperless
+            group: scanners
+            mode: "u+rwx,g+rwx"
+        expose:
+          - 8000
+        networks:
+          - proxy
+          - paperless
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=true"
+          - "traefik.docker.network={{ traefik_docker_network }}"
+          ## Router
+          - "traefik.http.routers.paperless-ngx.entryPoints=https"
+          - "traefik.http.routers.paperless-ngx.rule=Host(`paperless-ngx.{{ internal_domain }}`)"
+          - "traefik.http.routers.paperless-ngx.tls=true"
+          ## Service
+          - "traefik.http.services.paperless-ngx-svc.loadBalancer.server.port=8000"
+          - "traefik.http.services.paperless-ngx-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.paperless-ngx-svc.loadBalancer.passHostHeader=true"
+      - service_name: redis
+        image:
+          name: docker.io/library/redis
+          tag: 8
+        user:
+          user: "{{ (container_users | selectattr('username', 'equalto', 'redis') | list | first).uid }}"
+          group: "{{ (container_users | selectattr('username', 'equalto', 'redis') | list | first).gid }}"
+        volumes:
+          - source: redis
+            target: /data
+            owner: redis
+            group: redis
+            mode: 2775
+        networks:
+          - paperless
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=false"
+      - service_name: db
+        image:
+          name: docker.io/library/postgres
+          tag: 18
+        user:
+          user: "{{ (container_users | selectattr('username', 'equalto', 'postgres') | list | first).uid }}"
+          group: "{{ (container_users | selectattr('username', 'equalto', 'postgres') | list | first).gid }}"
+        volumes:
+          - source: postgres
+            target: /var/lib/postgresql
+            owner: postgres
+            group: postgres
+            mode: 2700
+        environment:
+          - POSTGRES_DB=paperless
+          - POSTGRES_USER=paperless
+        env_file:
+          - data: |
+              POSTGRES_PASSWORD='{{ vault_paperless_db_password }}'
+        networks:
+          - paperless
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=false"
+      - service_name: gotenberg
+        image:
+          name: docker.io/gotenberg/gotenberg
+          tag: 8.24
+        command:
+          - "gotenberg"
+          - "--chromium-disable-javascript=true"
+          - "--chromium-allow-list=file:///tmp/.*"
+        networks:
+          - paperless
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=false"
+      - service_name: tika
+        image:
+          name: docker.io/apache/tika
+          tag: latest
+        networks:
+          - paperless
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=false"
+    networks:
+      - name: paperless
+      - name: proxy
+        external: true
+        alias: "{{ traefik_docker_network }}"
+  - project_label: stirling-pdf
+    project_dir: "{{ appdata_path }}/stirling-pdf"
+    compose_file: compose.yaml
+    containers:
+      - service_name: stirling-pdf
+        image:
+          name: docker.stirlingpdf.com/stirlingtools/stirling-pdf
+          tag: latest
+        environment:
+          DISABLE_ADDITIONAL_FEATURES: 'false'
+          LANGS: en_GB
+          PUID: "{{ (container_users | selectattr('username', 'equalto', 'stirling-pdf') | list | first).uid }}"
+          PGID: "{{ (container_users | selectattr('username', 'equalto', 'stirling-pdf') | list | first).gid }}"
+        volumes:
+          - source: training-data
+            target: /usr/share/tessdata
+            owner: stirling-pdf
+            group: stirling-pdf
+            mode: 755
+          - source: config
+            target: /configs
+            owner: stirling-pdf
+            group: stirling-pdf
+            mode: 755
+          - source: custom-files
+            target: /customFiles
+            owner: stirling-pdf
+            group: stirling-pdf
+            mode: 755
+          - source: logs
+            target: /logs
+            owner: stirling-pdf
+            group: stirling-pdf
+            mode: 755
+          - source: pipeline
+            target: /pipeline
+            owner: stirling-pdf
+            group: stirling-pdf
+            mode: 755
+        expose:
+          - 8080
+        networks:
+          - proxy
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=true"
+          - "traefik.docker.network={{ traefik_docker_network }}"
+          ## Router
+          - "traefik.http.routers.stirling-pdf.entryPoints=https"
+          - "traefik.http.routers.stirling-pdf.rule=Host(`stirling-pdf.{{ internal_domain }}`)"
+          - "traefik.http.routers.stirling-pdf.tls=true"
+          ## Service
+          - "traefik.http.services.stirling-pdf-svc.loadBalancer.server.port=8080"
+          - "traefik.http.services.stirling-pdf-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.stirling-pdf-svc.loadBalancer.passHostHeader=true"
+    networks:
+      - name: proxy
+        external: true
+        alias: "{{ traefik_docker_network }}"
+  - project_label: media
+    project_dir: "{{ appdata_path }}/media"
     containers:
       - service_name: jellyfin
         image:
@@ -528,7 +739,7 @@ docker_compose_projects:
           tag: latest
         environment:
           - PUID={{ (container_users | selectattr('username', 'equalto', 'jellyfin') | list | first).uid }}
-          - PGID={{ (nas_common_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
+          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
           - TZ=Europe/London
         volumes:
           - source: "{{ appdata_path }}/media/jellyfin"
@@ -585,11 +796,11 @@ docker_compose_projects:
       - name: media
         external: true
         alias: "{{ traefik_docker_network }}"
-  - project_dir: "{{ appdata_path }}/torrents"
+  - project_label: torrents
+    project_dir: "{{ appdata_path }}/torrents"
     containers:
-      - service_name: vpn
+      - service_name: torrents-vpn
         image: qmcgaw/gluetun
-        container_name: gluetun
         cap_add:
           - NET_ADMIN
         networks:
@@ -604,11 +815,11 @@ docker_compose_projects:
         environment:
           - VPN_SERVICE_PROVIDER=airvpn
           - VPN_TYPE=wireguard
-          - WIREGUARD_PRIVATE_KEY={{ vault_airvpn_wireguard_private_key }}
-          - WIREGUARD_PRESHARED_KEY={{ vault_airvpn_wireguard_preshared_key }}
+          - WIREGUARD_PRIVATE_KEY={{ vault_torrents_airvpn_wireguard_private_key }}
+          - WIREGUARD_PRESHARED_KEY={{ vault_torrents_airvpn_wireguard_preshared_key }}
           - WIREGUARD_ADDRESSES=10.186.35.228/32
           - SERVER_COUNTRIES=Netherlands
-          - FIREWALL_VPN_INPUT_PORTS={{ vault_airvpn_port }}
+          - FIREWALL_VPN_INPUT_PORTS={{ vault_torrents_airvpn_port }}
           - TZ=Europe/London
         restart: always
         labels:
@@ -628,7 +839,7 @@ docker_compose_projects:
         container_name: qbittorrent
         environment:
           - PUID={{ (container_users | selectattr('username', 'equalto', 'torrents') | list | first).uid }}
-          - PGID={{ (nas_common_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}
+          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}
           - UMASK=002
           - TZ=Europe/London
           - WEBUI_PORT=8080
@@ -643,13 +854,14 @@ docker_compose_projects:
             owner: "torrents"
             group: "downloads"
             mode: "g+rx"
-        network_mode: "service:vpn"
+        network_mode: "service:torrents-vpn"
         restart: unless-stopped
     networks:
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
-  - project_dir: "{{ appdata_path }}/media-downloads"
+  - project_label: media-downloads
+    project_dir: "{{ appdata_path }}/media-downloads"
     autostart: no
     containers:
       - service_name: sonarr
@@ -657,7 +869,7 @@ docker_compose_projects:
           name: linuxserver/sonarr
         environment:
           - PUID={{ (container_users | selectattr('username', 'equalto', 'sonarr') | list | first).uid }}
-          - PGID={{ (nas_common_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
+          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
           - UMASK=002
           - TZ=Europe/London
         volumes:
@@ -692,7 +904,7 @@ docker_compose_projects:
           name: linuxserver/radarr
         environment:
           - PUID={{ (container_users | selectattr('username', 'equalto', 'radarr') | list | first).uid }}
-          - PGID={{ (nas_common_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
+          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
           - UMASK=002
           - TZ=Europe/London
         volumes:
@@ -727,7 +939,7 @@ docker_compose_projects:
           name: linuxserver/radarr
         environment:
           - PUID={{ (container_users | selectattr('username', 'equalto', 'radarr') | list | first).uid }}
-          - PGID={{ (nas_common_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
+          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
           - UMASK=002
           - TZ=Europe/London
         volumes:
@@ -763,7 +975,7 @@ docker_compose_projects:
           tag: develop
         environment:
           - PUID={{ (container_users | selectattr('username', 'equalto', 'prowlarr') | list | first).uid }}
-          - PGID={{ (nas_common_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
+          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
           - UMASK=002
           - TZ=Europe/London
         volumes:
@@ -815,7 +1027,7 @@ docker_compose_projects:
           name: linuxserver/ombi
         environment:
           - PUID={{ (container_users | selectattr('username', 'equalto', 'ombi') | list | first).uid }}
-          - PGID={{ (nas_common_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
+          - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
           - UMASK=002
           - TZ=Europe/London
         volumes:
@@ -843,8 +1055,10 @@ docker_compose_projects:
         image:
           name: alexta69/metube
         environment:
-          - YTDL_OPTIONS={"cookiefile":"/downloads/cookies.txt","writethumbnail":true,"postprocessors":[]}
+          - YTDL_OPTIONS_FILE=/etc/ytdlp-options.json
+          - DEFAULT_OPTION_PLAYLIST_STRICT_MODE=true
           - STATE_DIR=/state
+          - UMASK=002
         volumes:
           - source: /mnt/downloads/metube
             target: /downloads
@@ -861,12 +1075,37 @@ docker_compose_projects:
             owner: metube
             group: metube
             mode: "755"
-        user: "{{ (container_users | selectattr('username', 'equalto', 'metube') | list | first).uid }}:{{ (nas_common_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
-        expose:
-          - 8081
+          - source: metube/ytdlp-options.json
+            target: /etc/ytdlp-options.json
+            file: metube/ytdlp-options.json
+            owner: metube
+            group: metube
+            mode: "755"
+        user: "{{ (container_users | selectattr('username', 'equalto', 'metube') | list | first).uid }}:{{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
+        network_mode: "service:metube-vpn"
+        restart: unless-stopped
+      - service_name: metube-vpn
+        image: qmcgaw/gluetun
+        cap_add:
+          - NET_ADMIN
         networks:
           - proxy
-        restart: unless-stopped
+        expose:
+          # Metube WebUI
+          - 8081
+        volumes:
+          - gluetun:/gluetun
+        devices:
+          - "/dev/net/tun:/dev/net/tun"
+        environment:
+          - VPN_SERVICE_PROVIDER=airvpn
+          - VPN_TYPE=wireguard
+          - WIREGUARD_PRIVATE_KEY={{ vault_metube_airvpn_wireguard_private_key }}
+          - WIREGUARD_PRESHARED_KEY={{ vault_metube_airvpn_wireguard_preshared_key }}
+          - WIREGUARD_ADDRESSES=10.146.107.47/32
+          - SERVER_REGIONS=Europe
+          - TZ=Europe/London
+        restart: always
         labels:
           - "traefik.enable=true"
           ## Router
@@ -889,19 +1128,19 @@ linuxserver_container_custom_scripts:
       - script: add-to-downloads-group.sh
         template: add-container-user-to-group.sh.j2
         template_vars:
-          gid: "{{ (nas_common_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
+          gid: "{{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
           group: downloads
   - container: "{{ appdata_path }}/media-downloads/radarr"
     scripts:
       - script: add-to-downloads-group.sh
         template: add-container-user-to-group.sh.j2
         template_vars:
-          gid: "{{ (nas_common_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
+          gid: "{{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
           group: downloads
   - container: "{{ appdata_path }}/media-downloads/radarr-1080"
     scripts:
       - script: add-to-downloads-group.sh
         template: add-container-user-to-group.sh.j2
         template_vars:
-          gid: "{{ (nas_common_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
+          gid: "{{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
           group: downloads
