@@ -50,8 +50,8 @@ syncoid_syncs:
 
 ### exterrestris.docker_compose
 docker_compose_projects:
-  - project_label: monitoring
-    project_dir: "{{ appdata_path }}/monitoring"
+  - project_label: uptime-kuma
+    project_dir: "{{ appdata_dataset.mountpoint }}/uptime-kuma"
     containers:
       - service_name: uptime-kuma
         container_name: uptime-kuma
@@ -82,6 +82,13 @@ docker_compose_projects:
           - "traefik.http.services.uptime-kuma-svc.loadBalancer.server.port=3001"
           - "traefik.http.services.uptime-kuma-svc.loadbalancer.server.scheme=http"
           - "traefik.http.services.uptime-kuma-svc.loadBalancer.passHostHeader=true"
+    networks:
+      - name: proxy
+        external: true
+        alias: "{{ traefik_docker_network }}"
+  - project_label: healthchecks
+    project_dir: "{{ appdata_dataset.mountpoint }}/healthchecks"
+    containers:
       - service_name: healthchecks
         container_name: healthchecks
         image:
@@ -134,8 +141,8 @@ docker_compose_projects:
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
-  - project_label: network
-    project_dir: "{{ appdata_path }}/network"
+  - project_label: omada-controller
+    project_dir: "{{ appdata_dataset.mountpoint }}/omada-controller"
     containers:
       - service_name: omada-controller
         container_name: omada-controller

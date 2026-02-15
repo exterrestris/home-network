@@ -539,7 +539,7 @@ docker_ufw_rules:
 ### exterrestris.docker_compose
 docker_compose_projects:
   - project_label: paperless
-    project_dir: "{{ appdata_path }}/paperless"
+    project_dir: "{{ appdata_dataset.mountpoint }}/paperless"
     compose_file: compose.yaml
     containers:
       - service_name: paperless-ngx
@@ -681,7 +681,7 @@ docker_compose_projects:
         external: true
         alias: "{{ traefik_docker_network }}"
   - project_label: stirling-pdf
-    project_dir: "{{ appdata_path }}/stirling-pdf"
+    project_dir: "{{ appdata_dataset.mountpoint }}/stirling-pdf"
     compose_file: compose.yaml
     containers:
       - service_name: stirling-pdf
@@ -739,8 +739,8 @@ docker_compose_projects:
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
-  - project_label: media
-    project_dir: "{{ appdata_path }}/media"
+  - project_label: jellyfin
+    project_dir: "{{ appdata_dataset.mountpoint }}/jellyfin"
     containers:
       - service_name: jellyfin
         image:
@@ -751,7 +751,7 @@ docker_compose_projects:
           - PGID={{ (nas_groups | selectattr('name', 'equalto', 'media') | list | first).gid }}
           - TZ=Europe/London
         volumes:
-          - source: "{{ appdata_path }}/media/jellyfin"
+          - source: jellyfin
             target: /config
             group: "jellyfin"
             owner: "jellyfin"
@@ -806,7 +806,7 @@ docker_compose_projects:
         external: true
         alias: "{{ traefik_docker_network }}"
   - project_label: torrents
-    project_dir: "{{ appdata_path }}/torrents"
+    project_dir: "{{ appdata_dataset.mountpoint }}/torrents"
     containers:
       - service_name: torrents-vpn
         image: qmcgaw/gluetun
@@ -818,7 +818,11 @@ docker_compose_projects:
           # qBittorrent WebUI
           - 8080
         volumes:
-          - gluetun:/gluetun
+          - source: "gluetun"
+            target: /gluetun
+            owner: "torrents"
+            group: "torrents"
+            mode: "755"
         devices:
           - "/dev/net/tun:/dev/net/tun"
         environment:
@@ -869,8 +873,8 @@ docker_compose_projects:
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
-  - project_label: media-downloads
-    project_dir: "{{ appdata_path }}/media-downloads"
+  - project_label: sonarr
+    project_dir: "{{ appdata_dataset.mountpoint }}/sonarr"
     autostart: no
     containers:
       - service_name: sonarr
@@ -909,6 +913,14 @@ docker_compose_projects:
           - "traefik.http.services.sonarr-svc.loadBalancer.server.port=8989"
           - "traefik.http.services.sonarr-svc.loadbalancer.server.scheme=http"
           - "traefik.http.services.sonarr-svc.loadBalancer.passHostHeader=true"
+    networks:
+      - name: proxy
+        external: true
+        alias: "{{ traefik_docker_network }}"
+  - project_label: radarr
+    project_dir: "{{ appdata_dataset.mountpoint }}/radarr"
+    autostart: no
+    containers:
       - service_name: radarr
         image:
           name: linuxserver/radarr
@@ -981,6 +993,14 @@ docker_compose_projects:
           - "traefik.http.services.radarr-1080-svc.loadBalancer.server.port=7879"
           - "traefik.http.services.radarr-1080-svc.loadbalancer.server.scheme=http"
           - "traefik.http.services.radarr-1080-svc.loadBalancer.passHostHeader=true"
+    networks:
+      - name: proxy
+        external: true
+        alias: "{{ traefik_docker_network }}"
+  - project_label: prowlarr
+    project_dir: "{{ appdata_dataset.mountpoint }}/prowlarr"
+    autostart: no
+    containers:
       - service_name: prowlarr
         image:
           name: linuxserver/prowlarr
@@ -1011,6 +1031,14 @@ docker_compose_projects:
           - "traefik.http.services.prowlarr-svc.loadBalancer.server.port=9696"
           - "traefik.http.services.prowlarr-svc.loadbalancer.server.scheme=http"
           - "traefik.http.services.prowlarr-svc.loadBalancer.passHostHeader=true"
+    networks:
+      - name: proxy
+        external: true
+        alias: "{{ traefik_docker_network }}"
+  - project_label: flaresolverr
+    project_dir: "{{ appdata_dataset.mountpoint }}/flaresolverr"
+    autostart: no
+    containers:
       - service_name: flaresolverr
         image:
           name: flaresolverr/flaresolverr
@@ -1034,6 +1062,14 @@ docker_compose_projects:
           - "traefik.http.services.flaresolverr-svc.loadBalancer.server.port=8191"
           - "traefik.http.services.flaresolverr-svc.loadbalancer.server.scheme=http"
           - "traefik.http.services.flaresolverr-svc.loadBalancer.passHostHeader=true"
+    networks:
+      - name: proxy
+        external: true
+        alias: "{{ traefik_docker_network }}"
+  - project_label: ombi
+    project_dir: "{{ appdata_dataset.mountpoint }}/ombi"
+    autostart: no
+    containers:
       - service_name: ombi
         image:
           name: linuxserver/ombi
@@ -1063,6 +1099,14 @@ docker_compose_projects:
           - "traefik.http.services.ombi-svc.loadBalancer.server.port=3579"
           - "traefik.http.services.ombi-svc.loadbalancer.server.scheme=http"
           - "traefik.http.services.ombi-svc.loadBalancer.passHostHeader=true"
+    networks:
+      - name: proxy
+        external: true
+        alias: "{{ traefik_docker_network }}"
+  - project_label: sabnzbd
+    project_dir: "{{ appdata_dataset.mountpoint }}/sabnzbd"
+    autostart: no
+    containers:
       - service_name: sabnzbd
         image:
           name: linuxserver/sabnzbd
@@ -1097,6 +1141,14 @@ docker_compose_projects:
           - "traefik.http.services.sabnzbd-svc.loadBalancer.server.port=8080"
           - "traefik.http.services.sabnzbd-svc.loadbalancer.server.scheme=http"
           - "traefik.http.services.sabnzbd-svc.loadBalancer.passHostHeader=true"
+    networks:
+      - name: proxy
+        external: true
+        alias: "{{ traefik_docker_network }}"
+  - project_label: metube
+    project_dir: "{{ appdata_dataset.mountpoint }}/metube"
+    autostart: no
+    containers:
       - service_name: metube
         image:
           name: alexta69/metube
@@ -1140,7 +1192,11 @@ docker_compose_projects:
           # Metube WebUI
           - 8081
         volumes:
-          - gluetun:/gluetun
+          - source: "gluetun"
+            target: /gluetun
+            owner: "torrents"
+            group: "torrents"
+            mode: "755"
         devices:
           - "/dev/net/tun:/dev/net/tun"
         environment:
@@ -1169,21 +1225,21 @@ docker_compose_projects:
 
 ### linuxserver_containers
 linuxserver_container_custom_scripts:
-  - container: "{{ appdata_path }}/media-downloads/sonarr"
+  - container: "{{ appdata_dataset.mountpoint }}/sonarr/sonarr"
     scripts:
       - script: add-to-downloads-group.sh
         template: add-container-user-to-group.sh.j2
         template_vars:
           gid: "{{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
           group: downloads
-  - container: "{{ appdata_path }}/media-downloads/radarr"
+  - container: "{{ appdata_dataset.mountpoint }}/radarr/radarr"
     scripts:
       - script: add-to-downloads-group.sh
         template: add-container-user-to-group.sh.j2
         template_vars:
           gid: "{{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
           group: downloads
-  - container: "{{ appdata_path }}/media-downloads/radarr-1080"
+  - container: "{{ appdata_dataset.mountpoint }}/radarr/radarr-1080"
     scripts:
       - script: add-to-downloads-group.sh
         template: add-container-user-to-group.sh.j2
