@@ -2,7 +2,14 @@
 ansible_host: 192.168.5.132
 target_os: ubuntu
 
-appdata_path: /mnt/zfs/appdata
+appdata_dataset:
+  name: appdata
+  pool: ssd1
+  compression: lz4
+  mountpoint: /mnt/zfs/appdata
+  state: present
+
+appdata_path: "{{ appdata_dataset.mountpoint }}"
 archive_path: /mnt/zfs/archive
 
 media_downloads_mountpoint: "/mnt/zfs/media-downloads"
@@ -91,7 +98,8 @@ zfs_pools:
     properties:
       ashift: 12
 
-zfs_filesystems:
+zfs_datasets:
+  - "{{ appdata_dataset }}"
   - name: backups
     pool: storage1
     compression: lz4
@@ -176,11 +184,6 @@ zfs_filesystems:
     owner: "{{ main_user.username }}"
     group: photos
     mode: 2775
-    state: present
-  - name: appdata
-    pool: ssd1
-    compression: lz4
-    mountpoint: "{{ appdata_path }}"
     state: present
   - name: media
     pool: storage1
@@ -294,6 +297,7 @@ zfs_filesystems:
     mode: 2777
     state: present
 
+zfs_filesystems: "{{ zfs_datasets + docker_datasets }}"
 
 ### exterrestris.sanoid
 sanoid_datasets:
@@ -332,6 +336,7 @@ sanoid_datasets:
     templates: minimal
   - name: ssd1/appdata
     templates: docker
+    recursive: yes
   - name: ssd2/transient
     templates: interim
   - name: ssd2/transient/scratch
