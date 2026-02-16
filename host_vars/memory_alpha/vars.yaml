@@ -1194,8 +1194,8 @@ docker_compose_projects:
         volumes:
           - source: "gluetun"
             target: /gluetun
-            owner: "torrents"
-            group: "torrents"
+            owner: "metube"
+            group: "metube"
             mode: "755"
         devices:
           - "/dev/net/tun:/dev/net/tun"
