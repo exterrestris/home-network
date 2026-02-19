@@ -389,6 +389,7 @@ syncoid_syncs:
       slug: memory-alpha-backup-resources
   - name: backup-appdata
     src: ssd1/appdata
+    recursive: yes
     dest: backup1/memory-alpha/appdata
     dest_host: "memory-beta.{{ internal_domain }}"
     send_options: ''

@@ -42,6 +42,7 @@ sanoid_datasets:
 syncoid_syncs:
   - name: backup-appdata
     src: data1/appdata
+    recursive: yes
     dest: backup1/argus-array/appdata
     dest_host: "memory-beta.{{ internal_domain }}"
     send_options: ''
