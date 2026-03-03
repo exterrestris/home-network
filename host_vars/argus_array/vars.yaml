@@ -50,11 +50,11 @@ syncoid_syncs:
       slug: argus-array-backup-appdata
 
 ### exterrestris.docker_compose
-docker_compose_projects:
-  - project_label: uptime-kuma
+compose_projects:
+  - name: uptime-kuma
     project_dir: "{{ appdata_dataset.mountpoint }}/uptime-kuma"
-    containers:
-      - service_name: uptime-kuma
+    services:
+      - name: uptime-kuma
         container_name: uptime-kuma
         image:
           name: louislam/uptime-kuma
@@ -87,10 +87,10 @@ docker_compose_projects:
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
-  - project_label: healthchecks
+  - name: healthchecks
     project_dir: "{{ appdata_dataset.mountpoint }}/healthchecks"
-    containers:
-      - service_name: healthchecks
+    services:
+      - name: healthchecks
         container_name: healthchecks
         image:
           name: linuxserver/healthchecks
@@ -142,10 +142,10 @@ docker_compose_projects:
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
-  - project_label: omada-controller
+  - name: omada-controller
     project_dir: "{{ appdata_dataset.mountpoint }}/omada-controller"
-    containers:
-      - service_name: omada-controller
+    services:
+      - name: omada-controller
         container_name: omada-controller
         image:
           name: mbentley/omada-controller

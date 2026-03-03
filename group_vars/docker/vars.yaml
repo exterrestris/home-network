@@ -19,13 +19,13 @@ traefik_providers:
   - "{{ traefik_default_file_provider }}"
 
 ### exterrestris.docker_compose
-docker_compose_autostart: no
-docker_compose_pull_images: no
+compose_autostart: no
+compose_pull_images: no
 
 ### mrlesmithjr.zfs
 docker_datasets: >-
   {{
-    docker_compose_projects
+    compose_projects
     | map(attribute='project_dir')
     | map('replace', appdata_dataset.mountpoint, appdata_dataset.name)
     | map('community.general.dict_kv', 'name')

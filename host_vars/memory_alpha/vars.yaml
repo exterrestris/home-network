@@ -538,12 +538,12 @@ docker_ufw_rules:
     proto: udp
 
 ### exterrestris.docker_compose
-docker_compose_projects:
-  - project_label: paperless
+compose_projects:
+  - name: paperless
     project_dir: "{{ appdata_dataset.mountpoint }}/paperless"
     compose_file: compose.yaml
-    containers:
-      - service_name: paperless-ngx
+    services:
+      - name: paperless-ngx
         image:
           name: ghcr.io/paperless-ngx/paperless-ngx
           tag: 2.19
@@ -612,7 +612,7 @@ docker_compose_projects:
           - "traefik.http.services.paperless-ngx-svc.loadBalancer.server.port=8000"
           - "traefik.http.services.paperless-ngx-svc.loadbalancer.server.scheme=http"
           - "traefik.http.services.paperless-ngx-svc.loadBalancer.passHostHeader=true"
-      - service_name: redis
+      - name: redis
         image:
           name: docker.io/library/redis
           tag: 8
@@ -630,7 +630,7 @@ docker_compose_projects:
         restart: unless-stopped
         labels:
           - "traefik.enable=false"
-      - service_name: db
+      - name: db
         image:
           name: docker.io/library/postgres
           tag: 18
@@ -654,7 +654,7 @@ docker_compose_projects:
         restart: unless-stopped
         labels:
           - "traefik.enable=false"
-      - service_name: gotenberg
+      - name: gotenberg
         image:
           name: docker.io/gotenberg/gotenberg
           tag: 8.24
@@ -667,7 +667,7 @@ docker_compose_projects:
         restart: unless-stopped
         labels:
           - "traefik.enable=false"
-      - service_name: tika
+      - name: tika
         image:
           name: docker.io/apache/tika
           tag: latest
@@ -681,11 +681,11 @@ docker_compose_projects:
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
-  - project_label: stirling-pdf
+  - name: stirling-pdf
     project_dir: "{{ appdata_dataset.mountpoint }}/stirling-pdf"
     compose_file: compose.yaml
-    containers:
-      - service_name: stirling-pdf
+    services:
+      - name: stirling-pdf
         image:
           name: docker.stirlingpdf.com/stirlingtools/stirling-pdf
           tag: latest
@@ -740,10 +740,10 @@ docker_compose_projects:
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
-  - project_label: jellyfin
+  - name: jellyfin
     project_dir: "{{ appdata_dataset.mountpoint }}/jellyfin"
-    containers:
-      - service_name: jellyfin
+    services:
+      - name: jellyfin
         image:
           name: linuxserver/jellyfin
           tag: latest
@@ -806,10 +806,10 @@ docker_compose_projects:
       - name: media
         external: true
         alias: "{{ traefik_docker_network }}"
-  - project_label: torrents
+  - name: torrents
     project_dir: "{{ appdata_dataset.mountpoint }}/torrents"
-    containers:
-      - service_name: torrents-vpn
+    services:
+      - name: torrents-vpn
         image: qmcgaw/gluetun
         cap_add:
           - NET_ADMIN
@@ -846,7 +846,7 @@ docker_compose_projects:
           - "traefik.http.services.qbittorrent-svc.loadBalancer.server.port=8080"
           - "traefik.http.services.qbittorrent-svc.loadbalancer.server.scheme=http"
           - "traefik.http.services.qbittorrent-svc.loadBalancer.passHostHeader=true"
-      - service_name: qbittorrent
+      - name: qbittorrent
         image:
           name: ghcr.io/linuxserver/qbittorrent
           tag: version-14.3.9.99202110311443-7435-01519b5e7ubuntu20.04.1
@@ -874,11 +874,11 @@ docker_compose_projects:
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
-  - project_label: sonarr
+  - name: sonarr
     project_dir: "{{ appdata_dataset.mountpoint }}/sonarr"
     autostart: no
-    containers:
-      - service_name: sonarr
+    services:
+      - name: sonarr
         image:
           name: linuxserver/sonarr
         environment:
@@ -918,11 +918,11 @@ docker_compose_projects:
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
-  - project_label: radarr
+  - name: radarr
     project_dir: "{{ appdata_dataset.mountpoint }}/radarr"
     autostart: no
-    containers:
-      - service_name: radarr
+    services:
+      - name: radarr
         image:
           name: linuxserver/radarr
         environment:
@@ -958,7 +958,7 @@ docker_compose_projects:
           - "traefik.http.services.radarr-svc.loadBalancer.server.port=7878"
           - "traefik.http.services.radarr-svc.loadbalancer.server.scheme=http"
           - "traefik.http.services.radarr-svc.loadBalancer.passHostHeader=true"
-      - service_name: radarr-1080
+      - name: radarr-1080
         image:
           name: linuxserver/radarr
         environment:
@@ -998,11 +998,11 @@ docker_compose_projects:
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
-  - project_label: prowlarr
+  - name: prowlarr
     project_dir: "{{ appdata_dataset.mountpoint }}/prowlarr"
     autostart: no
-    containers:
-      - service_name: prowlarr
+    services:
+      - name: prowlarr
         image:
           name: linuxserver/prowlarr
           tag: develop
@@ -1036,11 +1036,11 @@ docker_compose_projects:
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
-  - project_label: flaresolverr
+  - name: flaresolverr
     project_dir: "{{ appdata_dataset.mountpoint }}/flaresolverr"
     autostart: no
-    containers:
-      - service_name: flaresolverr
+    services:
+      - name: flaresolverr
         image:
           name: flaresolverr/flaresolverr
         environment:
@@ -1067,11 +1067,11 @@ docker_compose_projects:
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
-  - project_label: ombi
+  - name: ombi
     project_dir: "{{ appdata_dataset.mountpoint }}/ombi"
     autostart: no
-    containers:
-      - service_name: ombi
+    services:
+      - name: ombi
         image:
           name: linuxserver/ombi
         environment:
@@ -1104,11 +1104,11 @@ docker_compose_projects:
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
-  - project_label: sabnzbd
+  - name: sabnzbd
     project_dir: "{{ appdata_dataset.mountpoint }}/sabnzbd"
     autostart: no
-    containers:
-      - service_name: sabnzbd
+    services:
+      - name: sabnzbd
         image:
           name: linuxserver/sabnzbd
         environment:
@@ -1146,11 +1146,11 @@ docker_compose_projects:
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
-  - project_label: metube
+  - name: metube
     project_dir: "{{ appdata_dataset.mountpoint }}/metube"
     autostart: no
-    containers:
-      - service_name: metube
+    services:
+      - name: metube
         image:
           name: alexta69/metube
         environment:
@@ -1183,7 +1183,7 @@ docker_compose_projects:
         user: "{{ (container_users | selectattr('username', 'equalto', 'metube') | list | first).uid }}:{{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
         network_mode: "service:metube-vpn"
         restart: unless-stopped
-      - service_name: metube-vpn
+      - name: metube-vpn
         image: qmcgaw/gluetun
         cap_add:
           - NET_ADMIN
