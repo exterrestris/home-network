@@ -142,6 +142,38 @@ compose_projects:
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
+  - name: dozzle
+    project_dir: "{{ appdata_dataset.mountpoint }}/dozzle"
+    services:
+      - name: dozzle
+        image:
+          name: ghcr.io/amir20/dozzle
+          tag: v10
+        expose:
+          - 8080
+        networks:
+          - proxy
+        volumes:
+          - source: /var/run/docker.sock
+            target: /var/run/docker.sock
+            type: socket
+        environment:
+          - DOZZLE_REMOTE_AGENT={{ hostvars['memory_alpha']['ansible_hostname'] }}.{{ internal_domain }}:7007
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=true"
+          ## Router
+          - "traefik.http.routers.dozzle.entryPoints=https"
+          - "traefik.http.routers.dozzle.rule=Host(`dozzle.{{ internal_domain }}`)"
+          - "traefik.http.routers.dozzle.tls=true"
+          ## Service
+          - "traefik.http.services.dozzle-svc.loadBalancer.server.port=8080"
+          - "traefik.http.services.dozzle-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.dozzle-svc.loadBalancer.passHostHeader=true"
+    networks:
+      - name: proxy
+        external: true
+        alias: "{{ traefik_docker_network }}"
   - name: omada-controller
     project_dir: "{{ appdata_dataset.mountpoint }}/omada-controller"
     services:
