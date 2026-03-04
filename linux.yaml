@@ -218,6 +218,35 @@
       when: "'raspberry_pi' in group_names"
   tags: docker-install
 
+- hosts: docker:&nvidia
+  tasks:
+    # Install Nvidia Container Toolkit
+    - name: fetch nvidia container toolkit gpg key
+      ansible.builtin.shell:
+        cmd: curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+      become: yes
+    - name: add nvidia container toolkit repository
+      ansible.builtin.shell:
+        cmd: curl -fsSL https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | sed -e 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' -e '/experimental/ s/^#//g' | tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+      become: yes
+    - name: update apt
+      ansible.builtin.apt:
+        update_cache: true
+    - name: install nvidia container toolkit
+      ansible.builtin.package:
+        name: nvidia-container-toolkit
+        state: present
+    - name: configure docker
+      ansible.builtin.command:
+        cmd: nvidia-ctk runtime configure --runtime=docker
+      become: yes
+    - name: restart docker
+      ansible.builtin.service:
+        name: docker
+        state: restarted
+  tags:
+    - gpu
+
 - hosts: docker
   roles:
     # Set up users specific to containers
