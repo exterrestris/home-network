@@ -146,6 +146,11 @@ all_container_users:
     gid: 219
     hosts:
       - memory_alpha
+  - username: paperless-gpt
+    uid: 220
+    gid: 220
+    hosts:
+      - memory_alpha
 
 container_user_opts:
   shell: /usr/sbin/nologin
