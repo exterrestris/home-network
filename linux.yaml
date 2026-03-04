@@ -163,6 +163,13 @@
         - disks
         - mergerfs
 
+- hosts: nvidia
+  roles:
+    # Install Nvidia driver
+    - role: nvidia.nvidia_driver
+      tags:
+        - gpu
+
 - hosts: traefik:!docker
   roles:
     # Install Traefik

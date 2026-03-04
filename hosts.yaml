@@ -36,6 +36,9 @@ all:
         # deep_space_9:
         # holosuite_1:
         # holosuite_2:
+    nvidia:
+      hosts:
+        memory_alpha:
     linux:
       children:
         # Roles
