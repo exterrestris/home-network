@@ -681,6 +681,80 @@ compose_projects:
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
+  - name: local-llms
+    project_dir: "{{ appdata_dataset.mountpoint }}/local-llms"
+    services:
+      - name: ollama
+        image:
+          name: ollama/ollama
+          tag: latest
+        expose:
+          - 8000
+        networks:
+          - ollama
+        restart: unless-stopped
+        env_file:
+          - lines:
+              - TZ=Europe/London
+              - OLLAMA_KEEP_ALIVE=15m
+              - NVIDIA_DRIVER_CAPABILITIES=all
+              - NVIDIA_VISIBLE_DEVICES=all
+              - OLLAMA_HOST=0.0.0.0:11434
+              - OLLAMA_MODELS=ollama-models
+        volumes:
+          - source: ollama/data
+            target: /root/.ollama
+            owner: ollama
+            group: ollama
+            mode: 2775
+          - source: ollama/models
+            target: /ollama-models
+            owner: ollama
+            group: ollama
+            mode: 2775
+        deploy:
+          resources:
+            reservations:
+              devices:
+                - driver: nvidia
+                  count: all
+                  capabilities:
+                    - gpu
+      - name: open-webui
+        image:
+          name: ghcr.io/open-webui/open-webui
+          tag: 0.8
+        expose:
+          - 8080
+        networks:
+          - ollama
+          - proxy
+        restart: unless-stopped
+        volumes:
+          - source: open-webui
+            target: /app/backend/data
+            owner: open-webui
+            group: open-webui
+            mode: 2775
+        environment:
+          TZ: Europe/London
+          OLLAMA_BASE_URL: http://ollama:11434
+        labels:
+          - "traefik.enable=true"
+          - "traefik.docker.network={{ traefik_docker_network }}"
+          ## Router
+          - "traefik.http.routers.open-webui.entryPoints=https"
+          - "traefik.http.routers.open-webui.rule=Host(`open-webui.{{ internal_domain }}`)"
+          - "traefik.http.routers.open-webui.tls=true"
+          ## Service
+          - "traefik.http.services.open-webui-svc.loadBalancer.server.port=8080"
+          - "traefik.http.services.open-webui-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.open-webui-svc.loadBalancer.passHostHeader=true"
+    networks:
+      - name: ollama
+      - name: proxy
+        external: true
+        alias: "{{ traefik_docker_network }}"
   - name: stirling-pdf
     project_dir: "{{ appdata_dataset.mountpoint }}/stirling-pdf"
     compose_file: compose.yaml
