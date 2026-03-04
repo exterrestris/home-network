@@ -1,0 +1,4 @@
+#!/bin/bash
+
+groupadd -f -g {{ file.vars.gid }} {{ file.vars.group }}
+usermod -aG {{ file.vars.group }} abc
