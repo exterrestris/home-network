@@ -536,6 +536,10 @@ docker_ufw_rules:
   - rule: allow
     from_ip: 192.168.5.162
     proto: udp
+  # Dozzle Agent
+  - rule: allow
+    to_port: 7007
+    proto: tcp
 
 ### exterrestris.docker_compose
 compose_projects:
@@ -1250,3 +1254,23 @@ compose_projects:
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
+  - name: dozzle
+    project_dir: "{{ appdata_dataset.mountpoint }}/dozzle"
+    services:
+      - name: dozzle
+        image:
+          name: ghcr.io/amir20/dozzle
+          tag: v10
+        command: agent
+        ports:
+          - "7007:7007"
+        environment:
+          - DOZZLE_HOSTNAME={{ ansible_hostname }}
+        volumes:
+          - source: /var/run/docker.sock
+            target: /var/run/docker.sock
+            type: socket
+            read_only: true
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=false"
