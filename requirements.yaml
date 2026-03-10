@@ -29,3 +29,4 @@ roles:
   - name: exterrestris.traefik
   - name: exterrestris.fetch_ssl
   - name: exterrestris.docker_compose
+  - name: nvidia.nvidia_driver

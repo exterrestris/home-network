@@ -136,6 +136,16 @@ all_container_users:
       - downloads
     hosts:
       - memory_alpha
+  - username: ollama
+    uid: 218
+    gid: 218
+    hosts:
+      - memory_alpha
+  - username: open-webui
+    uid: 219
+    gid: 219
+    hosts:
+      - memory_alpha
 
 container_user_opts:
   shell: /usr/sbin/nologin
