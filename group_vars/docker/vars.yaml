@@ -124,6 +124,7 @@ all_container_users:
     gid: 215
     hosts:
       - memory_alpha
+      - argus_array
   - username: stirling-pdf
     uid: 216
     gid: 216
@@ -136,6 +137,11 @@ all_container_users:
       - downloads
     hosts:
       - memory_alpha
+  - username: n8n
+    uid: 221
+    gid: 221
+    hosts:
+      - argus_array
 
 container_user_opts:
   shell: /usr/sbin/nologin
