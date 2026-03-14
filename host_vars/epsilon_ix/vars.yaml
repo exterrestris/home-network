@@ -40,6 +40,12 @@ traefik_routers:
     entrypoints:
       - web-http
       - web-https
+  - name: n8n-proxy
+    service: "n8n-proxy-svc@file"
+    rule: "Host(`n8n.{{ internal_domain }}`)"
+    entrypoints:
+      - web-http
+      - web-https
   - name: ombi-proxy
     service: "ombi-proxy-svc@file"
     rule: "Host(`ombi.{{ internal_domain }}`)"
@@ -70,6 +76,10 @@ traefik_services:
     type: http
     servers:
       - "https://paperless.{{ internal_domain }}"
+  - name: n8n-proxy-svc
+    type: http
+    servers:
+      - "https://n8n.{{ internal_domain }}"
   - name: ombi-proxy-svc
     type: http
     servers:
