@@ -174,6 +174,149 @@ compose_projects:
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
+  - name: n8n
+    project_dir: "{{ appdata_dataset.mountpoint }}/n8n"
+    services:
+      - name: n8n
+        image:
+          name: docker.n8n.io/n8nio/n8n
+          tag: 2.10.3
+        user:
+          groups:
+            - "{{ (container_users | selectattr('username', 'equalto', 'n8n') | list | first).gid }}"
+        environment:
+          - GENERIC_TIMEZONE=Europe/London
+          - TZ=Europe/London
+          - DB_TYPE=postgresdb
+          - DB_POSTGRESDB_HOST=postgres
+          - DB_POSTGRESDB_PORT=5432
+          - DB_POSTGRESDB_DATABASE=${POSTGRES_DB}
+          - DB_POSTGRESDB_USER=${POSTGRES_NON_ROOT_USER}
+          - DB_POSTGRESDB_PASSWORD=${POSTGRES_NON_ROOT_PASSWORD}
+          - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+          - N8N_HOST=n8n.{{ internal_domain }}
+          - N8N_PROTOCOL=https
+          - N8N_RUNNERS_MODE=external
+          - N8N_RUNNERS_BROKER_LISTEN_ADDRESS=0.0.0.0
+          - WEBHOOK_URL=https://n8n.{{ internal_domain }}/
+        env_file:
+          - data: |
+              N8N_RUNNERS_AUTH_TOKEN={{ vault_n8n_runner_token }}
+        volumes:
+          - source: n8n
+            target: /home/node/.n8n
+            group: n8n
+            owner: n8n
+            mode: 2775
+        expose:
+          - 5678
+        networks:
+          - n8n
+          - proxy
+        restart: unless-stopped
+        links:
+          - postgres
+        depends_on:
+          postgres:
+            condition: service_healthy
+        labels:
+          - "traefik.enable=true"
+          - "traefik.docker.network=proxy"
+          ## Router
+          - "traefik.http.routers.n8n.entryPoints=https"
+          - "traefik.http.routers.n8n.rule=Host(`n8n.{{ internal_domain }}`)"
+          - "traefik.http.routers.n8n.tls=true"
+          - "traefik.http.routers.n8n.middlewares=n8n@docker"
+          ## Middlewares
+          - "traefik.http.middlewares.n8n.headers.SSLRedirect=true"
+          - "traefik.http.middlewares.n8n.headers.STSSeconds=315360000"
+          - "traefik.http.middlewares.n8n.headers.browserXSSFilter=true"
+          - "traefik.http.middlewares.n8n.headers.contentTypeNosniff=true"
+          - "traefik.http.middlewares.n8n.headers.forceSTSHeader=true"
+          # - traefik.http.middlewares.n8n.headers.SSLHost={{ internal_domain }}
+          - "traefik.http.middlewares.n8n.headers.STSIncludeSubdomains=true"
+          - "traefik.http.middlewares.n8n.headers.STSPreload=true"
+          ## Service
+          - "traefik.http.services.n8n-svc.loadBalancer.server.port=5678"
+          - "traefik.http.services.n8n-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.n8n-svc.loadBalancer.passHostHeader=true"
+      - name: n8n-runners
+        image:
+          name: n8nio/runners
+          tag: 2.10.3
+        environment:
+          - N8N_RUNNERS_TASK_BROKER_URI=http://n8n:5679
+        env_file:
+          - data: |
+              N8N_RUNNERS_AUTH_TOKEN={{ vault_n8n_runner_token }}
+        networks:
+          - n8n
+        depends_on:
+          - n8n
+        labels:
+          - "traefik.enable=false"
+      - name: postgres
+        image:
+          name: postgres
+          tag: 16
+        user:
+          user: "{{ (container_users | selectattr('username', 'equalto', 'postgres') | list | first).uid }}"
+          group: "{{ (container_users | selectattr('username', 'equalto', 'postgres') | list | first).gid }}"
+        environment:
+          - GENERIC_TIMEZONE=Europe/London
+          - TZ=Europe/London
+          - POSTGRES_DB=${POSTGRES_DB}
+          - POSTGRES_USER=${POSTGRES_USER}
+          - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+          - POSTGRES_NON_ROOT_USER=${POSTGRES_NON_ROOT_USER}
+          - POSTGRES_NON_ROOT_PASSWORD=${POSTGRES_NON_ROOT_PASSWORD}
+        volumes:
+          - source: postgres/data
+            target: /var/lib/postgresql/data
+            owner: postgres
+            group: postgres
+            mode: 2700
+          # From https://raw.githubusercontent.com/n8n-io/n8n-hosting/refs/heads/main/docker-compose/withPostgres/init-data.sh
+          - source: postgres/init-data.sh
+            target: /docker-entrypoint-initdb.d/init-data.sh
+            data: !unsafe |
+              #!/bin/bash
+              set -e;
+              
+              if [ -n "${POSTGRES_NON_ROOT_USER:-}" ] && [ -n "${POSTGRES_NON_ROOT_PASSWORD:-}" ]; then
+              	psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
+              	        CREATE USER ${POSTGRES_NON_ROOT_USER} WITH PASSWORD '${POSTGRES_NON_ROOT_PASSWORD}';
+              	        GRANT ALL PRIVILEGES ON DATABASE ${POSTGRES_DB} TO ${POSTGRES_NON_ROOT_USER};
+              	        GRANT CREATE ON SCHEMA public TO ${POSTGRES_NON_ROOT_USER};
+              	EOSQL
+              else
+              	echo "SETUP INFO: No Environment variables given!"
+              fi
+            owner: postgres
+            group: postgres
+            mode: 440
+        healthcheck:
+          test: "['CMD-SHELL', 'pg_isready -h localhost -U ${POSTGRES_USER} -d ${POSTGRES_DB}']"
+          interval: 5s
+          timeout: 5s
+          retries: 10
+        networks:
+          - n8n
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=false"
+    env_file:
+      data: |
+        POSTGRES_DB=n8n
+        POSTGRES_USER={{ vault_n8n_db_root_user }}
+        POSTGRES_PASSWORD={{ vault_n8n_db_root_password }}
+        POSTGRES_NON_ROOT_USER={{ vault_n8n_db_user }}
+        POSTGRES_NON_ROOT_PASSWORD={{ vault_n8n_db_password }}
+    networks:
+      - name: n8n
+      - name: proxy
+        external: true
+        alias: "{{ traefik_docker_network }}"
   - name: omada-controller
     project_dir: "{{ appdata_dataset.mountpoint }}/omada-controller"
     services:
