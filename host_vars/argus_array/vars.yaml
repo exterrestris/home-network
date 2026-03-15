@@ -317,6 +317,95 @@ compose_projects:
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
+  - name: speedtest-tracker
+    project_dir: "{{ appdata_dataset.mountpoint }}/speedtest-tracker"
+    services:
+      - name: speedtest-tracker
+        image:
+          name: lscr.io/linuxserver/speedtest-tracker
+          tag: latest
+        environment:
+          - GENERIC_TIMEZONE=Europe/London
+          - TZ=Europe/London
+          - PUID={{ (container_users | selectattr('username', 'equalto', 'speedtest-tracker') | list | first).uid }}
+          - PGID={{ (container_users | selectattr('username', 'equalto', 'speedtest-tracker') | list | first).gid }}
+          - APP_URL=https://speedtest.{{ internal_domain }}/
+          - ASSET_URL=https://speedtest.{{ internal_domain }}/
+          - DB_CONNECTION=pgsql
+          - DB_HOST=db
+          - DB_PORT=5432
+          - DB_DATABASE=${POSTGRES_DB}
+          - DB_USERNAME=${POSTGRES_USER}
+          - DB_PASSWORD=${POSTGRES_PASSWORD}
+          - SPEEDTEST_SCHEDULE=8 */2 * * *
+        env_file:
+          - data: |
+              APP_KEY={{ vault_speedtest_app_key }}
+        volumes:
+          - source: config
+            target: /config
+            group: speedtest-tracker
+            owner: speedtest-tracker
+            mode: 2775
+        expose:
+          - 80
+        networks:
+          - speedtest-tracker
+          - proxy
+        restart: unless-stopped
+        depends_on:
+          db:
+            condition: service_healthy
+        labels:
+          - "traefik.enable=true"
+          - "traefik.docker.network={{ traefik_docker_network }}"
+          ## Router
+          - "traefik.http.routers.speedtest-tracker.entryPoints=https"
+          - "traefik.http.routers.speedtest-tracker.rule=Host(`speedtest.{{ internal_domain }}`)"
+          - "traefik.http.routers.speedtest-tracker.tls=true"
+          ## Service
+          - "traefik.http.services.speedtest-tracker-svc.loadBalancer.server.port=80"
+          - "traefik.http.services.speedtest-tracker-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.speedtest-tracker-svc.loadBalancer.passHostHeader=true"
+      - name: db
+        image:
+          name: postgres
+          tag: 18
+        user:
+          user: "{{ (container_users | selectattr('username', 'equalto', 'postgres') | list | first).uid }}"
+          group: "{{ (container_users | selectattr('username', 'equalto', 'postgres') | list | first).gid }}"
+        environment:
+          - GENERIC_TIMEZONE=Europe/London
+          - TZ=Europe/London
+          - POSTGRES_DB=${POSTGRES_DB}
+          - POSTGRES_USER=${POSTGRES_USER}
+          - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+        volumes:
+          - source: postgres
+            target: /var/lib/postgresql
+            owner: postgres
+            group: postgres
+            mode: 2700
+        healthcheck:
+          test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+          interval: 10s
+          timeout: 5s
+          retries: 5
+        networks:
+          - speedtest-tracker
+        restart: unless-stopped
+        labels:
+          - "traefik.enable=false"
+    env_file:
+      data: |
+        POSTGRES_DB=speedtest-tracker
+        POSTGRES_USER={{ vault_speedtest_db_user }}
+        POSTGRES_PASSWORD={{ vault_speedtest_db_password }}
+    networks:
+      - name: speedtest-tracker
+      - name: proxy
+        external: true
+        alias: "{{ traefik_docker_network }}"
   - name: omada-controller
     project_dir: "{{ appdata_dataset.mountpoint }}/omada-controller"
     services:
