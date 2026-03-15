@@ -221,7 +221,7 @@ compose_projects:
             condition: service_healthy
         labels:
           - "traefik.enable=true"
-          - "traefik.docker.network=proxy"
+          - "traefik.docker.network={{ traefik_docker_network }}"
           ## Router
           - "traefik.http.routers.n8n.entryPoints=https"
           - "traefik.http.routers.n8n.rule=Host(`n8n.{{ internal_domain }}`)"
