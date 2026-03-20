@@ -1,0 +1,6 @@
+{
+  "makefile.configureOnOpen": false,
+  "yaml.customTags": [
+    "!unsafe scalar"
+  ]
+}

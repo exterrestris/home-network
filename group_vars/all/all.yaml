@@ -7,6 +7,7 @@ main_user:
   update_password: on_create
   groups:
     - 'sudo'
+  append: true
   ssh_key:
     # USS Enterprise
     - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ5vL72HAZsSoIwSUKPiQBiP6cHb2ccsq8My+ygN6bWl"

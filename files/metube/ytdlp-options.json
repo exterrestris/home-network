@@ -1,0 +1,12 @@
+{
+  "cookiefile": "/downloads/cookies.txt",
+  "writethumbnail": true,
+  "postprocessors": [
+    {
+      "key": "FFmpegMetadata",
+      "add_chapters": true
+    }
+  ],
+  "sleep_interval": 2,
+  "max_sleep_interval": 5
+}

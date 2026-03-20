@@ -1,4 +1,4 @@
---- 
+---
 - name: configure variables
   block:
     - set_fact:

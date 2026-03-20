@@ -19,10 +19,20 @@ traefik_providers:
   - "{{ traefik_default_file_provider }}"
 
 ### exterrestris.docker_compose
-docker_compose_autostart: no
-docker_compose_pull_images: no
+compose_autostart: no
+compose_pull_images: no
 
-## exterrestris.users
+### mrlesmithjr.zfs
+docker_datasets: >-
+  {{
+    compose_projects
+    | map(attribute='project_dir')
+    | map('replace', appdata_dataset.mountpoint, appdata_dataset.name)
+    | map('community.general.dict_kv', 'name')
+    | map('combine', appdata_dataset | ansible.utils.remove_keys(target=['name', 'mountpoint']))
+  }}
+
+### exterrestris.users
 all_container_users:
   - username: jellyfin
     groups:
@@ -96,10 +106,46 @@ all_container_users:
     gid: 212
     hosts:
       - argus_array
-
-container_users: "{{ (all_container_users | selectattr('hosts', 'superset', [ inventory_hostname ]) | list) }}"
+  - username: paperless
+    uid: 213
+    gid: 213
+    groups:
+      - archive
+      - scanners
+    hosts:
+      - memory_alpha
+  - username: redis
+    uid: 214
+    gid: 214
+    hosts:
+      - memory_alpha
+  - username: postgres
+    uid: 215
+    gid: 215
+    hosts:
+      - memory_alpha
+      - argus_array
+  - username: stirling-pdf
+    uid: 216
+    gid: 216
+    hosts:
+      - memory_alpha
+  - username: sabnzbd
+    uid: 217
+    gid: 217
+    groups:
+      - downloads
+    hosts:
+      - memory_alpha
+  - username: n8n
+    uid: 221
+    gid: 221
+    hosts:
+      - argus_array
 
 container_user_opts:
   shell: /usr/sbin/nologin
   home: /nonexistent
   createhome: no
+
+container_users: "{{ all_container_users | selectattr('hosts', 'superset', [ inventory_hostname ]) | list | map('combine', container_user_opts) }}"

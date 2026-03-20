@@ -20,7 +20,17 @@
         name: "{{ item.name }}"
         state: present
       with_items: "{{ common_packages }}"
-    
+
+    # Generate SSH key
+    - name: generate ssh key
+      ansible.builtin.user:
+        name: "{{ main_user.username }}"
+        group: "{{ main_user.username }}"
+        shell: /bin/zsh
+        generate_ssh_key: yes
+        ssh_key_type: ed25519
+        ssh_key_file: .ssh/id_ed25519
+
     # Install ZSH Powerlevel10k config
     - name: copy p10k config
       copy:
@@ -44,7 +54,7 @@
     - role: viasite-ansible.zsh
       vars:
         zsh_user: "{{ main_user.username }}"
-    
+
     # Run ssh-agent automatically on login
     - role: ssh_agent
       vars:
