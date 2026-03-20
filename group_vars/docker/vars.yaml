@@ -142,6 +142,11 @@ all_container_users:
     gid: 221
     hosts:
       - argus_array
+  - username: speedtest-tracker
+    uid: 222
+    gid: 222
+    hosts:
+      - argus_array
 
 container_user_opts:
   shell: /usr/sbin/nologin
