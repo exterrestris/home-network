@@ -12,6 +12,7 @@ all:
             spacedock:
             starbase_375:
             utopia_planitia:
+            epsilon_ix:
     proxmox_vm:
       hosts:
         memory_alpha:
