@@ -3,8 +3,6 @@ nas_common_packages:
   - name: smartmontools
   - name: nvme-cli
 
-appdata_path: /mnt/zfs/appdata
-
 ## exterrestris.users
 all_nas_users:
   - username: officejet-8725
