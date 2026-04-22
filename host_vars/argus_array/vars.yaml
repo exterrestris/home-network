@@ -180,7 +180,7 @@ compose_projects:
       - name: n8n
         image:
           name: docker.n8n.io/n8nio/n8n
-          tag: 2.10.3
+          tag: 2.17.5
         user:
           groups:
             - "{{ (container_users | selectattr('username', 'equalto', 'n8n') | list | first).gid }}"
@@ -243,7 +243,7 @@ compose_projects:
       - name: n8n-runners
         image:
           name: n8nio/runners
-          tag: 2.10.3
+          tag: 2.17.5
         environment:
           - N8N_RUNNERS_TASK_BROKER_URI=http://n8n:5679
         env_file:
