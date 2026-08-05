@@ -147,6 +147,11 @@ all_container_users:
     gid: 222
     hosts:
       - argus_array
+  - username: certmate
+    uid: 223
+    gid: 223
+    hosts:
+      - argus_array
 
 container_user_opts:
   shell: /usr/sbin/nologin

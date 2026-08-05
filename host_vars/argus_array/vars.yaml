@@ -317,6 +317,54 @@ compose_projects:
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
+  - name: certmate
+    project_dir: "{{ appdata_dataset.mountpoint }}/certmate"
+    services:
+      - name: certmate
+        image:
+          name: fabriziosalmi/certmate
+          tag: 2
+        user:
+          user: "{{ (container_users | selectattr('username', 'equalto', 'certmate') | list | first).uid }}"
+          group: 0
+        expose:
+          - 8000
+        volumes:
+          - source: data
+            target: /app/data
+            group: 0
+            owner: certmate
+            mode: 2770
+          - source: certificates
+            target: /app/certificates
+            group: 0
+            owner: certmate
+            mode: 2770
+          - source: letsencrypt
+            target: /app/letsencrypt
+            group: 0
+            owner: certmate
+            mode: 2770
+        env_file:
+          - data: |
+              CLOUDFLARE_TOKEN={{ vault_certmate_cloudflare_token }}
+        restart: unless-stopped
+        networks:
+          - proxy
+        labels:
+          - "traefik.enable=true"
+          ## Router
+          - "traefik.http.routers.certmate.entryPoints=https"
+          - "traefik.http.routers.certmate.rule=Host(`certmate.{{ internal_domain }}`)"
+          - "traefik.http.routers.certmate.tls=true"
+          ## Service
+          - "traefik.http.services.certmate-svc.loadBalancer.server.port=8000"
+          - "traefik.http.services.certmate-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.certmate-svc.loadBalancer.passHostHeader=true"
+    networks:
+      - name: proxy
+        external: true
+        alias: "{{ traefik_docker_network }}"
   - name: speedtest-tracker
     project_dir: "{{ appdata_dataset.mountpoint }}/speedtest-tracker"
     services:
