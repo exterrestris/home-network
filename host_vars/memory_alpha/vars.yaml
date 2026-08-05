@@ -1186,6 +1186,8 @@ compose_projects:
           name: alexta69/metube
         environment:
           - YTDL_OPTIONS_FILE=/etc/ytdlp-options.json
+          - YTDL_OPTIONS_PRESETS_FILE=/etc/ytdlp-presets.json
+          - ALLOW_PRIVATE_ADDRESSES=true # Required for VPN proxy
           - DEFAULT_OPTION_PLAYLIST_STRICT_MODE=true
           - STATE_DIR=/state
           - UMASK=002
@@ -1211,18 +1213,40 @@ compose_projects:
             owner: metube
             group: metube
             mode: "755"
+          - source: metube/ytdlp-presets.json
+            target: /etc/ytdlp-presets.json
+            file: metube/ytdlp-presets.json
+            owner: metube
+            group: metube
+            mode: "755"
         user: "{{ (container_users | selectattr('username', 'equalto', 'metube') | list | first).uid }}:{{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
-        network_mode: "service:metube-vpn"
+        networks:
+          - proxy
+          - vpn
+        expose:
+          # Metube WebUI
+          - 8081
+        labels:
+          - "traefik.enable=true"
+          - "traefik.docker.network={{ traefik_docker_network }}"
+          ## Router
+          - "traefik.http.routers.metube.entryPoints=https"
+          - "traefik.http.routers.metube.rule=Host(`metube.{{ ansible_hostname }}.{{ internal_domain }}`)"
+          - "traefik.http.routers.metube.tls=true"
+          ## Service
+          - "traefik.http.services.metube-svc.loadBalancer.server.port=8081"
+          - "traefik.http.services.metube-svc.loadbalancer.server.scheme=http"
+          - "traefik.http.services.metube-svc.loadBalancer.passHostHeader=true"
         restart: unless-stopped
-      - name: metube-vpn
+      - name: vpn
         image: qmcgaw/gluetun
         cap_add:
           - NET_ADMIN
         networks:
-          - proxy
+          - vpn
         expose:
-          # Metube WebUI
-          - 8081
+          # SOCKS5 proxy
+          - 1080
         volumes:
           - source: "gluetun"
             target: /gluetun
@@ -1234,23 +1258,20 @@ compose_projects:
         environment:
           - VPN_SERVICE_PROVIDER=airvpn
           - VPN_TYPE=wireguard
-          - WIREGUARD_PRIVATE_KEY={{ vault_metube_airvpn_wireguard_private_key }}
-          - WIREGUARD_PRESHARED_KEY={{ vault_metube_airvpn_wireguard_preshared_key }}
           - WIREGUARD_ADDRESSES=10.146.107.47/32
           - SERVER_REGIONS=Europe
           - TZ=Europe/London
+          - SOCKS5_ENABLED=on
+          - SOCKS5_LISTENING_ADDRESS=":1080"
+        env_file:
+          - lines:
+              - WIREGUARD_PRIVATE_KEY={{ vault_metube_airvpn_wireguard_private_key }}
+              - WIREGUARD_PRESHARED_KEY={{ vault_metube_airvpn_wireguard_preshared_key }}
         restart: always
         labels:
-          - "traefik.enable=true"
-          ## Router
-          - "traefik.http.routers.metube.entryPoints=https"
-          - "traefik.http.routers.metube.rule=Host(`metube.{{ ansible_hostname }}.{{ internal_domain }}`)"
-          - "traefik.http.routers.metube.tls=true"
-          ## Service
-          - "traefik.http.services.metube-svc.loadBalancer.server.port=8081"
-          - "traefik.http.services.metube-svc.loadbalancer.server.scheme=http"
-          - "traefik.http.services.metube-svc.loadBalancer.passHostHeader=true"
+          - "traefik.enable=false"
     networks:
+      - name: vpn
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
