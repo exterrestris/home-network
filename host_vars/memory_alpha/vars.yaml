@@ -1234,11 +1234,13 @@ compose_projects:
         environment:
           - VPN_SERVICE_PROVIDER=airvpn
           - VPN_TYPE=wireguard
-          - WIREGUARD_PRIVATE_KEY={{ vault_metube_airvpn_wireguard_private_key }}
-          - WIREGUARD_PRESHARED_KEY={{ vault_metube_airvpn_wireguard_preshared_key }}
           - WIREGUARD_ADDRESSES=10.146.107.47/32
           - SERVER_REGIONS=Europe
           - TZ=Europe/London
+        env_file:
+          - lines:
+              - WIREGUARD_PRIVATE_KEY={{ vault_metube_airvpn_wireguard_private_key }}
+              - WIREGUARD_PRESHARED_KEY={{ vault_metube_airvpn_wireguard_preshared_key }}
         restart: always
         labels:
           - "traefik.enable=true"
