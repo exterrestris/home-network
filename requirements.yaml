@@ -26,6 +26,7 @@ roles:
   - name: viasite-ansible.zsh
   - name: robertdebock.update
   - name: robertdebock.reboot
+  - name: robertdebock.locale
   - name: exterrestris.traefik
   - name: exterrestris.fetch_ssl
   - name: exterrestris.docker_compose
