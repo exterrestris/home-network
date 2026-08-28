@@ -2,6 +2,7 @@
 nas_common_packages:
   - name: smartmontools
   - name: nvme-cli
+  - name: openseachest
 
 ## exterrestris.users
 all_nas_users:
