@@ -7,7 +7,7 @@ all:
     # Type
     proxmox:
       children:
-        proxmox_8:
+        proxmox_9:
           hosts:
             spacedock:
             starbase_375:
