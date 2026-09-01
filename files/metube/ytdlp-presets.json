@@ -1,0 +1,11 @@
+{
+  "vpn": {
+    "proxy": "socks5://vpn:1080"
+  },
+  "firefox": {
+    "impersonate": "firefox"
+  },
+  "chrome": {
+    "impersonate": "chrome"
+  }
+}
