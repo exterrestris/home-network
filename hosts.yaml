@@ -12,11 +12,12 @@ all:
             spacedock:
             starbase_375:
             utopia_planitia:
+            epsilon_ix:
     proxmox_vm:
       hosts:
         memory_alpha:
         memory_beta:
-        epsilon_ix:
+        subspace_relay_47:
         # holosuite_1:
         argus_array:
         midas_array:
@@ -32,7 +33,7 @@ all:
         memory_alpha:
         memory_beta:
         argus_array:
-        epsilon_ix:
+        subspace_relay_47:
         # deep_space_9:
         # holosuite_1:
         # holosuite_2:
@@ -50,7 +51,7 @@ all:
             memory_beta:
         traefik:
           hosts:
-            epsilon_ix:
+            subspace_relay_47:
             memory_alpha:
             argus_array:
         docker:
