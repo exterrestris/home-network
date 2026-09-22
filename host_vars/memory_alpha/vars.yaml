@@ -140,22 +140,6 @@ zfs_datasets:
     owner: "{{ main_user.username }}"
     group: backups
     mode: 2775
-  - name: backups/computers/uss-rio-grande
-    pool: storage1
-    compression: lz4
-    recordsize: 1M
-    state: present
-    owner: "{{ main_user.username }}"
-    group: backups
-    mode: 2775
-  - name: backups/computers/jupiter-station
-    pool: storage1
-    compression: lz4
-    recordsize: 1M
-    state: present
-    owner: "{{ main_user.username }}"
-    group: backups
-    mode: 2775
   - name: backups/drives
     pool: storage1
     compression: lz4
