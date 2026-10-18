@@ -15,7 +15,7 @@
     - name: get installed packages
       ansible.builtin.package_facts:
 
-    - name: update proxmox repos
+    - name: update pve repos
       block:
         - name: disable pve enterprise repo
           ansible.builtin.deb822_repository:
@@ -65,6 +65,35 @@
           ansible.builtin.apt:
             update_cache: true
       when: "'proxmox-ve' in ansible_facts.packages"
+
+    - name: update pbs repos
+      block:
+        - name: disable pbs enterprise repo
+          ansible.builtin.deb822_repository:
+            name: pbs-enterprise
+            types: deb
+            uris: "https://enterprise.proxmox.com/{{ ansible_distribution | lower }}/pbs"
+            signed_by: "/usr/share/keyrings/proxmox-archive-keyring.gpg"
+            suites: ["{{ ansible_distribution_release | lower }}"]
+            components: [pbs-enterprise]
+            state: present
+            enabled: false
+            
+        - name: enable pbs no subscription repo
+          ansible.builtin.deb822_repository:
+            name: proxmox
+            types: deb
+            uris: "http://download.proxmox.com/{{ ansible_distribution | lower }}/pbs"
+            signed_by: "/usr/share/keyrings/proxmox-archive-keyring.gpg"
+            suites: ["{{ ansible_distribution_release | lower }}"]
+            components: [pbs-no-subscription]
+            state: present
+            enabled: true
+
+        - name: update repositories
+          ansible.builtin.apt:
+            update_cache: true
+      when: "'proxmox-backup-server' in ansible_facts.packages"
   when: ansible_distribution == 'Debian'
   tags:
     - bootstrap-new
