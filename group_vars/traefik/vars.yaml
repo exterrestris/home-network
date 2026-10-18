@@ -22,20 +22,17 @@ traefik_ufw_rules:
     proto: tcp
 
 ### exterrestris.fetch_ssl
-fetch_ssl_ssh_host: "midas-array.{{ internal_domain }}"
-fetch_ssl_ssh_user: admin
-fetch_ssl_ssh_host_python: "{{ hostvars['midas_array']['ansible_python_interpreter'] }}"
+fetch_ssl_certificate_source: certmate
+fetch_ssl_certmate_token: "{{ vault_certmate_api_token }}"
+fetch_ssl_certmate_host: "certmate.{{ internal_domain }}"
+fetch_ssl_certmate_cert: "{{ internal_domain }}"
 fetch_ssl_certs:
-  - cert: "/conf/acme/{{ internal_domain }}-wildcard.fullchain"
-    key: "/conf/acme/{{ internal_domain }}-wildcard.key"
+  - name: "{{ internal_domain }}"
     install_to:
       - cert: "{{ traefik_tls_certificate_dir }}/{{ internal_domain }}-wildcard.cert"
         key: "{{ traefik_tls_certificate_dir }}/{{ internal_domain }}-wildcard.key"
-  - cert: "/conf/acme/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.fullchain"
-    key: "/conf/acme/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.key"
+  - name: "{{ ansible_hostname }}.{{ internal_domain }}"
     install_to:
       - cert: "{{ traefik_tls_certificate_dir }}/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.cert"
         key: "{{ traefik_tls_certificate_dir }}/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.key"
-
 fetch_ssl_run_now: yes
-fetch_ssl_ssh_add_remote_to_known_hosts: yes
