@@ -7,12 +7,15 @@ all:
     # Type
     proxmox:
       children:
-        proxmox_9:
+        pve:
           hosts:
             spacedock:
             starbase_375:
             utopia_planitia:
             epsilon_ix:
+        pbs:
+          hosts:
+            memory_prime:
     proxmox_vm:
       hosts:
         memory_alpha:
