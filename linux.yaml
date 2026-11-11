@@ -57,6 +57,7 @@
     - role: viasite-ansible.zsh
       vars:
         zsh_user: "{{ main_user.username }}"
+        zsh_theme: powerlevel10k
       tags: zsh
     # Run ssh-agent automatically on login
     - role: ssh_agent
