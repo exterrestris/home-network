@@ -14,7 +14,9 @@ main_user:
     # USS Enterprise (WSL: Ubuntu-22.04)
     - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE3OKdlxfzxvLtz9kdLRvt++7Bvn6jghXgRn/ZoOeVJ8
     # USS Enterprise (WSL: Ubuntu-24.04)
-    - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG0OQJSDORbmVPvwZj4KZsRd68oCyG/mPnYvFGd7/Ccp
+    - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKPbXwqoCBqvolJJtscTCOUKu3SjYrhUJVakv6hIWdSl
+    # USS Enterprise (WSL: Ubuntu-26.04)
+    - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEyGq/g3qYVoZ9gDpRUjNqWnn3jeKJBFeLA0LgKVAryL
     # USS Bellerophon
     - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE0UaIVzdBc2LpsjOmSHCBGsSayTM2tNwYfiYTwp5or+
     # USS Bellerophon (WSL: Ubuntu-20.04)
