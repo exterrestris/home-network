@@ -1,65 +1,75 @@
-# Bootstrap host not in inventory
-- hosts: localhost
-  gather_facts: no
+---
+- name: Bootstrap host not in inventory
+  hosts: localhost
+  gather_facts: false
   tags: bootstrap-new
   tasks:
-    - pause:
-        prompt: IP address to bootstrap
-        echo: yes
+    - name: IP address to bootstrap
+      ansible.builtin.pause:
+        prompt:
+        echo: true
       register: target_host
-    - add_host:
+    - name: Add host
+      ansible.builtin.add_host:
         name: "{{ target_host.user_input }}"
         groups: setup
-      changed_when: False
+      changed_when: false
 
-# Bootstrap single host from inventory
-- hosts: localhost
-  gather_facts: no
+- name: Bootstrap single host from inventory
+  hosts: localhost
+  gather_facts: false
   tags: bootstrap-host
   tasks:
-    - pause:
-        prompt: Inventory host to bootstrap
-        echo: yes
+    - name: Inventory host to bootstrap
+      ansible.builtin.pause:
+        prompt:
+        echo: true
       register: target_host
-    - ansible.builtin.assert:
+    - name: Verify host exists
+      ansible.builtin.assert:
         fail_msg: "{{ target_host.user_input | replace('-', '_') }} is not a valid host in the inventory"
         that: (target_host.user_input | replace('-', '_')) in hostvars
-    - add_host:
+    - name: Add host
+      ansible.builtin.add_host:
         name: "{{ target_host.user_input | replace('-', '_') }}"
         groups: setup
-      changed_when: False
+      changed_when: false
 
-# Bootstrap group from inventory
-- hosts: localhost
-  gather_facts: no
+- name: Bootstrap group from inventory
+  hosts: localhost
+  gather_facts: false
   tags: bootstrap-group
   tasks:
-    - pause:
-        prompt: Inventory group to bootstrap
-        echo: yes
+    - name: Inventory group to bootstrap
+      ansible.builtin.pause:
+        prompt:
+        echo: true
       register: target_host
-    - ansible.builtin.assert:
+    - name: Verify group exists
+      ansible.builtin.assert:
         fail_msg: "{{ target_host.user_input | replace('-', '_') }} is not a valid group in the inventory"
         that: (target_host.user_input | replace('-', '_')) in groups
-    - add_host:
+    - name: Add hosts from group
+      ansible.builtin.add_host:
         name: "{{ item }}"
         groups: setup
       loop: "{{ groups[(target_host.user_input | replace('-', '_'))] }}"
-      changed_when: False
+      changed_when: false
 
-# Bootstrap all hosts in inventory
-- hosts: localhost
-  gather_facts: no
+- name: Bootstrap all hosts in inventory
+  hosts: localhost
+  gather_facts: false
   tags: bootstrap-all
   tasks:
-    - add_host:
-        name: '{{ item }}'
+    - name: Add all hosts
+      ansible.builtin.add_host:
+        name: "{{ item }}"
         groups: setup
       loop: "{{ groups.all }}"
 
-# Check Ansible can connect
-- hosts: setup
-  gather_facts: no
+- name: Check Ansible can connect
+  hosts: setup
+  gather_facts: false
   serial: 1
   tags:
     - bootstrap-new
@@ -67,41 +77,47 @@
     - bootstrap-group
     - bootstrap-all
   tasks:
-    - include_tasks: tasks/check-ansible-user.yaml
+    - name: Check Ansible user
+      ansible.builtin.include_tasks: tasks/check-ansible-user.yaml
 
-# Verify Python path
-- hosts: setup
-  gather_facts: no
+- name: Configure Python interpreter
+  hosts: setup
+  gather_facts: false
   tags: bootstrap-new
   tasks:
-    - pause:
-        prompt: "Path to Python executable (Current: auto detect)"
-        echo: yes
+    - name: Prompt for Python interpreter path
+      ansible.builtin.pause:
+        prompt: "Path to Python interpreter (Current: auto detect)"
+        echo: true
       register: python
-    - set_fact:
+    - name: Set Python interpreter
+      ansible.builtin.set_fact:
         ansible_python_interpreter: "{{ python.user_input }}"
       when: python.user_input != ''
 
-# Standard bootstrap
-- hosts: setup
+- name: Bootstrap host(s)
+  hosts: setup
   tags:
     - bootstrap-new
     - bootstrap-host
     - bootstrap-group
     - bootstrap-all
   tasks:
-    - include_tasks: tasks/setup.yaml
+    - name: Include bootstrap tasks
+      ansible.builtin.include_tasks: tasks/setup.yaml
 
-# Additional new host tasks
-- hosts: setup
+- name: Set hostname for host
+  hosts: setup
   tags:
     - bootstrap-new
     - bootstrap-host
   tasks:
-    - pause:
+    - name: Prompt for desired hostname
+      ansible.builtin.pause:
         prompt: "Desired hostname (Current: {{ ansible_hostname }})"
-        echo: yes
+        echo: true
       register: hostname
-    - ansible.builtin.hostname:
+    - name: Set hostname
+      ansible.builtin.hostname:
         name: "{{ hostname.user_input }}"
       when: hostname.user_input != ''

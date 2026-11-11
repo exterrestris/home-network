@@ -1,11 +1,11 @@
 ---
-- name: add SSH agent
+- name: Add SSH agent
   ansible.builtin.blockinfile:
-    path: "/home/{{ user }}/{{ item }}"
+    path: /home/{{ ssh_agent_user }}/{{ item }}
     block: "{{ lookup('template', 'shell.j2') }}"
-    owner: "{{ user }}"
-    group: "{{ user }}"
-    mode: '0644'
+    owner: "{{ ssh_agent_user }}"
+    group: "{{ ssh_agent_user }}"
+    mode: "0644"
     marker: "# {mark} ANSIBLE MANAGED BLOCK - SSH Agent"
-    create: yes
+    create: true
   with_items: "{{ ssh_agent_source_files }}"

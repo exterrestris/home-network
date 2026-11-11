@@ -1,6 +1,6 @@
 ---
-- name: install filesystem packages
-  package:
+- name: Install filesystem packages
+  ansible.builtin.package:
     name: "{{ item.name }}"
     state: present
   with_items:
@@ -9,13 +9,13 @@
   tags:
     - disks
 
-- name: create /mnt points
-  file:
+- name: Create /mnt points
+  ansible.builtin.file:
     dest: "{{ item.path }}"
     state: directory
     owner: nobody
     group: nogroup
-    mode: 0777
+    mode: "0777"
   when:
     - item
     - ansible_mounts | selectattr('mount', 'equalto', item.path) | list | length == 0
@@ -29,7 +29,7 @@
     - mounts
     - disks
 
-- name: mount disks
+- name: Mount disks
   ansible.posix.mount:
     name: "{{ item.path }}"
     src: "{{ item.diskbyid }}"
@@ -46,7 +46,7 @@
     - mounts
     - disks
 
-- name: remove mount points
+- name: Remove mount points
   ansible.posix.mount:
     name: "{{ item.path }}"
     state: absent

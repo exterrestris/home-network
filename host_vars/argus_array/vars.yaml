@@ -14,19 +14,19 @@ appdata_path: "{{ appdata_dataset.mountpoint }}"
 ### mrlesmithjr.zfs
 zfs_pools:
   - name: data1
-    action: 'create'
+    action: create
     import: force
-    compression: 'lz4'
+    compression: lz4
     devices:
       # WD_Red_SN700_1000GB_24112Y801074
-      - 'nvme-WD_Red_SN700_1000GB_24112Y801074'
+      - nvme-WD_Red_SN700_1000GB_24112Y801074
       # WD_Red_SN700_1000GB_24112Y801475
-      - 'nvme-WD_Red_SN700_1000GB_24112Y801475'
-    type: 'mirror'
+      - nvme-WD_Red_SN700_1000GB_24112Y801475
+    type: mirror
     properties:
       ashift: 12
-      autoexpand: 'on'
-    state: 'present'
+      autoexpand: "on"
+    state: present
 
 zfs_datasets:
   - "{{ appdata_dataset }}"
@@ -37,15 +37,15 @@ zfs_filesystems: "{{ zfs_datasets + docker_datasets }}"
 sanoid_datasets:
   - name: data1/appdata
     templates: docker
-    recursive: yes
+    recursive: true
 
 syncoid_syncs:
   - name: backup-appdata
     src: data1/appdata
-    recursive: yes
+    recursive: true
     dest: backup1/argus-array/appdata
-    dest_host: "memory-beta.{{ internal_domain }}"
-    send_options: ''
+    dest_host: memory-beta.{{ internal_domain }}
+    send_options: ""
     healthchecks:
       slug: argus-array-backup-appdata
 
@@ -74,15 +74,15 @@ compose_projects:
           - proxy
         restart: always
         labels:
-          - "traefik.enable=true"
+          - traefik.enable=true
           ## Router
-          - "traefik.http.routers.uptime-kuma.entryPoints=https"
-          - "traefik.http.routers.uptime-kuma.rule=Host(`uptime.{{ internal_domain }}`,`status.{{ internal_domain }}`)"
-          - "traefik.http.routers.uptime-kuma.tls=true"
+          - traefik.http.routers.uptime-kuma.entryPoints=https
+          - traefik.http.routers.uptime-kuma.rule=Host(`uptime.{{ internal_domain }}`,`status.{{ internal_domain }}`)
+          - traefik.http.routers.uptime-kuma.tls=true
           ## Service
-          - "traefik.http.services.uptime-kuma-svc.loadBalancer.server.port=3001"
-          - "traefik.http.services.uptime-kuma-svc.loadbalancer.server.scheme=http"
-          - "traefik.http.services.uptime-kuma-svc.loadBalancer.passHostHeader=true"
+          - traefik.http.services.uptime-kuma-svc.loadBalancer.server.port=3001
+          - traefik.http.services.uptime-kuma-svc.loadbalancer.server.scheme=http
+          - traefik.http.services.uptime-kuma-svc.loadBalancer.passHostHeader=true
     networks:
       - name: proxy
         external: true
@@ -129,15 +129,15 @@ compose_projects:
           - proxy
         restart: unless-stopped
         labels:
-          - "traefik.enable=true"
+          - traefik.enable=true
           ## Router
-          - "traefik.http.routers.healthchecks.entryPoints=https"
-          - "traefik.http.routers.healthchecks.rule=Host(`healthchecks.{{ internal_domain }}`)"
-          - "traefik.http.routers.healthchecks.tls=true"
+          - traefik.http.routers.healthchecks.entryPoints=https
+          - traefik.http.routers.healthchecks.rule=Host(`healthchecks.{{ internal_domain }}`)
+          - traefik.http.routers.healthchecks.tls=true
           ## Service
-          - "traefik.http.services.healthchecks-svc.loadBalancer.server.port=8000"
-          - "traefik.http.services.healthchecks-svc.loadbalancer.server.scheme=http"
-          - "traefik.http.services.healthchecks-svc.loadBalancer.passHostHeader=true"
+          - traefik.http.services.healthchecks-svc.loadBalancer.server.port=8000
+          - traefik.http.services.healthchecks-svc.loadbalancer.server.scheme=http
+          - traefik.http.services.healthchecks-svc.loadBalancer.passHostHeader=true
     networks:
       - name: proxy
         external: true
@@ -161,15 +161,15 @@ compose_projects:
           - DOZZLE_REMOTE_AGENT={{ hostvars['memory_alpha']['ansible_hostname'] }}.{{ internal_domain }}:7007
         restart: unless-stopped
         labels:
-          - "traefik.enable=true"
+          - traefik.enable=true
           ## Router
-          - "traefik.http.routers.dozzle.entryPoints=https"
-          - "traefik.http.routers.dozzle.rule=Host(`dozzle.{{ internal_domain }}`)"
-          - "traefik.http.routers.dozzle.tls=true"
+          - traefik.http.routers.dozzle.entryPoints=https
+          - traefik.http.routers.dozzle.rule=Host(`dozzle.{{ internal_domain }}`)
+          - traefik.http.routers.dozzle.tls=true
           ## Service
-          - "traefik.http.services.dozzle-svc.loadBalancer.server.port=8080"
-          - "traefik.http.services.dozzle-svc.loadbalancer.server.scheme=http"
-          - "traefik.http.services.dozzle-svc.loadBalancer.passHostHeader=true"
+          - traefik.http.services.dozzle-svc.loadBalancer.server.port=8080
+          - traefik.http.services.dozzle-svc.loadbalancer.server.scheme=http
+          - traefik.http.services.dozzle-svc.loadBalancer.passHostHeader=true
     networks:
       - name: proxy
         external: true
@@ -221,26 +221,26 @@ compose_projects:
           postgres:
             condition: service_healthy
         labels:
-          - "traefik.enable=true"
-          - "traefik.docker.network={{ traefik_docker_network }}"
+          - traefik.enable=true
+          - traefik.docker.network={{ traefik_docker_network }}
           ## Router
-          - "traefik.http.routers.n8n.entryPoints=https"
-          - "traefik.http.routers.n8n.rule=Host(`n8n.{{ internal_domain }}`)"
-          - "traefik.http.routers.n8n.tls=true"
-          - "traefik.http.routers.n8n.middlewares=n8n@docker"
+          - traefik.http.routers.n8n.entryPoints=https
+          - traefik.http.routers.n8n.rule=Host(`n8n.{{ internal_domain }}`)
+          - traefik.http.routers.n8n.tls=true
+          - traefik.http.routers.n8n.middlewares=n8n@docker
           ## Middlewares
-          - "traefik.http.middlewares.n8n.headers.SSLRedirect=true"
-          - "traefik.http.middlewares.n8n.headers.STSSeconds=315360000"
-          - "traefik.http.middlewares.n8n.headers.browserXSSFilter=true"
-          - "traefik.http.middlewares.n8n.headers.contentTypeNosniff=true"
-          - "traefik.http.middlewares.n8n.headers.forceSTSHeader=true"
+          - traefik.http.middlewares.n8n.headers.SSLRedirect=true
+          - traefik.http.middlewares.n8n.headers.STSSeconds=315360000
+          - traefik.http.middlewares.n8n.headers.browserXSSFilter=true
+          - traefik.http.middlewares.n8n.headers.contentTypeNosniff=true
+          - traefik.http.middlewares.n8n.headers.forceSTSHeader=true
           # - traefik.http.middlewares.n8n.headers.SSLHost={{ internal_domain }}
-          - "traefik.http.middlewares.n8n.headers.STSIncludeSubdomains=true"
-          - "traefik.http.middlewares.n8n.headers.STSPreload=true"
+          - traefik.http.middlewares.n8n.headers.STSIncludeSubdomains=true
+          - traefik.http.middlewares.n8n.headers.STSPreload=true
           ## Service
-          - "traefik.http.services.n8n-svc.loadBalancer.server.port=5678"
-          - "traefik.http.services.n8n-svc.loadbalancer.server.scheme=http"
-          - "traefik.http.services.n8n-svc.loadBalancer.passHostHeader=true"
+          - traefik.http.services.n8n-svc.loadBalancer.server.port=5678
+          - traefik.http.services.n8n-svc.loadbalancer.server.scheme=http
+          - traefik.http.services.n8n-svc.loadBalancer.passHostHeader=true
       - name: n8n-runners
         image:
           name: n8nio/runners
@@ -255,7 +255,7 @@ compose_projects:
         depends_on:
           - n8n
         labels:
-          - "traefik.enable=false"
+          - traefik.enable=false
       - name: postgres
         image:
           name: postgres
@@ -283,7 +283,7 @@ compose_projects:
             data: !unsafe |
               #!/bin/bash
               set -e;
-              
+
               if [ -n "${POSTGRES_NON_ROOT_USER:-}" ] && [ -n "${POSTGRES_NON_ROOT_PASSWORD:-}" ]; then
               	psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
               	        CREATE USER ${POSTGRES_NON_ROOT_USER} WITH PASSWORD '${POSTGRES_NON_ROOT_PASSWORD}';
@@ -305,7 +305,7 @@ compose_projects:
           - n8n
         restart: unless-stopped
         labels:
-          - "traefik.enable=false"
+          - traefik.enable=false
     env_file:
       data: |
         POSTGRES_DB=n8n
@@ -353,15 +353,15 @@ compose_projects:
         networks:
           - proxy
         labels:
-          - "traefik.enable=true"
+          - traefik.enable=true
           ## Router
-          - "traefik.http.routers.certmate.entryPoints=https"
-          - "traefik.http.routers.certmate.rule=Host(`certmate.{{ internal_domain }}`)"
-          - "traefik.http.routers.certmate.tls=true"
+          - traefik.http.routers.certmate.entryPoints=https
+          - traefik.http.routers.certmate.rule=Host(`certmate.{{ internal_domain }}`)
+          - traefik.http.routers.certmate.tls=true
           ## Service
-          - "traefik.http.services.certmate-svc.loadBalancer.server.port=8000"
-          - "traefik.http.services.certmate-svc.loadbalancer.server.scheme=http"
-          - "traefik.http.services.certmate-svc.loadBalancer.passHostHeader=true"
+          - traefik.http.services.certmate-svc.loadBalancer.server.port=8000
+          - traefik.http.services.certmate-svc.loadbalancer.server.scheme=http
+          - traefik.http.services.certmate-svc.loadBalancer.passHostHeader=true
     networks:
       - name: proxy
         external: true
@@ -406,16 +406,16 @@ compose_projects:
           db:
             condition: service_healthy
         labels:
-          - "traefik.enable=true"
-          - "traefik.docker.network={{ traefik_docker_network }}"
+          - traefik.enable=true
+          - traefik.docker.network={{ traefik_docker_network }}
           ## Router
-          - "traefik.http.routers.speedtest-tracker.entryPoints=https"
-          - "traefik.http.routers.speedtest-tracker.rule=Host(`speedtest.{{ internal_domain }}`)"
-          - "traefik.http.routers.speedtest-tracker.tls=true"
+          - traefik.http.routers.speedtest-tracker.entryPoints=https
+          - traefik.http.routers.speedtest-tracker.rule=Host(`speedtest.{{ internal_domain }}`)
+          - traefik.http.routers.speedtest-tracker.tls=true
           ## Service
-          - "traefik.http.services.speedtest-tracker-svc.loadBalancer.server.port=80"
-          - "traefik.http.services.speedtest-tracker-svc.loadbalancer.server.scheme=http"
-          - "traefik.http.services.speedtest-tracker-svc.loadBalancer.passHostHeader=true"
+          - traefik.http.services.speedtest-tracker-svc.loadBalancer.server.port=80
+          - traefik.http.services.speedtest-tracker-svc.loadbalancer.server.scheme=http
+          - traefik.http.services.speedtest-tracker-svc.loadBalancer.passHostHeader=true
       - name: db
         image:
           name: postgres
@@ -436,7 +436,7 @@ compose_projects:
             group: postgres
             mode: 2700
         healthcheck:
-          test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+          test: [CMD-SHELL, "pg_isready -U ${POSTGRES_USER:-postgres}"]
           interval: 10s
           timeout: 5s
           retries: 5
@@ -444,7 +444,7 @@ compose_projects:
           - speedtest-tracker
         restart: unless-stopped
         labels:
-          - "traefik.enable=false"
+          - traefik.enable=false
     env_file:
       data: |
         POSTGRES_DB=speedtest-tracker
@@ -489,8 +489,8 @@ compose_projects:
           - PORT_DISCOVERY=29810
           - SHOW_SERVER_LOGS=true
           - SHOW_MONGODB_LOGS=false
-          #- SSL_CERT_NAME=tls.crt
-          #- SSL_KEY_NAME=tls.key
+          # - SSL_CERT_NAME=tls.crt
+          # - SSL_KEY_NAME=tls.key
           - TZ=Etc/UTC
         volumes:
           - source: omada-controller/data
