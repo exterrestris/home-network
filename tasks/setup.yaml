@@ -1,105 +1,104 @@
 ---
-- name: configure variables
+- name: Configure variables
+  tags:
+    - bootstrap-new
+    - bootstrap-all
   block:
-    - set_fact:
+    - name: Override sudo for pfSense
+      ansible.builtin.set_fact:
         sudo_package: pfSense-pkg-sudo
         sudo_group: wheel
         sudoers: /usr/local/etc/sudoers
       when: ansible_distribution == 'FreeBSD' and 'pfSense' in ansible_kernel_version
-  tags:
-    - bootstrap-new
-    - bootstrap-all
-
-- name: check if proxmox
-  block:
-    - name: get installed packages
-      ansible.builtin.package_facts:
-
-    - name: update pve repos
-      block:
-        - name: disable pve enterprise repo
-          ansible.builtin.deb822_repository:
-            name: pve-enterprise
-            types: deb
-            uris: "https://enterprise.proxmox.com/{{ ansible_distribution | lower }}/pve"
-            signed_by: "/usr/share/keyrings/proxmox-archive-keyring.gpg"
-            suites: ["{{ ansible_distribution_release | lower }}"]
-            components: [enterprise]
-            state: present
-            enabled: false
-            
-        - name: enable pve no subscription repo
-          ansible.builtin.deb822_repository:
-            name: proxmox
-            types: deb
-            uris: "http://download.proxmox.com/{{ ansible_distribution | lower }}/pve"
-            signed_by: "/usr/share/keyrings/proxmox-archive-keyring.gpg"
-            suites: ["{{ ansible_distribution_release | lower }}"]
-            components: [pve-no-subscription]
-            state: present
-            enabled: true
-
-        - name: disable ceph enterprise repo
-          ansible.builtin.deb822_repository:
-            name: ceph-enterprise
-            types: deb
-            uris: "https://enterprise.proxmox.com/{{ ansible_distribution | lower }}/ceph-squid"
-            signed_by: "/usr/share/keyrings/proxmox-archive-keyring.gpg"
-            suites: ["{{ ansible_distribution_release | lower }}"]
-            components: [enterprise]
-            state: present
-            enabled: false
-            
-        - name: enable ceph no subscription repo
-          ansible.builtin.deb822_repository:
-            name: ceph
-            types: deb
-            uris: "http://download.proxmox.com/{{ ansible_distribution | lower }}/ceph-squid"
-            signed_by: "/usr/share/keyrings/proxmox-archive-keyring.gpg"
-            suites: ["{{ ansible_distribution_release | lower }}"]
-            components: [no-subscription]
-            state: present
-            enabled: true
-
-        - name: update repositories
-          ansible.builtin.apt:
-            update_cache: true
-      when: "'proxmox-ve' in ansible_facts.packages"
-
-    - name: update pbs repos
-      block:
-        - name: disable pbs enterprise repo
-          ansible.builtin.deb822_repository:
-            name: pbs-enterprise
-            types: deb
-            uris: "https://enterprise.proxmox.com/{{ ansible_distribution | lower }}/pbs"
-            signed_by: "/usr/share/keyrings/proxmox-archive-keyring.gpg"
-            suites: ["{{ ansible_distribution_release | lower }}"]
-            components: [pbs-enterprise]
-            state: present
-            enabled: false
-            
-        - name: enable pbs no subscription repo
-          ansible.builtin.deb822_repository:
-            name: proxmox
-            types: deb
-            uris: "http://download.proxmox.com/{{ ansible_distribution | lower }}/pbs"
-            signed_by: "/usr/share/keyrings/proxmox-archive-keyring.gpg"
-            suites: ["{{ ansible_distribution_release | lower }}"]
-            components: [pbs-no-subscription]
-            state: present
-            enabled: true
-
-        - name: update repositories
-          ansible.builtin.apt:
-            update_cache: true
-      when: "'proxmox-backup-server' in ansible_facts.packages"
+- name: Check if proxmox
   when: ansible_distribution == 'Debian'
   tags:
     - bootstrap-new
     - bootstrap-all
 
-- name: install sudo
+  block:
+    - name: Get installed packages
+      ansible.builtin.package_facts:
+
+    - name: Update pve repos
+      when: "'proxmox-ve' in ansible_facts.packages"
+      block:
+        - name: Disable pve enterprise repo
+          ansible.builtin.deb822_repository:
+            name: pve-enterprise
+            types: deb
+            uris: https://enterprise.proxmox.com/{{ ansible_distribution | lower }}/pve
+            signed_by: /usr/share/keyrings/proxmox-archive-keyring.gpg
+            suites: ["{{ ansible_distribution_release | lower }}"]
+            components: [enterprise]
+            state: present
+            enabled: false
+
+        - name: Enable pve no subscription repo
+          ansible.builtin.deb822_repository:
+            name: proxmox
+            types: deb
+            uris: http://download.proxmox.com/{{ ansible_distribution | lower }}/pve
+            signed_by: /usr/share/keyrings/proxmox-archive-keyring.gpg
+            suites: ["{{ ansible_distribution_release | lower }}"]
+            components: [pve-no-subscription]
+            state: present
+            enabled: true
+
+        - name: Disable ceph enterprise repo
+          ansible.builtin.deb822_repository:
+            name: ceph-enterprise
+            types: deb
+            uris: https://enterprise.proxmox.com/{{ ansible_distribution | lower }}/ceph-squid
+            signed_by: /usr/share/keyrings/proxmox-archive-keyring.gpg
+            suites: ["{{ ansible_distribution_release | lower }}"]
+            components: [enterprise]
+            state: present
+            enabled: false
+
+        - name: Enable ceph no subscription repo
+          ansible.builtin.deb822_repository:
+            name: ceph
+            types: deb
+            uris: http://download.proxmox.com/{{ ansible_distribution | lower }}/ceph-squid
+            signed_by: /usr/share/keyrings/proxmox-archive-keyring.gpg
+            suites: ["{{ ansible_distribution_release | lower }}"]
+            components: [no-subscription]
+            state: present
+            enabled: true
+
+        - name: Update repositories
+          ansible.builtin.apt:
+            update_cache: true
+    - name: Update pbs repos
+      when: "'proxmox-backup-server' in ansible_facts.packages"
+      block:
+        - name: Disable pbs enterprise repo
+          ansible.builtin.deb822_repository:
+            name: pbs-enterprise
+            types: deb
+            uris: https://enterprise.proxmox.com/{{ ansible_distribution | lower }}/pbs
+            signed_by: /usr/share/keyrings/proxmox-archive-keyring.gpg
+            suites: ["{{ ansible_distribution_release | lower }}"]
+            components: [pbs-enterprise]
+            state: present
+            enabled: false
+
+        - name: Enable pbs no subscription repo
+          ansible.builtin.deb822_repository:
+            name: proxmox
+            types: deb
+            uris: http://download.proxmox.com/{{ ansible_distribution | lower }}/pbs
+            signed_by: /usr/share/keyrings/proxmox-archive-keyring.gpg
+            suites: ["{{ ansible_distribution_release | lower }}"]
+            components: [pbs-no-subscription]
+            state: present
+            enabled: true
+
+        - name: Update repositories
+          ansible.builtin.apt:
+            update_cache: true
+- name: Install sudo
   package:
     name: "{{ sudo_package | default('sudo') }}"
     state: present
@@ -107,19 +106,19 @@
     - bootstrap-new
     - bootstrap-all
 
-- name: ensure sudo group in sudoers
+- name: Ensure sudo group in sudoers
   lineinfile:
     dest: "{{ sudoers | default('/etc/sudoers') }}"
     state: present
-    regexp: "^%{{ sudo_group | default('sudo') }}"
-    insertbefore: '^#includedir'
+    regexp: ^%{{ sudo_group | default('sudo') }}
+    insertbefore: ^#includedir
     line: "%{{ sudo_group | default('sudo') }} ALL=(ALL) ALL"
     validate: visudo -cf %s
   tags:
     - bootstrap-new
     - bootstrap-all
 
-- name: create ansible group
+- name: Create ansible group
   group:
     name: "{{ vault_ansible_user_group }}"
     gid: "{{ vault_ansible_user_group_gid }}"
@@ -127,7 +126,7 @@
     - bootstrap-new
     - bootstrap-all
 
-- name: create ansible user
+- name: Create ansible user
   user:
     name: "{{ vault_ansible_user }}"
     uid: "{{ vault_ansible_user_uid }}"
@@ -138,7 +137,7 @@
     - bootstrap-new
     - bootstrap-all
 
-- name: add SSH authorized_keys
+- name: Add SSH authorized_keys
   authorized_key:
     user: "{{ vault_ansible_user }}"
     key: "{{ item }}"

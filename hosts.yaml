@@ -1,3 +1,4 @@
+---
 all:
   vars:
     ansible_user: "{{ vault_ansible_user }}"
@@ -27,7 +28,7 @@ all:
         # deep_space_9:
     raspberry_pi:
       hosts:
-        # holosuite_2:
+    # holosuite_2:
     pfsense:
       hosts:
         midas_array:

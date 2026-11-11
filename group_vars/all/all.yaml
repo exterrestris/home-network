@@ -6,32 +6,32 @@ main_user:
   shell: /bin/zsh
   update_password: on_create
   groups:
-    - 'sudo'
+    - sudo
   append: true
   ssh_key:
     # USS Enterprise
-    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ5vL72HAZsSoIwSUKPiQBiP6cHb2ccsq8My+ygN6bWl"
+    - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ5vL72HAZsSoIwSUKPiQBiP6cHb2ccsq8My+ygN6bWl
     # USS Enterprise (WSL: Ubuntu-22.04)
-    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE3OKdlxfzxvLtz9kdLRvt++7Bvn6jghXgRn/ZoOeVJ8"
+    - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE3OKdlxfzxvLtz9kdLRvt++7Bvn6jghXgRn/ZoOeVJ8
     # USS Enterprise (WSL: Ubuntu-24.04)
-    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG0OQJSDORbmVPvwZj4KZsRd68oCyG/mPnYvFGd7/Ccp"
+    - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG0OQJSDORbmVPvwZj4KZsRd68oCyG/mPnYvFGd7/Ccp
     # USS Bellerophon
-    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE0UaIVzdBc2LpsjOmSHCBGsSayTM2tNwYfiYTwp5or+"
+    - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE0UaIVzdBc2LpsjOmSHCBGsSayTM2tNwYfiYTwp5or+
     # USS Bellerophon (WSL: Ubuntu-20.04)
-    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDyOflUAFqct5RWU8JI2HkJqOf4HB10d7hFbUvyhNY5C"
+    - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDyOflUAFqct5RWU8JI2HkJqOf4HB10d7hFbUvyhNY5C
     # USS Bellerophon (WSL: Ubuntu-24.04)
-    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOA2rT82sj/nt+np29f0PMzcCxnBs/8ZgqavO95PFnwy"
+    - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOA2rT82sj/nt+np29f0PMzcCxnBs/8ZgqavO95PFnwy
     # USS Prometheus
-    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEc73jCV4Npb1maDi17/IWcoT/zDQiit6bkl6SvpJ9dM"
+    - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEc73jCV4Npb1maDi17/IWcoT/zDQiit6bkl6SvpJ9dM
     # USS Prometheus (WSL: Ubuntu-24.04)
-    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII7N63NIHOUF9YV35Q7HKSq2USpeWxn7hERP/gvYUL73"
+    - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII7N63NIHOUF9YV35Q7HKSq2USpeWxn7hERP/gvYUL73
     # Samsung Galaxy Tab S8
-    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICeBAAGaHxzH+c5ff8I5U72ypMioR8toi9Z+abeFkcMu"
+    - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICeBAAGaHxzH+c5ff8I5U72ypMioR8toi9Z+abeFkcMu
     # Samsung Galaxy S20 FE
-    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDoJw21yo2UC4h8N/Ob+3gOBG1h0rlZlJ0LqkRgcx8KN"
+    - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDoJw21yo2UC4h8N/Ob+3gOBG1h0rlZlJ0LqkRgcx8KN
     # Samsung Galaxy S24+
-    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFQR22gFrtR5IwdUqblgVDzfH92K6rHhHZwgLy0dNfjU"
-  generate_ssh_key: yes
+    - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFQR22gFrtR5IwdUqblgVDzfH92K6rHhHZwgLy0dNfjU
+  generate_ssh_key: true
   generate_ssh_key_type: ed25519
   generate_ssh_key_file: .ssh/id_ed25519
 
@@ -61,12 +61,11 @@ migadu_smtp_port: 465
 migadu_smtp_tls_port: 587
 
 ### viasite-ansible.zsh
-zsh_antigen_theme: "romkatv/powerlevel10k powerlevel10k"
+zsh_antigen_theme: romkatv/powerlevel10k powerlevel10k
 
-zsh_powerlevel10k_instant_prompt: yes
+zsh_powerlevel10k_instant_prompt: true
 
 zsh_powerlevel_custom_elements:
-
 zsh_antigen_bundles:
   - { name: command-not-found }
   - { name: docker, command: docker }
@@ -93,10 +92,12 @@ zsh_antigen_bundles:
 zsh_editor: nano
 
 zsh_aliases:
-  - alias: 'lsdisk'
-    action: 'lsblk --output NAME,UUID,LABEL,FSTYPE,MOUNTPOINT,SIZE,FSAVAIL'
-  - alias: 'dfused'
-    action: 'df -h -x tmpfs -t zfs -t fuse.mergerfs -t xfs -t ext4 -t btrfs --output=target,source,fstype,size,used,avail,pcent | (read -r; printf \"%s\n\" \"\$REPLY\"; sort)'
+  - alias: lsdisk
+    action: lsblk --output NAME,UUID,LABEL,FSTYPE,MOUNTPOINT,SIZE,FSAVAIL
+  - alias: dfused
+    action: >-
+      df -h -x tmpfs -t zfs -t fuse.mergerfs -t xfs -t ext4 -t btrfs --output=target,source,fstype,size,used,avail,pcent
+       | (read -r; printf \"%s\n\" \"\$REPLY\"; sort)
 
 zsh_path:
   - "{{ zsh_fzf_path }}"

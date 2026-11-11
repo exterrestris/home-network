@@ -1,49 +1,50 @@
 ---
-- hosts: localhost
+- name: Verify WSL environment
+  hosts: localhost
   connection: local
-  become: no
+  become: false
   tasks:
-    # Verify this is a WSL environment
-    - name: check is WSL
-      assert:
+    - name: Verify WSL environment
+      ansible.builtin.assert:
         that:
           - lookup('env', 'WSL_DISTRO_NAME') != ""
 
-- hosts: localhost
-  become: yes
-  gather_facts: no
+- name: Configure WSL
+  hosts: localhost
+  become: true
+  gather_facts: false
   connection: local
   tasks:
     # Install packages
-    - name: install common packages
-      package:
+    - name: Install common packages
+      ansible.builtin.package:
         name: "{{ item.name }}"
         state: present
       with_items: "{{ common_packages }}"
 
     # Generate SSH key
-    - name: generate ssh key
+    - name: Generate ssh key
       ansible.builtin.user:
         name: "{{ main_user.username }}"
         group: "{{ main_user.username }}"
         shell: /bin/zsh
-        generate_ssh_key: yes
+        generate_ssh_key: true
         ssh_key_type: ed25519
         ssh_key_file: .ssh/id_ed25519
 
     # Install ZSH Powerlevel10k config
-    - name: copy p10k config
-      copy:
-        src: "p10k.zsh"
-        dest: "/home/{{ main_user.username }}/.p10k.zsh"
+    - name: Copy p10k config
+      ansible.builtin.copy:
+        src: p10k.zsh
+        dest: /home/{{ main_user.username }}/.p10k.zsh
         owner: "{{ main_user.username }}"
         group: "{{ main_user.username }}"
-        mode: '0644'
+        mode: "0644"
   roles:
     # Install any available package updates
     - role: robertdebock.update
       vars:
-        update_reboot: no
+        update_reboot: false
       tags: updates
 
     # Reboot if necessary
@@ -59,9 +60,9 @@
     # Run ssh-agent automatically on login
     - role: ssh_agent
       vars:
-        user: "{{ main_user.username }}"
+        ssh_agent_user: "{{ main_user.username }}"
         ssh_agent_source_files:
-          - '.bashrc'
-          - '.zshrc.local.pre-p10k'
+          - .bashrc
+          - .zshrc.local.pre-p10k
         ssh_agent_keys:
           - ~/.ssh/id_ed25519

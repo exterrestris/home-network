@@ -1,0 +1,5 @@
+---
+profile: basic
+exclude_paths:
+  - ansible_collections/
+  - galaxy_roles/

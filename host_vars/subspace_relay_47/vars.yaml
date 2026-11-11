@@ -5,7 +5,7 @@ target_os: ubuntu
 ### exterrestris.traefik
 traefik_binary_version: v2.6.3
 
-traefik_access_log_enabled: yes
+traefik_access_log_enabled: true
 
 traefik_internal_entrypoint:
   host: "{{ ansible_enp6s18.ipv4.address }}"
@@ -22,47 +22,47 @@ traefik_entrypoints:
     http:
       redirect:
         to: web-https
-        scheme: 'https'
+        scheme: https
   - name: web-https
     port: 443
     host: "{{ ansible_enp6s19.ipv4.address }}"
 
 traefik_routers:
   - name: jellyfin-proxy
-    service: "jellyfin-proxy-svc@file"
-    rule: "Host(`jellyfin.{{ internal_domain }}`)"
+    service: jellyfin-proxy-svc@file
+    rule: Host(`jellyfin.{{ internal_domain }}`)
     entrypoints:
       - web-http
       - web-https
   - name: paperless-proxy
-    service: "paperless-proxy-svc@file"
-    rule: "Host(`paperless.{{ internal_domain }}`)"
+    service: paperless-proxy-svc@file
+    rule: Host(`paperless.{{ internal_domain }}`)
     entrypoints:
       - web-http
       - web-https
   - name: n8n-proxy
-    service: "n8n-proxy-svc@file"
-    rule: "Host(`n8n.{{ internal_domain }}`)"
+    service: n8n-proxy-svc@file
+    rule: Host(`n8n.{{ internal_domain }}`)
     entrypoints:
       - web-http
       - web-https
   - name: ombi-proxy
-    service: "ombi-proxy-svc@file"
-    rule: "Host(`ombi.{{ internal_domain }}`)"
+    service: ombi-proxy-svc@file
+    rule: Host(`ombi.{{ internal_domain }}`)
     entrypoints:
       - web-http
       - web-https
   - name: status-proxy
-    service: "status-proxy-svc@file"
-    rule: "Host(`status.{{ internal_domain }}`)"
+    service: status-proxy-svc@file
+    rule: Host(`status.{{ internal_domain }}`)
     entrypoints:
       - web-http
       - web-https
       - http
       - https
   - name: home-assistant-proxy
-    service: "home-assistant-proxy-svc@file"
-    rule: "Host(`home-assistant.{{ internal_domain }}`)"
+    service: home-assistant-proxy-svc@file
+    rule: Host(`home-assistant.{{ internal_domain }}`)
     entrypoints:
       - web-http
       - web-https
@@ -71,24 +71,24 @@ traefik_services:
   - name: jellyfin-proxy-svc
     type: http
     servers:
-      - "https://jellyfin.{{ internal_domain }}"
+      - https://jellyfin.{{ internal_domain }}
   - name: paperless-proxy-svc
     type: http
     servers:
-      - "https://paperless.{{ internal_domain }}"
+      - https://paperless.{{ internal_domain }}
   - name: n8n-proxy-svc
     type: http
     servers:
-      - "https://n8n.{{ internal_domain }}"
+      - https://n8n.{{ internal_domain }}
   - name: ombi-proxy-svc
     type: http
     servers:
-      - "https://ombi.{{ internal_domain }}"
+      - https://ombi.{{ internal_domain }}
   - name: status-proxy-svc
     type: http
     servers:
-      - "https://uptime.{{ internal_domain }}"
+      - https://uptime.{{ internal_domain }}
   - name: home-assistant-proxy-svc
     type: http
     servers:
-      - "https://home-assistant.{{ internal_domain }}"
+      - https://home-assistant.{{ internal_domain }}

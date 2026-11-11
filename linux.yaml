@@ -1,43 +1,42 @@
 ---
-# Setup - Groups
-
-# Main - Common
-- hosts: all:!pfsense
+- name: Main - Common
+  hosts: all:!pfsense
   tasks:
     # Install packages
-    - name: install common packages
-      package:
+    - name: Install common packages
+      ansible.builtin.package:
         name: "{{ item.name }}"
         state: present
       with_items: "{{ common_packages }}"
       tags: packages
 
-- hosts: raspberry_pi:&ubuntu
+- name: Main - Raspberry Pi - Ubuntu
+  hosts: raspberry_pi:&ubuntu
   tasks:
     # Install packages
-    - name: install rasberry pi ubuntu packages
-      package:
+    - name: Install rasberry pi ubuntu packages
+      ansible.builtin.package:
         name: "{{ item.name }}"
         state: present
       with_items: "{{ raspberry_pi_ubuntu_packages }}"
       tags: packages
-    - name: remove default "ubuntu" user
-      user:
+    - name: Remove default "ubuntu" user
+      ansible.builtin.user:
         name: ubuntu
-        remove: yes
+        remove: true
         state: absent
-    - name: remove default "ubuntu" group
-      group:
+    - name: Remove default "ubuntu" group
+      ansible.builtin.group:
         name: ubuntu
         state: absent
 
-# Main - Standard Linux
-- hosts: linux
+- name: Main - Standard Linux
+  hosts: linux
   roles:
     # Install any available package updates
     - role: robertdebock.update
       vars:
-        update_reboot: no
+        update_reboot: false
       tags:
         - updates
         - setup
@@ -49,7 +48,7 @@
     # Set up main user
     - role: exterrestris.ansible_users
       vars:
-        users:
+        users: # noqa var-naming[no-role-prefix]
           - "{{ main_user }}"
       tags:
         - users
@@ -62,10 +61,10 @@
     # Run ssh-agent automatically on login
     - role: ssh_agent
       vars:
-        user: "{{ main_user.username }}"
+        ssh_agent_user: "{{ main_user.username }}"
         ssh_agent_source_files:
-          - '.bashrc'
-          - '.zshrc.local.pre-p10k'
+          - .bashrc
+          - .zshrc.local.pre-p10k
         ssh_agent_keys:
           - ~/.ssh/id_ed25519
     # Configure firewall
@@ -75,17 +74,17 @@
       tags: firewall
   tasks:
     # Install ZSH Powerlevel10k config
-    - name: copy p10k config
-      copy:
-        src: "p10k.zsh"
-        dest: "/home/{{ main_user.username }}/.p10k.zsh"
+    - name: Copy p10k config
+      ansible.builtin.copy:
+        src: p10k.zsh
+        dest: /home/{{ main_user.username }}/.p10k.zsh
         owner: "{{ main_user.username }}"
         group: "{{ main_user.username }}"
-        mode: '0644'
+        mode: "0644"
       tags: zsh
 
-# Main - Groups
-- hosts: pve
+- name: Proxmox VE
+  hosts: pve
   roles:
     # Remove Proxmox 'unregisted' nag
     - role: ironicbadger.ansible_role_proxmox_nag_removal
@@ -95,39 +94,42 @@
       tags: proxmox
   tasks:
     # Copy IOMMU groups script
-    - name: copy iommu.sh script
-      copy:
-        src: "iommu.sh"
-        dest: "/root/iommu.sh"
-        owner: "root"
-        group: "root"
-        mode: '0755'
+    - name: Copy iommu.sh script
+      ansible.builtin.copy:
+        src: iommu.sh
+        dest: /root/iommu.sh
+        owner: root
+        group: root
+        mode: "0755"
 
-- hosts: proxmox
+- name: Proxmox
+  hosts: proxmox
   roles:
     # Install SSL certificate
     - role: exterrestris.proxmox_ssl
       tags: ssl
   tasks:
-    - name: install additional packages
-      package:
+    - name: Install additional packages
+      ansible.builtin.package:
         name: "{{ item.name }}"
         state: present
       with_items: "{{ proxmox_additional_packages }}"
       tags: packages
 
-- hosts: proxmox_vm:&linux
+- name: Promxox VM
+  hosts: proxmox_vm:&linux
   roles:
     # Install qemu-guest-agent
     - role: proxmox_vm
 
-- hosts: nas
+- name: NAS - Common
+  hosts: nas
   roles:
     # Set up groups needed for file permissions
     - role: exterrestris.ansible_users
       vars:
-        users: "{{ nas_users }}"
-        groups_to_create: "{{ nas_groups }}"
+        users: "{{ nas_users }}" # noqa var-naming[no-role-prefix]
+        groups_to_create: "{{ nas_groups }}" # noqa var-naming[no-role-prefix]
       tags:
         - users
         - nas-users
@@ -135,23 +137,24 @@
     - role: mount_disks
   tasks:
     # Add main user to groups created
-    - name: additional groups for main user
-      user:
+    - name: Additional groups for main user
+      ansible.builtin.user:
         name: "{{ main_user.username }}"
         groups: "{{ nas_groups | map(attribute='name') }}"
-        append: yes
+        append: true
       tags:
         - users
         - nas-users
     # Install packages
-    - name: install common nas packages
-      package:
+    - name: Install common nas packages
+      ansible.builtin.package:
         name: "{{ item.name }}"
         state: present
       with_items: "{{ nas_common_packages }}"
       tags: packages
 
-- hosts: zfs
+- name: ZFS
+  hosts: zfs
   roles:
     # Install/configure ZFS pools
     - role: mrlesmithjr.zfs
@@ -161,14 +164,15 @@
     # Install/configure ZFS snapshots/replication using Sanoid
     - role: exterrestris.sanoid
   tasks:
-    - name: install additional packages
-      package:
+    - name: Install additional packages
+      ansible.builtin.package:
         name: "{{ item.name }}"
         state: present
       with_items: "{{ zfs_additional_packages }}"
       tags: packages
 
-- hosts: nas
+- name: NAS - post ZFS
+  hosts: nas
   roles:
     # Install/configure mergerfs
     - role: tigattack.mergerfs
@@ -176,7 +180,8 @@
         - disks
         - mergerfs
 
-- hosts: traefik:!docker
+- name: Traefik (non Docker)
+  hosts: traefik:!docker
   roles:
     # Install Traefik
     - role: exterrestris.traefik
@@ -196,22 +201,24 @@
   tags:
     - traefik
 
-- hosts: docker:!raspberry_pi
+- name: Docker - Setup - non Raspberry Pi
+  hosts: docker:!raspberry_pi
   roles:
     # Install Docker (x64)
     - role: geerlingguy.docker
       when: "'raspberry_pi' not in group_names"
-    # Install Docker/Docker Compose PIP packages (needed for Ansible to control Docker)
-    # - role: geerlingguy.pip
-    #   vars:
-    #     pip_install_packages:
-    #       - name: docker
-    #       - name: docker-compose
+  # Install Docker/Docker Compose PIP packages (needed for Ansible to control Docker)
+  # - role: geerlingguy.pip
+  #   vars:
+  #     pip_install_packages:
+  #       - name: docker
+  #       - name: docker-compose
   tags:
     - docker
     - docker-install
 
-- hosts: docker:&raspberry_pi
+- name: Docker - Setup - Raspberry Pi
+  hosts: docker:&raspberry_pi
   roles:
     # # Install PIP
     # - role: geerlingguy.pip
@@ -224,12 +231,13 @@
       when: "'raspberry_pi' in group_names"
   tags: docker-install
 
-- hosts: docker
+- name: Docker - Common
+  hosts: docker
   roles:
     # Set up users specific to containers
     - role: exterrestris.ansible_users
       vars:
-        users: "{{ container_users }}"
+        users: "{{ container_users }}" # noqa var-naming[no-role-prefix]
       tags:
         - container-users
     # Install Traefik
@@ -260,7 +268,8 @@
   tags:
     - docker
 
-- hosts: nas
+- name: NAS - post Docker
+  hosts: nas
   roles:
     # Install/configure Samba shares/users
     - role: vladgh.samba.server
