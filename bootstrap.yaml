@@ -22,10 +22,10 @@
         echo: yes
       register: target_host
     - ansible.builtin.assert:
-        fail_msg: "{{ target_host.user_input }} is not a valid host in the inventory"
-        that: target_host.user_input in hostvars
+        fail_msg: "{{ target_host.user_input | replace('-', '_') }} is not a valid host in the inventory"
+        that: (target_host.user_input | replace('-', '_')) in hostvars
     - add_host:
-        name: "{{ target_host.user_input }}"
+        name: "{{ target_host.user_input | replace('-', '_') }}"
         groups: setup
       changed_when: False
 
@@ -39,12 +39,12 @@
         echo: yes
       register: target_host
     - ansible.builtin.assert:
-        fail_msg: "{{ target_host.user_input }} is not a valid group in the inventory"
-        that: target_host.user_input in groups
+        fail_msg: "{{ target_host.user_input | replace('-', '_') }} is not a valid group in the inventory"
+        that: (target_host.user_input | replace('-', '_')) in groups
     - add_host:
         name: "{{ item }}"
         groups: setup
-      loop: "{{ groups[target_host.user_input] }}"
+      loop: "{{ groups[(target_host.user_input | replace('-', '_'))] }}"
       changed_when: False
 
 # Bootstrap all hosts in inventory
@@ -94,7 +94,9 @@
 
 # Additional new host tasks
 - hosts: setup
-  tags: bootstrap-new
+  tags:
+    - bootstrap-new
+    - bootstrap-host
   tasks:
     - pause:
         prompt: "Desired hostname (Current: {{ ansible_hostname }})"

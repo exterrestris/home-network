@@ -84,7 +84,7 @@
       tags: zsh
 
 # Main - Groups
-- hosts: proxmox
+- hosts: pve
   roles:
     # Remove Proxmox 'unregisted' nag
     - role: ironicbadger.ansible_role_proxmox_nag_removal
@@ -92,6 +92,18 @@
     # Disable cluster services to prevent SSD wear
     - role: proxmox_host
       tags: proxmox
+  tasks:
+    # Copy IOMMU groups script
+    - name: copy iommu.sh script
+      copy:
+        src: "iommu.sh"
+        dest: "/root/iommu.sh"
+        owner: "root"
+        group: "root"
+        mode: '0755'
+
+- hosts: proxmox
+  roles:
     # Install SSL certificate
     - role: exterrestris.proxmox_ssl
       tags: ssl

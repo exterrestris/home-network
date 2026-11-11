@@ -12,16 +12,16 @@ zfs_pools:
     devices:
       # WD60EZRZ WD-WX11DB56ZP10 (6TB)
       - 'wwn-0x50014ee20d782122'
-      # WD60PURZ WD-WX92DA0N82VF (6TB)
-      - 'wwn-0x50014ee2147bff7f'
+      # WD120EMFZ Z2KGGM0T (12TB) (temp)
+      - 'wwn-0x5000cca28df0da90'
       # WD60EZRZ WD-WX41D95A2NJL (6TB)
       - 'wwn-0x50014ee2621c4a10'
       # WD63PURZ WD-WX62D22N9A9E (6TB)
       - 'wwn-0x50014ee26a7cbb95'
       # ST6000VX001 WSC057K7 (6TB)
       - 'wwn-0x5000c500d55abe86'
-      # WD60PURX WD-WX22D70EJRDF (6TB)
-      - 'wwn-0x50014ee2bdc2c37a'
+      # WD120EMFZ Z2HGERAT (12TB) (temp)
+      - 'wwn-0x5000cca28dd4a834'
       # MG08ADA6 7450A07NFD0H (6TB)
       - 'wwn-0x5000039d68c973f7'
       # WD64PURZ WD-WX52DA31RU5U (6TB)
