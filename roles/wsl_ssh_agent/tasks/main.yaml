@@ -21,6 +21,10 @@
     src: "{{ npiperelay_wsl_path.stdout }}"
     state: link
 
+- name: Install socat
+  ansible.builtin.package:
+    name: socat
+
 - name: Add SSH agent
   ansible.builtin.blockinfile:
     path: /home/{{ wsl_ssh_agent_user }}/{{ item }}
