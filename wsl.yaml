@@ -58,11 +58,10 @@
         zsh_theme: powerlevel10k
 
     # Run ssh-agent automatically on login
-    - role: ssh_agent
+    - role: wsl_ssh_agent
       vars:
-        ssh_agent_user: "{{ main_user.username }}"
-        ssh_agent_source_files:
+        wsl_ssh_agent_user: "{{ main_user.username }}"
+        wsl_ssh_agent_source_files:
           - .bashrc
           - .zshrc.local.pre-p10k
-        ssh_agent_keys:
-          - ~/.ssh/id_ed25519
+      tags: ssh-agent
