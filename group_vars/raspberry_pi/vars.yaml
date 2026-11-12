@@ -1,6 +1,6 @@
 ---
 raspberry_pi_ubuntu_packages:
- - name: libraspberrypi-bin
+  - name: libraspberrypi-bin
 
 ### mrlesmithjr.zfs
 zfs_ubuntu_universe_repo_url: http://ports.ubuntu.com/ubuntu-ports
