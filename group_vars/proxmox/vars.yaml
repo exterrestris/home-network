@@ -1,5 +1,5 @@
 ---
-target_os: debian #proxmox
+target_os: debian # Proxmox
 
 proxmox_additional_packages:
   - name: lshw
@@ -12,6 +12,6 @@ proxmox_additional_packages:
 
 proxmox_ssl_certificate_source: certmate
 proxmox_ssl_certmate_token: "{{ vault_certmate_api_token }}"
-proxmox_ssl_certmate_host: "certmate.{{ internal_domain }}"
+proxmox_ssl_certmate_host: certmate.{{ internal_domain }}
 proxmox_ssl_certmate_cert: "{{ internal_domain }}"
-proxmox_ssl_run_now: yes
+proxmox_ssl_run_now: true

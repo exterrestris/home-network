@@ -1,14 +1,14 @@
 ---
 ### exterrestris.traefik
 traefik_install: binary
-traefik_log_enabled: yes
-traefik_dashboard_domain: "traefik.{{ ansible_hostname }}.{{ internal_domain }}"
+traefik_log_enabled: true
+traefik_dashboard_domain: traefik.{{ ansible_hostname }}.{{ internal_domain }}
 traefik_tls_certificates:
   - cert: "{{ internal_domain }}-wildcard.cert"
     key: "{{ internal_domain }}-wildcard.key"
   - cert: "{{ ansible_hostname }}.{{ internal_domain }}-wildcard.cert"
     key: "{{ ansible_hostname }}.{{ internal_domain }}-wildcard.key"
-    default: yes
+    default: true
 traefik_providers:
   - "{{ traefik_default_file_provider }}"
 
@@ -24,7 +24,7 @@ traefik_ufw_rules:
 ### exterrestris.fetch_ssl
 fetch_ssl_certificate_source: certmate
 fetch_ssl_certmate_token: "{{ vault_certmate_api_token }}"
-fetch_ssl_certmate_host: "certmate.{{ internal_domain }}"
+fetch_ssl_certmate_host: certmate.{{ internal_domain }}
 fetch_ssl_certmate_cert: "{{ internal_domain }}"
 fetch_ssl_certs:
   - name: "{{ internal_domain }}"
@@ -35,4 +35,4 @@ fetch_ssl_certs:
     install_to:
       - cert: "{{ traefik_tls_certificate_dir }}/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.cert"
         key: "{{ traefik_tls_certificate_dir }}/{{ ansible_hostname }}.{{ internal_domain }}-wildcard.key"
-fetch_ssl_run_now: yes
+fetch_ssl_run_now: true
