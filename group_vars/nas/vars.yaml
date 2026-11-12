@@ -28,10 +28,10 @@ all_nas_users:
 nas_user_opts:
   shell: /usr/sbin/nologin
   home: /nonexistent
-  createhome: no
+  createhome: false
 
 global_nas_users: "{{ all_nas_users | rejectattr('hosts', 'defined') | list }}"
-host_nas_users: "{{ all_nas_users | selectattr('hosts', 'defined') | selectattr('hosts', 'superset', [ inventory_hostname ]) | list }}"
+host_nas_users: "{{ all_nas_users | selectattr('hosts', 'defined') | selectattr('hosts', 'superset', [inventory_hostname]) | list }}"
 nas_users: "{{ global_nas_users | union(host_nas_users) | map('combine', nas_user_opts) }}"
 
 all_nas_groups:
@@ -61,7 +61,7 @@ all_nas_groups:
       - memory_alpha
 
 global_nas_groups: "{{ all_nas_groups | rejectattr('hosts', 'defined') | list }}"
-host_nas_groups: "{{ all_nas_groups | selectattr('hosts', 'defined') | selectattr('hosts', 'superset', [ inventory_hostname ]) | list }}"
+host_nas_groups: "{{ all_nas_groups | selectattr('hosts', 'defined') | selectattr('hosts', 'superset', [inventory_hostname]) | list }}"
 nas_groups: "{{ global_nas_groups | union(host_nas_groups) | community.general.remove_keys(target=['samba_password']) }}"
 
 ### mount_disks
@@ -77,16 +77,11 @@ mergerfs_remove_undefined_mounts: true
 all_samba_users:
   - "{{ main_user_samba }}"
 global_samba_users: "{{ all_samba_users | rejectattr('hosts', 'defined') | list }}"
-host_samba_users: "{{ all_samba_users | selectattr('hosts', 'defined') | selectattr('hosts', 'superset', [ inventory_hostname ]) | list }}"
-nas_samba_users: "{{ global_nas_users
-                      | union(host_nas_users)
-                      | selectattr('samba_password', 'defined')
-                      | list
-                      | community.general.keep_keys(target=['username', 'samba_password'])
-                      | map(
-                          'ansible.utils.replace_keys',
-                          target=[{'before': 'username', 'after': 'name'}, {'before': 'samba_password', 'after': 'password'}]
-                        ) }}"
+host_samba_users: "{{ all_samba_users | selectattr('hosts', 'defined') | selectattr('hosts', 'superset', [inventory_hostname]) | list }}"
+nas_samba_users: >-
+  {{ global_nas_users | union(host_nas_users) | selectattr('samba_password', 'defined') | list
+    | community.general.keep_keys(target=['username', 'samba_password'])
+    | map( 'ansible.utils.replace_keys', target=[{'before': 'username', 'after': 'name'}, {'before': 'samba_password', 'after': 'password'}] ) }}"
 
 samba_workgroup: FEDERATION
 samba_preferred_master: true

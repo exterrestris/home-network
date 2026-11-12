@@ -12,88 +12,88 @@ appdata_dataset:
 appdata_path: "{{ appdata_dataset.mountpoint }}"
 archive_path: /mnt/zfs/archive
 
-media_downloads_mountpoint: "/mnt/zfs/media-downloads"
+media_downloads_mountpoint: /mnt/zfs/media-downloads
 
 ### mrlesmithjr.zfs
 zfs_pools:
   - name: ssd1
-    action: 'create'
+    action: create
     import: force
-    compression: 'lz4'
+    compression: lz4
     devices:
       # WD_Red_SN700_1000GB_23171U800295
-      - 'nvme-WD_Red_SN700_1000GB_23171U800295'
+      - nvme-WD_Red_SN700_1000GB_23171U800295
       # WD_Red_SN700_1000GB_23171U800244
-      - 'nvme-WD_Red_SN700_1000GB_23072Y801997'
-    type: 'mirror'
+      - nvme-WD_Red_SN700_1000GB_23072Y801997
+    type: mirror
     properties:
       ashift: 12
-      autoexpand: 'on'
+      autoexpand: "on"
     state: present
   - name: storage1
     action: create
     import: force
-    compression: 'lz4'
+    compression: lz4
     devices:
       # ST12000NM007G ZTN0KBAZ (12TB)
-      - 'wwn-0x5000c500dccb5155'
+      - wwn-0x5000c500dccb5155
       # WD120EMAZ 8CKANMKF (12TB)
-      - 'wwn-0x5000cca26fef1fab'
+      - wwn-0x5000cca26fef1fab
       # WD120EMAZ 8CKATPYE (12TB)
-      - 'wwn-0x5000cca26fef2ef9'
+      - wwn-0x5000cca26fef2ef9
       # WD120EMAZ 8CJX3YAF (12TB)
-      - 'wwn-0x5000cca26fe8f836'
+      - wwn-0x5000cca26fe8f836
       # WD120EMAZ 8CJY60HE (12TB)
-      - 'wwn-0x5000cca26fe9745a'
+      - wwn-0x5000cca26fe9745a
       # ST12000NM001G WTN04568 (12TB)
-      - 'wwn-0x5000c500e0b84a62'
+      - wwn-0x5000c500e0b84a62
       # ST12000NM001G WTN02E3D (12TB)
-      - 'wwn-0x5000c500e03309cf'
+      - wwn-0x5000c500e03309cf
       # ST16000NM001G ZL2PV9FM (16TB)
-      - 'wwn-0x5000c500e54d7b9b'
+      - wwn-0x5000c500e54d7b9b
       # WD121PURP D7J5A86N (12TB)
-      - 'wwn-0x5000cca2dfde9b65'
-    type: 'raidz2'
+      - wwn-0x5000cca2dfde9b65
+    type: raidz2
     properties:
       ashift: 12
-      autoexpand: 'on'
+      autoexpand: "on"
     recordsize: 1M
     state: present
   - name: storage1
     action: add
-    compression: 'lz4'
-    type: 'special mirror'
+    compression: lz4
+    type: special mirror
     devices:
       # INTEL SSDSC2KB24 BTYF93620B8Y240AGN (240GB)
-      - 'wwn-0x55cd2e415163f97a'
+      - wwn-0x55cd2e415163f97a
       # INTEL SSDSC2KG240G8R PHYG9485046V240AGN (240GB)
-      - 'wwn-0x55cd2e41520282f9'
+      - wwn-0x55cd2e41520282f9
       # INTEL SSDSC2KB24 BTYF935307WW240AGN (240GB)
-      - 'wwn-0x55cd2e41515ecfa8'
+      - wwn-0x55cd2e41515ecfa8
     state: present
   - name: ssd2
-    action: 'create'
+    action: create
     import: force
-    compression: 'lz4'
+    compression: lz4
     devices:
       # Micron 5400 Pro 240746EFB42B (1.92TB)
-      - 'wwn-0x500a075146efb42b'
+      - wwn-0x500a075146efb42b
       # Micron 5400 Pro 240746EFB47C (1.92TB)
-      - 'wwn-0x500a075146efb47c'
-    type: 'mirror'
+      - wwn-0x500a075146efb47c
+    type: mirror
     properties:
       ashift: 12
-      autoexpand: 'on'
+      autoexpand: "on"
     state: present
   - name: ssd2
-    action: 'add'
-    compression: 'lz4'
+    action: add
+    compression: lz4
     devices:
       # Micron 5400 Pro 240646CF5ABE (1.92TB)
-      - 'wwn-0x500a075146cf5abe'
+      - wwn-0x500a075146cf5abe
       # Micron 5400 Pro 240646CF197D (1.92TB)
-      - 'wwn-0x500a075146cf197d'
-    type: 'mirror'
+      - wwn-0x500a075146cf197d
+    type: mirror
     state: present
     properties:
       ashift: 12
@@ -140,22 +140,6 @@ zfs_datasets:
     owner: "{{ main_user.username }}"
     group: backups
     mode: 2775
-  - name: backups/computers/uss-rio-grande
-    pool: storage1
-    compression: lz4
-    recordsize: 1M
-    state: present
-    owner: "{{ main_user.username }}"
-    group: backups
-    mode: 2775
-  - name: backups/computers/jupiter-station
-    pool: storage1
-    compression: lz4
-    recordsize: 1M
-    state: present
-    owner: "{{ main_user.username }}"
-    group: backups
-    mode: 2775
   - name: backups/drives
     pool: storage1
     compression: lz4
@@ -180,7 +164,7 @@ zfs_datasets:
   - name: photos
     pool: storage1
     compression: lz4
-    mountpoint: "/mnt/zfs/photos"
+    mountpoint: /mnt/zfs/photos
     owner: "{{ main_user.username }}"
     group: photos
     mode: 2775
@@ -292,7 +276,7 @@ zfs_datasets:
     pool: ssd2
     compression: lz4
     recordsize: 1M
-    owner: "root"
+    owner: root
     group: scratch
     mode: 2777
     state: present
@@ -307,7 +291,7 @@ sanoid_datasets:
     templates: standard
   - name: storage1/backups/computers
     templates: standard
-    recursive: yes
+    recursive: true
   - name: storage1/backups/drives
     templates: standard
   - name: storage1/resources
@@ -324,10 +308,10 @@ sanoid_datasets:
     templates: basic
   - name: storage1/media/movies
     templates: minimal
-    recursive: yes
+    recursive: true
   - name: storage1/media/shows
     templates: minimal
-    recursive: yes
+    recursive: true
   - name: storage1/media/videos
     templates: minimal
   - name: storage1/downloads
@@ -336,7 +320,7 @@ sanoid_datasets:
     templates: minimal
   - name: ssd1/appdata
     templates: docker
-    recursive: yes
+    recursive: true
   - name: ssd2/transient
     templates: interim
   - name: ssd2/transient/scratch
@@ -346,70 +330,65 @@ syncoid_syncs:
   - name: backup-archive
     src: storage1/archive
     dest: backup1/memory-alpha/archive
-    dest_host: "memory-beta.{{ internal_domain }}"
+    dest_host: memory-beta.{{ internal_domain }}
     healthchecks:
       slug: memory-alpha-backup-archive
   - name: backup-backups
     src: storage1/backups
-    recursive: yes
+    recursive: true
     dest: backup1/memory-alpha/backups
-    dest_host: "memory-beta.{{ internal_domain }}"
+    dest_host: memory-beta.{{ internal_domain }}
     healthchecks:
       slug: memory-alpha-backup-backups
   - name: backup-media
     src: storage1/media
     dest: backup1/memory-alpha/media
-    dest_host: "memory-beta.{{ internal_domain }}"
+    dest_host: memory-beta.{{ internal_domain }}
     healthchecks:
       slug: memory-alpha-backup-media
   - name: backup-music
     src: storage1/media/music
     dest: backup1/memory-alpha/media/music
-    dest_host: "memory-beta.{{ internal_domain }}"
+    dest_host: memory-beta.{{ internal_domain }}
     healthchecks:
       slug: memory-alpha-backup-music
   - name: backup-reactions
     src: storage1/media/reactions
-    recursive: yes
+    recursive: true
     dest: backup1/memory-alpha/media/reactions
-    dest_host: "memory-beta.{{ internal_domain }}"
+    dest_host: memory-beta.{{ internal_domain }}
     healthchecks:
       slug: memory-alpha-backup-reactions
   - name: backup-photos
     src: storage1/photos
     dest: backup1/memory-alpha/photos
-    dest_host: "memory-beta.{{ internal_domain }}"
+    dest_host: memory-beta.{{ internal_domain }}
     healthchecks:
       slug: memory-alpha-backup-photos
   - name: backup-resources
     src: storage1/resources
     dest: backup1/memory-alpha/resources
-    dest_host: "memory-beta.{{ internal_domain }}"
+    dest_host: memory-beta.{{ internal_domain }}
     healthchecks:
       slug: memory-alpha-backup-resources
   - name: backup-appdata
     src: ssd1/appdata
-    recursive: yes
+    recursive: true
     dest: backup1/memory-alpha/appdata
-    dest_host: "memory-beta.{{ internal_domain }}"
-    send_options: ''
+    dest_host: memory-beta.{{ internal_domain }}
+    send_options: ""
     healthchecks:
       slug: memory-alpha-backup-appdata
 
 ### mount_disks
 parity_disks: []
-
 data_disks: []
-
 other_disks: []
-
 ntfs_data_disks:
-
 other_mounts:
   - path: /mnt/zfs
 
 remove_mounts:
-
 ### tigattack.mergerfs
 mergerfs_mounts:
   - path: /mnt/media/shows/downloads
@@ -430,90 +409,90 @@ mergerfs_mounts:
     options: "{{ mergerfs_opts }},category.create={{ mergerfs_policy }},x-systemd.requires=zfs-mount.service"
 
 ### vladgh.samba.server
-samba_map_to_guest: 'bad user'
+samba_map_to_guest: bad user
 
 samba_shares:
   - name: Archive
     path: /mnt/zfs/archive
     owner: "{{ main_user.username }}"
     group: archive
-    directory_mode: '2775'
-    writable: yes
-    guest_ok: no
+    directory_mode: "2775"
+    writable: true
+    guest_ok: false
   - name: Backups
     path: /mnt/zfs/backups
     owner: "{{ main_user.username }}"
     group: backups
-    directory_mode: '2775'
-    writable: yes
-    guest_ok: no
+    directory_mode: "2775"
+    writable: true
+    guest_ok: false
   - name: Photos
     path: /mnt/zfs/photos
     owner: "{{ main_user.username }}"
     group: photos
-    directory_mode: '2775'
-    writable: yes
-    guest_ok: yes
+    directory_mode: "2775"
+    writable: true
+    guest_ok: true
   - name: Media
     path: /mnt/media
     owner: "{{ main_user.username }}"
     group: media
-    directory_mode: '2775'
-    writable: yes
-    guest_ok: yes
+    directory_mode: "2775"
+    writable: true
+    guest_ok: true
   - name: Jellyfin DVR
     path: /mnt/transient/dvr
-    owner: "jellyfin"
+    owner: jellyfin
     group: media
-    directory_mode: '2775'
-    writable: no
-    guest_ok: yes
+    directory_mode: "2775"
+    writable: false
+    guest_ok: true
   - name: Resources
     path: /mnt/zfs/resources
     owner: "{{ main_user.username }}"
     group: resources
-    create_mode: '775'
-    directory_mode: '2775'
-    writable: yes
-    public: yes
-    guest_ok: yes
+    create_mode: "775"
+    directory_mode: "2775"
+    writable: true
+    public: true
+    guest_ok: true
   - name: Downloads
     path: /mnt/downloads
     owner: "{{ main_user.username }}"
     group: downloads
-    create_mode: '775'
-    directory_mode: '2775'
-    writable: yes
-    public: yes
-    guest_ok: yes
+    create_mode: "775"
+    directory_mode: "2775"
+    writable: true
+    public: true
+    guest_ok: true
   - name: Scans
     path: /mnt/transient/scans
     owner: "{{ main_user.username }}"
     group: scanners
-    directory_mode: '2775'
-    writable: yes
-    guest_ok: yes
+    directory_mode: "2775"
+    writable: true
+    guest_ok: true
   - name: Paperless-ngx
     path: /mnt/transient/paperless
     owner: paperless
     group: archive
-    directory_mode: '2775'
-    writable: yes
-    guest_ok: yes
+    directory_mode: "2775"
+    writable: true
+    guest_ok: true
   - name: Scratch
     path: /mnt/transient/scratch
     owner: root
     group: scratch
-    directory_mode: '2775'
-    writable: yes
-    guest_ok: yes
+    directory_mode: "2775"
+    writable: true
+    guest_ok: true
 
 ### exterrestris.traefik
 traefik_services:
   - name: jellyfin-svc
     type: http
     servers:
-      - "http://jellyfin.{{ internal_domain }}:8096"
+      - http://jellyfin.{{ internal_domain }}:8096
 
 ### weareinteractive.ufw
 docker_ufw_rules:
@@ -593,12 +572,12 @@ compose_projects:
             target: /usr/src/paperless/export
             owner: paperless
             group: archive
-            mode: "u+rwx,g+rwx"
+            mode: u+rwx,g+rwx
           - source: /mnt/transient/paperless/consume
             target: /usr/src/paperless/consume
             owner: paperless
             group: scanners
-            mode: "u+rwx,g+rwx"
+            mode: u+rwx,g+rwx
         expose:
           - 8000
         networks:
@@ -606,16 +585,16 @@ compose_projects:
           - paperless
         restart: unless-stopped
         labels:
-          - "traefik.enable=true"
-          - "traefik.docker.network={{ traefik_docker_network }}"
+          - traefik.enable=true
+          - traefik.docker.network={{ traefik_docker_network }}
           ## Router
-          - "traefik.http.routers.paperless-ngx.entryPoints=https"
-          - "traefik.http.routers.paperless-ngx.rule=Host(`paperless-ngx.{{ internal_domain }}`)"
-          - "traefik.http.routers.paperless-ngx.tls=true"
+          - traefik.http.routers.paperless-ngx.entryPoints=https
+          - traefik.http.routers.paperless-ngx.rule=Host(`paperless-ngx.{{ internal_domain }}`)
+          - traefik.http.routers.paperless-ngx.tls=true
           ## Service
-          - "traefik.http.services.paperless-ngx-svc.loadBalancer.server.port=8000"
-          - "traefik.http.services.paperless-ngx-svc.loadbalancer.server.scheme=http"
-          - "traefik.http.services.paperless-ngx-svc.loadBalancer.passHostHeader=true"
+          - traefik.http.services.paperless-ngx-svc.loadBalancer.server.port=8000
+          - traefik.http.services.paperless-ngx-svc.loadbalancer.server.scheme=http
+          - traefik.http.services.paperless-ngx-svc.loadBalancer.passHostHeader=true
       - name: redis
         image:
           name: docker.io/library/redis
@@ -633,7 +612,7 @@ compose_projects:
           - paperless
         restart: unless-stopped
         labels:
-          - "traefik.enable=false"
+          - traefik.enable=false
       - name: db
         image:
           name: docker.io/library/postgres
@@ -657,20 +636,20 @@ compose_projects:
           - paperless
         restart: unless-stopped
         labels:
-          - "traefik.enable=false"
+          - traefik.enable=false
       - name: gotenberg
         image:
           name: docker.io/gotenberg/gotenberg
           tag: 8.24
         command:
-          - "gotenberg"
-          - "--chromium-disable-javascript=true"
-          - "--chromium-allow-list=file:///tmp/.*"
+          - gotenberg
+          - --chromium-disable-javascript=true
+          - --chromium-allow-list=file:///tmp/.*
         networks:
           - paperless
         restart: unless-stopped
         labels:
-          - "traefik.enable=false"
+          - traefik.enable=false
       - name: tika
         image:
           name: docker.io/apache/tika
@@ -679,7 +658,7 @@ compose_projects:
           - paperless
         restart: unless-stopped
         labels:
-          - "traefik.enable=false"
+          - traefik.enable=false
     networks:
       - name: paperless
       - name: proxy
@@ -694,7 +673,7 @@ compose_projects:
           name: docker.stirlingpdf.com/stirlingtools/stirling-pdf
           tag: latest
         environment:
-          DISABLE_ADDITIONAL_FEATURES: 'false'
+          DISABLE_ADDITIONAL_FEATURES: "false"
           LANGS: en_GB
           PUID: "{{ (container_users | selectattr('username', 'equalto', 'stirling-pdf') | list | first).uid }}"
           PGID: "{{ (container_users | selectattr('username', 'equalto', 'stirling-pdf') | list | first).gid }}"
@@ -730,16 +709,16 @@ compose_projects:
           - proxy
         restart: unless-stopped
         labels:
-          - "traefik.enable=true"
-          - "traefik.docker.network={{ traefik_docker_network }}"
+          - traefik.enable=true
+          - traefik.docker.network={{ traefik_docker_network }}
           ## Router
-          - "traefik.http.routers.stirling-pdf.entryPoints=https"
-          - "traefik.http.routers.stirling-pdf.rule=Host(`stirling-pdf.{{ internal_domain }}`)"
-          - "traefik.http.routers.stirling-pdf.tls=true"
+          - traefik.http.routers.stirling-pdf.entryPoints=https
+          - traefik.http.routers.stirling-pdf.rule=Host(`stirling-pdf.{{ internal_domain }}`)
+          - traefik.http.routers.stirling-pdf.tls=true
           ## Service
-          - "traefik.http.services.stirling-pdf-svc.loadBalancer.server.port=8080"
-          - "traefik.http.services.stirling-pdf-svc.loadbalancer.server.scheme=http"
-          - "traefik.http.services.stirling-pdf-svc.loadBalancer.passHostHeader=true"
+          - traefik.http.services.stirling-pdf-svc.loadBalancer.server.port=8080
+          - traefik.http.services.stirling-pdf-svc.loadbalancer.server.scheme=http
+          - traefik.http.services.stirling-pdf-svc.loadBalancer.passHostHeader=true
     networks:
       - name: proxy
         external: true
@@ -758,54 +737,54 @@ compose_projects:
         volumes:
           - source: jellyfin
             target: /config
-            group: "jellyfin"
-            owner: "jellyfin"
+            group: jellyfin
+            owner: jellyfin
             mode: "755"
           - source: /mnt/media/shows
             target: /media/shows
             group: media
-            mode: "g+rx"
+            mode: g+rx
           - source: /mnt/media/movies
             target: /media/movies
             group: media
-            mode: "g+rx"
+            mode: g+rx
           - source: /mnt/media/music
             target: /media/music
             group: media
-            mode: "g+rx"
+            mode: g+rx
           - source: /mnt/media/reactions
             target: /media/reactions
             group: media
-            mode: "g+rx"
+            mode: g+rx
           - source: /mnt/transient/dvr
             target: /media/dvr
             group: media
-            mode: "g+rwxs"
+            mode: g+rwxs
           - source: /mnt/transient/transcodes
             target: /config/data/transcodes
             owner: jellyfin
             group: jellyfin
-            mode: "u+rwx"
-        network_mode: "host"
+            mode: u+rwx
+        network_mode: host
         restart: unless-stopped
         labels:
-          - "traefik.enable=true"
+          - traefik.enable=true
           ## Router
-          - "traefik.http.routers.jellyfin.entryPoints=https"
-          - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.{{ internal_domain }}`)" # OPTIONAL: && PathPrefix(`/jellyfin`)
-          - "traefik.http.routers.jellyfin.tls=true"
-          - "traefik.http.routers.jellyfin.middlewares=jellyfin-mw"
-          - "traefik.http.routers.jellyfin.service=jellyfin-svc@file"
+          - traefik.http.routers.jellyfin.entryPoints=https
+          - traefik.http.routers.jellyfin.rule=Host(`jellyfin.{{ internal_domain }}`) # OPTIONAL: && PathPrefix(`/jellyfin`)
+          - traefik.http.routers.jellyfin.tls=true
+          - traefik.http.routers.jellyfin.middlewares=jellyfin-mw
+          - traefik.http.routers.jellyfin.service=jellyfin-svc@file
           ## Middleware
-          - "traefik.http.middlewares.jellyfin-mw.headers.customResponseHeaders.X-Robots-Tag=noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex"
-          - "traefik.http.middlewares.jellyfin-mw.headers.frameDeny=true"
-          - "traefik.http.middlewares.jellyfin-mw.headers.contentTypeNosniff=true"
-          - "traefik.http.middlewares.jellyfin-mw.headers.browserXSSFilter=true"
-          - "traefik.http.middlewares.jellyfin-mw.headers.customFrameOptionsValue='allow-from https://jellyfin.{{ internal_domain }}'"
+          - traefik.http.middlewares.jellyfin-mw.headers.customResponseHeaders.X-Robots-Tag=noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
+          - traefik.http.middlewares.jellyfin-mw.headers.frameDeny=true
+          - traefik.http.middlewares.jellyfin-mw.headers.contentTypeNosniff=true
+          - traefik.http.middlewares.jellyfin-mw.headers.browserXSSFilter=true
+          - traefik.http.middlewares.jellyfin-mw.headers.customFrameOptionsValue='allow-from https://jellyfin.{{ internal_domain }}'
           ## Service
-          - "traefik.http.services.jellyfin-svc.loadBalancer.server.port=8096"
-          - "traefik.http.services.jellyfin-svc.loadbalancer.server.scheme=http"
-          - "traefik.http.services.jellyfin-svc.loadBalancer.passHostHeader=true"
+          - traefik.http.services.jellyfin-svc.loadBalancer.server.port=8096
+          - traefik.http.services.jellyfin-svc.loadbalancer.server.scheme=http
+          - traefik.http.services.jellyfin-svc.loadBalancer.passHostHeader=true
     networks:
       - name: media
         external: true
@@ -823,13 +802,13 @@ compose_projects:
           # qBittorrent WebUI
           - 8080
         volumes:
-          - source: "gluetun"
+          - source: gluetun
             target: /gluetun
-            owner: "torrents"
-            group: "torrents"
+            owner: torrents
+            group: torrents
             mode: "755"
         devices:
-          - "/dev/net/tun:/dev/net/tun"
+          - /dev/net/tun:/dev/net/tun
         environment:
           - VPN_SERVICE_PROVIDER=airvpn
           - VPN_TYPE=wireguard
@@ -841,15 +820,15 @@ compose_projects:
           - TZ=Europe/London
         restart: always
         labels:
-          - "traefik.enable=true"
+          - traefik.enable=true
           ## Router
-          - "traefik.http.routers.qbittorrent.entryPoints=https"
-          - "traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.{{ ansible_hostname }}.{{ internal_domain }}`)"
-          - "traefik.http.routers.qbittorrent.tls=true"
+          - traefik.http.routers.qbittorrent.entryPoints=https
+          - traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.{{ ansible_hostname }}.{{ internal_domain }}`)
+          - traefik.http.routers.qbittorrent.tls=true
           ## Service
-          - "traefik.http.services.qbittorrent-svc.loadBalancer.server.port=8080"
-          - "traefik.http.services.qbittorrent-svc.loadbalancer.server.scheme=http"
-          - "traefik.http.services.qbittorrent-svc.loadBalancer.passHostHeader=true"
+          - traefik.http.services.qbittorrent-svc.loadBalancer.server.port=8080
+          - traefik.http.services.qbittorrent-svc.loadbalancer.server.scheme=http
+          - traefik.http.services.qbittorrent-svc.loadBalancer.passHostHeader=true
       - name: qbittorrent
         image:
           name: ghcr.io/linuxserver/qbittorrent
@@ -862,17 +841,17 @@ compose_projects:
           - TZ=Europe/London
           - WEBUI_PORT=8080
         volumes:
-          - source: "qbittorrent"
+          - source: qbittorrent
             target: /config
-            owner: "torrents"
-            group: "torrents"
+            owner: torrents
+            group: torrents
             mode: "755"
           - source: "{{ media_downloads_mountpoint }}/torrents"
             target: /storage/torrents
-            owner: "torrents"
-            group: "downloads"
+            owner: torrents
+            group: downloads
             mode: "2775"
-        network_mode: "service:torrents-vpn"
+        network_mode: service:torrents-vpn
         restart: unless-stopped
     networks:
       - name: proxy
@@ -880,7 +859,7 @@ compose_projects:
         alias: "{{ traefik_docker_network }}"
   - name: sonarr
     project_dir: "{{ appdata_dataset.mountpoint }}/sonarr"
-    autostart: no
+    autostart: false
     services:
       - name: sonarr
         image:
@@ -904,7 +883,7 @@ compose_projects:
               - name: add-to-downloads-group.sh
                 owner: root
                 group: root
-                mode: '744'
+                mode: "744"
                 template: add-lsio-container-user-to-group.sh.j2
                 vars:
                   gid: "{{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
@@ -918,22 +897,22 @@ compose_projects:
           - proxy
         restart: unless-stopped
         labels:
-          - "traefik.enable=true"
+          - traefik.enable=true
           ## Router
-          - "traefik.http.routers.sonarr.entryPoints=https"
-          - "traefik.http.routers.sonarr.rule=Host(`sonarr.{{ internal_domain }}`)"
-          - "traefik.http.routers.sonarr.tls=true"
+          - traefik.http.routers.sonarr.entryPoints=https
+          - traefik.http.routers.sonarr.rule=Host(`sonarr.{{ internal_domain }}`)
+          - traefik.http.routers.sonarr.tls=true
           ## Service
-          - "traefik.http.services.sonarr-svc.loadBalancer.server.port=8989"
-          - "traefik.http.services.sonarr-svc.loadbalancer.server.scheme=http"
-          - "traefik.http.services.sonarr-svc.loadBalancer.passHostHeader=true"
+          - traefik.http.services.sonarr-svc.loadBalancer.server.port=8989
+          - traefik.http.services.sonarr-svc.loadbalancer.server.scheme=http
+          - traefik.http.services.sonarr-svc.loadBalancer.passHostHeader=true
     networks:
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
   - name: radarr
     project_dir: "{{ appdata_dataset.mountpoint }}/radarr"
-    autostart: no
+    autostart: false
     services:
       - name: radarr
         image:
@@ -957,7 +936,7 @@ compose_projects:
               - name: add-to-downloads-group.sh
                 owner: root
                 group: root
-                mode: '744'
+                mode: "744"
                 template: add-lsio-container-user-to-group.sh.j2
                 vars:
                   gid: "{{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
@@ -971,15 +950,15 @@ compose_projects:
           - proxy
         restart: unless-stopped
         labels:
-          - "traefik.enable=true"
+          - traefik.enable=true
           ## Router
-          - "traefik.http.routers.radarr.entryPoints=https"
-          - "traefik.http.routers.radarr.rule=Host(`radarr.{{ internal_domain }}`)"
-          - "traefik.http.routers.radarr.tls=true"
+          - traefik.http.routers.radarr.entryPoints=https
+          - traefik.http.routers.radarr.rule=Host(`radarr.{{ internal_domain }}`)
+          - traefik.http.routers.radarr.tls=true
           ## Service
-          - "traefik.http.services.radarr-svc.loadBalancer.server.port=7878"
-          - "traefik.http.services.radarr-svc.loadbalancer.server.scheme=http"
-          - "traefik.http.services.radarr-svc.loadBalancer.passHostHeader=true"
+          - traefik.http.services.radarr-svc.loadBalancer.server.port=7878
+          - traefik.http.services.radarr-svc.loadbalancer.server.scheme=http
+          - traefik.http.services.radarr-svc.loadBalancer.passHostHeader=true
       - name: radarr-1080
         image:
           name: linuxserver/radarr
@@ -1002,7 +981,7 @@ compose_projects:
               - name: add-to-downloads-group.sh
                 owner: root
                 group: root
-                mode: '744'
+                mode: "744"
                 template: add-lsio-container-user-to-group.sh.j2
                 vars:
                   gid: "{{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
@@ -1016,22 +995,22 @@ compose_projects:
           - proxy
         restart: unless-stopped
         labels:
-          - "traefik.enable=true"
+          - traefik.enable=true
           ## Router
-          - "traefik.http.routers.radarr-1080.entryPoints=https"
-          - "traefik.http.routers.radarr-1080.rule=Host(`radarr.{{ ansible_hostname }}.{{ internal_domain }}`)"
-          - "traefik.http.routers.radarr-1080.tls=true"
+          - traefik.http.routers.radarr-1080.entryPoints=https
+          - traefik.http.routers.radarr-1080.rule=Host(`radarr.{{ ansible_hostname }}.{{ internal_domain }}`)
+          - traefik.http.routers.radarr-1080.tls=true
           ## Service
-          - "traefik.http.services.radarr-1080-svc.loadBalancer.server.port=7879"
-          - "traefik.http.services.radarr-1080-svc.loadbalancer.server.scheme=http"
-          - "traefik.http.services.radarr-1080-svc.loadBalancer.passHostHeader=true"
+          - traefik.http.services.radarr-1080-svc.loadBalancer.server.port=7879
+          - traefik.http.services.radarr-1080-svc.loadbalancer.server.scheme=http
+          - traefik.http.services.radarr-1080-svc.loadBalancer.passHostHeader=true
     networks:
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
   - name: prowlarr
     project_dir: "{{ appdata_dataset.mountpoint }}/prowlarr"
-    autostart: no
+    autostart: false
     services:
       - name: prowlarr
         image:
@@ -1054,22 +1033,22 @@ compose_projects:
           - proxy
         restart: unless-stopped
         labels:
-          - "traefik.enable=true"
+          - traefik.enable=true
           ## Router
-          - "traefik.http.routers.prowlarr.entryPoints=https"
-          - "traefik.http.routers.prowlarr.rule=Host(`prowlarr.{{ ansible_hostname }}.{{ internal_domain }}`)"
-          - "traefik.http.routers.prowlarr.tls=true"
+          - traefik.http.routers.prowlarr.entryPoints=https
+          - traefik.http.routers.prowlarr.rule=Host(`prowlarr.{{ ansible_hostname }}.{{ internal_domain }}`)
+          - traefik.http.routers.prowlarr.tls=true
           ## Service
-          - "traefik.http.services.prowlarr-svc.loadBalancer.server.port=9696"
-          - "traefik.http.services.prowlarr-svc.loadbalancer.server.scheme=http"
-          - "traefik.http.services.prowlarr-svc.loadBalancer.passHostHeader=true"
+          - traefik.http.services.prowlarr-svc.loadBalancer.server.port=9696
+          - traefik.http.services.prowlarr-svc.loadbalancer.server.scheme=http
+          - traefik.http.services.prowlarr-svc.loadBalancer.passHostHeader=true
     networks:
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
   - name: flaresolverr
     project_dir: "{{ appdata_dataset.mountpoint }}/flaresolverr"
-    autostart: no
+    autostart: false
     services:
       - name: flaresolverr
         image:
@@ -1085,22 +1064,22 @@ compose_projects:
           - proxy
         restart: unless-stopped
         labels:
-          - "traefik.enable=true"
+          - traefik.enable=true
           ## Router
-          - "traefik.http.routers.flaresolverr.entryPoints=https"
-          - "traefik.http.routers.flaresolverr.rule=Host(`flaresolverr.{{ ansible_hostname }}.{{ internal_domain }}`)"
-          - "traefik.http.routers.flaresolverr.tls=true"
+          - traefik.http.routers.flaresolverr.entryPoints=https
+          - traefik.http.routers.flaresolverr.rule=Host(`flaresolverr.{{ ansible_hostname }}.{{ internal_domain }}`)
+          - traefik.http.routers.flaresolverr.tls=true
           ## Service
-          - "traefik.http.services.flaresolverr-svc.loadBalancer.server.port=8191"
-          - "traefik.http.services.flaresolverr-svc.loadbalancer.server.scheme=http"
-          - "traefik.http.services.flaresolverr-svc.loadBalancer.passHostHeader=true"
+          - traefik.http.services.flaresolverr-svc.loadBalancer.server.port=8191
+          - traefik.http.services.flaresolverr-svc.loadbalancer.server.scheme=http
+          - traefik.http.services.flaresolverr-svc.loadBalancer.passHostHeader=true
     networks:
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
   - name: ombi
     project_dir: "{{ appdata_dataset.mountpoint }}/ombi"
-    autostart: no
+    autostart: false
     services:
       - name: ombi
         image:
@@ -1122,22 +1101,22 @@ compose_projects:
           - proxy
         restart: unless-stopped
         labels:
-          - "traefik.enable=true"
+          - traefik.enable=true
           ## Router
-          - "traefik.http.routers.ombi.entryPoints=https"
-          - "traefik.http.routers.ombi.rule=Host(`ombi.{{ internal_domain }}`)"
-          - "traefik.http.routers.ombi.tls=true"
+          - traefik.http.routers.ombi.entryPoints=https
+          - traefik.http.routers.ombi.rule=Host(`ombi.{{ internal_domain }}`)
+          - traefik.http.routers.ombi.tls=true
           ## Service
-          - "traefik.http.services.ombi-svc.loadBalancer.server.port=3579"
-          - "traefik.http.services.ombi-svc.loadbalancer.server.scheme=http"
-          - "traefik.http.services.ombi-svc.loadBalancer.passHostHeader=true"
+          - traefik.http.services.ombi-svc.loadBalancer.server.port=3579
+          - traefik.http.services.ombi-svc.loadbalancer.server.scheme=http
+          - traefik.http.services.ombi-svc.loadBalancer.passHostHeader=true
     networks:
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
   - name: sabnzbd
     project_dir: "{{ appdata_dataset.mountpoint }}/sabnzbd"
-    autostart: no
+    autostart: false
     services:
       - name: sabnzbd
         image:
@@ -1164,28 +1143,30 @@ compose_projects:
           - proxy
         restart: unless-stopped
         labels:
-          - "traefik.enable=true"
+          - traefik.enable=true
           ## Router
-          - "traefik.http.routers.sabnzbd.entryPoints=https"
-          - "traefik.http.routers.sabnzbd.rule=Host(`sabnzbd.{{ ansible_hostname }}.{{ internal_domain }}`)"
-          - "traefik.http.routers.sabnzbd.tls=true"
+          - traefik.http.routers.sabnzbd.entryPoints=https
+          - traefik.http.routers.sabnzbd.rule=Host(`sabnzbd.{{ ansible_hostname }}.{{ internal_domain }}`)
+          - traefik.http.routers.sabnzbd.tls=true
           ## Service
-          - "traefik.http.services.sabnzbd-svc.loadBalancer.server.port=8080"
-          - "traefik.http.services.sabnzbd-svc.loadbalancer.server.scheme=http"
-          - "traefik.http.services.sabnzbd-svc.loadBalancer.passHostHeader=true"
+          - traefik.http.services.sabnzbd-svc.loadBalancer.server.port=8080
+          - traefik.http.services.sabnzbd-svc.loadbalancer.server.scheme=http
+          - traefik.http.services.sabnzbd-svc.loadBalancer.passHostHeader=true
     networks:
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
   - name: metube
     project_dir: "{{ appdata_dataset.mountpoint }}/metube"
-    autostart: no
+    autostart: false
     services:
       - name: metube
         image:
           name: alexta69/metube
         environment:
           - YTDL_OPTIONS_FILE=/etc/ytdlp-options.json
+          - YTDL_OPTIONS_PRESETS_FILE=/etc/ytdlp-presets.json
+          - ALLOW_PRIVATE_ADDRESSES=true # Required for VPN proxy
           - DEFAULT_OPTION_PLAYLIST_STRICT_MODE=true
           - STATE_DIR=/state
           - UMASK=002
@@ -1211,46 +1192,67 @@ compose_projects:
             owner: metube
             group: metube
             mode: "755"
-        user: "{{ (container_users | selectattr('username', 'equalto', 'metube') | list | first).uid }}:{{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}"
-        network_mode: "service:metube-vpn"
+          - source: metube/ytdlp-presets.json
+            target: /etc/ytdlp-presets.json
+            file: metube/ytdlp-presets.json
+            owner: metube
+            group: metube
+            mode: "755"
+        user: >-
+          {{ (container_users | selectattr('username', 'equalto', 'metube') | list | first).uid }}:
+          {{ (nas_groups | selectattr('name', 'equalto', 'downloads') | list | first).gid }}
+        networks:
+          - proxy
+          - vpn
+        expose:
+          # Metube WebUI
+          - 8081
+        labels:
+          - traefik.enable=true
+          - traefik.docker.network={{ traefik_docker_network }}
+          ## Router
+          - traefik.http.routers.metube.entryPoints=https
+          - traefik.http.routers.metube.rule=Host(`metube.{{ ansible_hostname }}.{{ internal_domain }}`)
+          - traefik.http.routers.metube.tls=true
+          ## Service
+          - traefik.http.services.metube-svc.loadBalancer.server.port=8081
+          - traefik.http.services.metube-svc.loadbalancer.server.scheme=http
+          - traefik.http.services.metube-svc.loadBalancer.passHostHeader=true
         restart: unless-stopped
-      - name: metube-vpn
+      - name: vpn
         image: qmcgaw/gluetun
         cap_add:
           - NET_ADMIN
         networks:
-          - proxy
+          - vpn
         expose:
-          # Metube WebUI
-          - 8081
+          # SOCKS5 proxy
+          - 1080
         volumes:
-          - source: "gluetun"
+          - source: gluetun
             target: /gluetun
-            owner: "metube"
-            group: "metube"
+            owner: metube
+            group: metube
             mode: "755"
         devices:
-          - "/dev/net/tun:/dev/net/tun"
+          - /dev/net/tun:/dev/net/tun
         environment:
           - VPN_SERVICE_PROVIDER=airvpn
           - VPN_TYPE=wireguard
-          - WIREGUARD_PRIVATE_KEY={{ vault_metube_airvpn_wireguard_private_key }}
-          - WIREGUARD_PRESHARED_KEY={{ vault_metube_airvpn_wireguard_preshared_key }}
           - WIREGUARD_ADDRESSES=10.146.107.47/32
           - SERVER_REGIONS=Europe
           - TZ=Europe/London
+          - SOCKS5_ENABLED=on
+          - SOCKS5_LISTENING_ADDRESS=":1080"
+        env_file:
+          - lines:
+              - WIREGUARD_PRIVATE_KEY={{ vault_metube_airvpn_wireguard_private_key }}
+              - WIREGUARD_PRESHARED_KEY={{ vault_metube_airvpn_wireguard_preshared_key }}
         restart: always
         labels:
-          - "traefik.enable=true"
-          ## Router
-          - "traefik.http.routers.metube.entryPoints=https"
-          - "traefik.http.routers.metube.rule=Host(`metube.{{ ansible_hostname }}.{{ internal_domain }}`)"
-          - "traefik.http.routers.metube.tls=true"
-          ## Service
-          - "traefik.http.services.metube-svc.loadBalancer.server.port=8081"
-          - "traefik.http.services.metube-svc.loadbalancer.server.scheme=http"
-          - "traefik.http.services.metube-svc.loadBalancer.passHostHeader=true"
+          - traefik.enable=false
     networks:
+      - name: vpn
       - name: proxy
         external: true
         alias: "{{ traefik_docker_network }}"
@@ -1263,7 +1265,7 @@ compose_projects:
           tag: v10
         command: agent
         ports:
-          - "7007:7007"
+          - 7007:7007
         environment:
           - DOZZLE_HOSTNAME={{ ansible_hostname }}
         volumes:
@@ -1273,4 +1275,4 @@ compose_projects:
             read_only: true
         restart: unless-stopped
         labels:
-          - "traefik.enable=false"
+          - traefik.enable=false

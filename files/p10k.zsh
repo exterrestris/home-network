@@ -32,7 +32,8 @@
   # The list of segments shown on the left. Fill it with the most important segments.
   typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
     # =========================[ Line #1 ]=========================
-    os_icon                 # os identifier
+    # os_icon                 # os identifier
+    os_version              # custom os identifier with version
     context                 # user@hostname
     dir                     # current directory
     vcs                     # git status
@@ -1623,6 +1624,12 @@
     p10k segment -b 1 -f 3 -i '⭐' -t 'hello, %n'
   }
 
+ function prompt_os_version() {
+    os_version=$(lsb_release -r | awk '{print $2}')
+
+    p10k segment -b $POWERLEVEL9K_OS_ICON_BACKGROUND -f $POWERLEVEL9K_OS_ICON_FOREGROUND -i $_p9k_os_icon -t $os_version
+  }
+
   # User-defined prompt segments may optionally provide an instant_prompt_* function. Its job
   # is to generate the prompt segment for display in instant prompt. See
   # https://github.com/romkatv/powerlevel10k/blob/master/README.md#instant-prompt.
@@ -1666,7 +1673,7 @@
   #   - verbose: Enable instant prompt and print a warning when detecting console output during
   #              zsh initialization. Choose this if you've never tried instant prompt, haven't
   #              seen the warning, or if you are unsure what this all means.
-  typeset -g POWERLEVEL9K_INSTANT_PROMPT=verbose
+  typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 
   # Hot reload allows you to change POWERLEVEL9K options after Powerlevel10k has been initialized.
   # For example, you can type POWERLEVEL9K_BACKGROUND=red and see your prompt turn red. Hot reload
