@@ -1,6 +1,6 @@
 ---
-cluster_services:
+proxmox_host_cluster_services:
   - name: pve-ha-lrm
   - name: pve-ha-crm
 
-cluster_services_enabled: no
+proxmox_host_cluster_services_enabled: false

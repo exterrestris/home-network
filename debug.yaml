@@ -1,83 +1,101 @@
 ---
-- hosts: localhost
-  gather_facts: no
+- name: Debug facts/variables
+  hosts: localhost
+  gather_facts: false
   tasks:
-    - pause:
+    - name: What do you want to see?
+      ansible.builtin.pause:
         prompt: |
-          What do you want to see?
-            1 - single variable
-            2 - all variables
-            3 - group variables
-            4 - single fact
-        echo: yes
+          1 - single variable
+          2 - all variables
+          3 - group variables
+          4 - single fact
+        echo: true
       register: debug_option
-    - pause:
-        prompt: |
-          Which variable?
-        echo: yes
+    - name: Which variable?
+      ansible.builtin.pause:
+        prompt:
+        echo: true
       register: selected_var
       when: debug_option.user_input == "1"
-    - pause:
-        prompt: |
-          Which fact?
-        echo: yes
+    - name: Which fact?
+      ansible.builtin.pause:
+        prompt:
+        echo: true
       register: selected_fact
       when: debug_option.user_input == "4"
-    - pause:
-        prompt: |
-          For which host(s)?
-        echo: yes
+    - name: For which host(s)?
+      ansible.builtin.pause:
+        prompt:
+        echo: true
       register: target_hosts
       when: debug_option.user_input != "3"
-    - pause:
-        prompt: |
-          For which group?
-        echo: yes
+    - name: For which group?
+      ansible.builtin.pause:
+        prompt:
+        echo: true
       register: target_group
       when: debug_option.user_input == "3"
-    - block:
-        - add_host:
-            name: "{{ item }}"
-            groups: debug
-          loop: "{{ groups[ target_hosts.user_input ] }}"
-          changed_when: False
+    - name: Add host from inventory
+      ansible.builtin.add_host:
+        name: "{{ item }}"
+        groups: debug
+      loop: "{{ groups[target_hosts.user_input] }}"
+      changed_when: false
       when:
         - debug_option.user_input != "3"
         - groups[ target_hosts.user_input ] is defined
-    - block:
-        - add_host:
-            name: "{{ target_hosts.user_input }}"
-            groups: debug
-          changed_when: False
+    - name: Add host from input
+      ansible.builtin.add_host:
+        name: "{{ target_hosts.user_input }}"
+        groups: debug
+      changed_when: false
       when:
         - debug_option.user_input != "3"
         - groups[ target_hosts.user_input ] is not defined
-    - block:
-        - debug:
+    - name: Display variable
+      when: debug_option.user_input == "1"
+      block:
+        - name: Output variable
+          ansible.builtin.debug:
             msg:
               - "{{ selected_var.user_input }}:"
               - "{{ hostvars[item][selected_var.user_input] | default('NOT DEFINED') }}"
           loop: "{{ groups['debug'] }}"
-      when: debug_option.user_input == "1"
-    - block:
-        - debug:
+        - name: Finish
+          meta: end_play
+    - name: Display all variables
+      when: debug_option.user_input == "2"
+      block:
+        - name: Output variables
+          ansible.builtin.debug:
             var: "{{ hostvars[item] }}"
           loop: "{{ groups['debug'] }}"
-      when: debug_option.user_input == "2"
-    - debug:
-        var: "{{ groups[target_group.user_input] }}"
+        - name: Finish
+          meta: end_play
+    - name: Display group variables
       when: debug_option.user_input == "3"
-    - block:
-        - setup:
+      block:
+        - name: Output group variables
+          ansible.builtin.debug:
+            var: "{{ groups[target_group.user_input] }}"
+        - name: Finish
+          meta: end_play
+    - name: Display fact
+      when: debug_option.user_input == "4"
+      block:
+        - name: Gather facts
+          ansible.builtin.setup:
             gather_subset:
               - "{{ selected_fact.user_input | replace('ansible_', '') }}"
           delegate_to: "{{ item }}"
           delegate_facts: true
           loop: "{{ groups['debug'] }}"
-        - debug:
+        - name: Display fact
+          ansible.builtin.debug:
             msg:
-             - "{{ selected_fact.user_input }}:"
-             - "{{ hostvars[item][selected_fact.user_input] | default('NOT DEFINED') }}"
+              - "{{ selected_fact.user_input }}:"
+              - "{{ hostvars[item][selected_fact.user_input] | default('NOT DEFINED') }}"
           loop: "{{ groups['debug'] }}"
-      when: debug_option.user_input == "4"
-
+        - name: Finish
+          meta: end_play

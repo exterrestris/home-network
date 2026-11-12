@@ -1,17 +1,17 @@
 ---
 # Protects against SSD wear
-- name: disable cluster services
-  service:
+- name: Disable cluster services
+  ansible.builtin.service:
     name: "{{ item.name }}"
     state: stopped
-    enabled: no
-  with_items: "{{ cluster_services }}"
-  when: not cluster_services_enabled
+    enabled: false
+  with_items: "{{ proxmox_host_cluster_services }}"
+  when: not proxmox_host_cluster_services_enabled
 
-- name: enable cluster services
-  service:
+- name: Enable cluster services
+  ansible.builtin.service:
     name: "{{ item.name }}"
     state: started
-    enabled: yes
-  with_items: "{{ cluster_services }}"
-  when: cluster_services_enabled
+    enabled: true
+  with_items: "{{ proxmox_host_cluster_services }}"
+  when: proxmox_host_cluster_services_enabled
