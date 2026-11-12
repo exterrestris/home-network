@@ -1,3 +1,4 @@
+---
 all:
   vars:
     ansible_user: "{{ vault_ansible_user }}"
@@ -7,23 +8,27 @@ all:
     # Type
     proxmox:
       children:
-        proxmox_8:
+        pve:
           hosts:
             spacedock:
             starbase_375:
             utopia_planitia:
+            epsilon_ix:
+        pbs:
+          hosts:
+            memory_prime:
     proxmox_vm:
       hosts:
         memory_alpha:
         memory_beta:
-        epsilon_ix:
+        subspace_relay_47:
         # holosuite_1:
         argus_array:
         midas_array:
         # deep_space_9:
     raspberry_pi:
       hosts:
-        # holosuite_2:
+    # holosuite_2:
     pfsense:
       hosts:
         midas_array:
@@ -32,7 +37,7 @@ all:
         memory_alpha:
         memory_beta:
         argus_array:
-        epsilon_ix:
+        subspace_relay_47:
         # deep_space_9:
         # holosuite_1:
         # holosuite_2:
@@ -50,7 +55,7 @@ all:
             memory_beta:
         traefik:
           hosts:
-            epsilon_ix:
+            subspace_relay_47:
             memory_alpha:
             argus_array:
         docker:

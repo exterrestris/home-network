@@ -1,0 +1,4 @@
+---
+wsl_ssh_agent_source_files:
+  - .bashrc
+  - .zshrc

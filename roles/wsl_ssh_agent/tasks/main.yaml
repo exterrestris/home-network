@@ -1,0 +1,37 @@
+---
+- name: Get niperelay Windows path
+  ansible.builtin.shell:
+    cmd: /mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -Command "&{(Get-Command npiperelay).Path}"
+  register: npiperelay_exe_path
+
+- name: Verify npiperelay installed
+  ansible.builtin.assert:
+    that: npiperelay_exe_path.stderr == ""
+
+- name: Convert Windows path to WSL path 
+  ansible.builtin.command:
+    argv:
+      - wslpath
+      - "{{ npiperelay_exe_path.stdout }}"
+  register: npiperelay_wsl_path
+
+- name: Create niperelay symlink
+  ansible.builtin.file:
+    path: /home/{{ wsl_ssh_agent_user }}/.local/bin/npiperelay
+    src: "{{ npiperelay_wsl_path.stdout }}"
+    state: link
+
+- name: Install socat
+  ansible.builtin.package:
+    name: socat
+
+- name: Add SSH agent
+  ansible.builtin.blockinfile:
+    path: /home/{{ wsl_ssh_agent_user }}/{{ item }}
+    block: "{{ lookup('template', 'shell.j2') }}"
+    owner: "{{ wsl_ssh_agent_user }}"
+    group: "{{ wsl_ssh_agent_user }}"
+    mode: "0644"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - SSH Agent"
+    create: true
+  with_items: "{{ wsl_ssh_agent_source_files }}"

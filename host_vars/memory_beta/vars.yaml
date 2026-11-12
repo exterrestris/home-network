@@ -7,43 +7,43 @@ zfs_pools:
   - name: backup1
     action: create
     import: force
-    compression: 'lz4'
-    type: 'raidz2'
+    compression: lz4
+    type: raidz2
     devices:
       # WD60EZRZ WD-WX11DB56ZP10 (6TB)
-      - 'wwn-0x50014ee20d782122'
-      # WD60PURZ WD-WX92DA0N82VF (6TB)
-      - 'wwn-0x50014ee2147bff7f'
+      - wwn-0x50014ee20d782122
+      # WD120EMFZ Z2KGGM0T (12TB) (temp)
+      - wwn-0x5000cca28df0da90
       # WD60EZRZ WD-WX41D95A2NJL (6TB)
-      - 'wwn-0x50014ee2621c4a10'
+      - wwn-0x50014ee2621c4a10
       # WD63PURZ WD-WX62D22N9A9E (6TB)
-      - 'wwn-0x50014ee26a7cbb95'
+      - wwn-0x50014ee26a7cbb95
       # ST6000VX001 WSC057K7 (6TB)
-      - 'wwn-0x5000c500d55abe86'
-      # WD60PURX WD-WX22D70EJRDF (6TB)
-      - 'wwn-0x50014ee2bdc2c37a'
+      - wwn-0x5000c500d55abe86
+      # WD120EMFZ Z2HGERAT (12TB) (temp)
+      - wwn-0x5000cca28dd4a834
       # MG08ADA6 7450A07NFD0H (6TB)
-      - 'wwn-0x5000039d68c973f7'
+      - wwn-0x5000039d68c973f7
       # WD64PURZ WD-WX52DA31RU5U (6TB)
-      - 'wwn-0x50014ee26b7f3af9'
+      - wwn-0x50014ee26b7f3af9
       # WD62PURZ WD-C80DD0PG (6TB)
-      - 'wwn-0x50014ee213a9708f'
+      - wwn-0x50014ee213a9708f
     properties:
       ashift: 12
-      autoexpand: 'on'
-    state: 'present'
+      autoexpand: "on"
+    state: present
   - name: backup1
     action: add
-    compression: 'lz4'
-    type: 'special mirror'
+    compression: lz4
+    type: special mirror
     devices:
       # INTEL SSDSC2BB16 PHWL510301K5160MGN (160GB)
-      - 'wwn-0x55cd2e404c4f1b94'
+      - wwn-0x55cd2e404c4f1b94
       # INTEL SSDSC2BB16 PHWL510301JX160MGN (160GB)
-      - 'wwn-0x55cd2e404c4f1b91'
+      - wwn-0x55cd2e404c4f1b91
       # INTEL SSDSC2KG240G8R PHYG948504MH240AGN (240GB) (temp)
-      - 'wwn-0x55cd2e4152027fc8'
-    state: 'present'
+      - wwn-0x55cd2e4152027fc8
+    state: present
   - name: backup2
     action: create
     import: force
@@ -85,26 +85,23 @@ zfs_filesystems:
 sanoid_datasets:
   - name: backup1/memory-alpha
     templates: backups
-    recursive: yes
+    recursive: true
   - name: backup1/argus-array
     templates: backups
-    recursive: yes
+    recursive: true
 
 ### mount_disks
 parity_disks:
 data_disks:
 other_disks:
 ntfs_data_disks:
-
 other_mounts:
   - path: /mnt/zfs
   - path: /mnt/backups
   - path: /mnt/aux-backups
 
 remove_mounts:
-
 ### tigattack.mergerfs
 mergerfs_mounts: []
-
 ### vladgh.samba.server
 samba_shares: []
