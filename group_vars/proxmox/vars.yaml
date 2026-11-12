@@ -6,6 +6,9 @@ proxmox_additional_packages:
   - name: lm-sensors
   - name: smartmontools
   - name: nvme-cli
+  - name: unzip
+  - name: hdparm
+  - name: powertop
 
 proxmox_ssl_certificate_source: certmate
 proxmox_ssl_certmate_token: "{{ vault_certmate_api_token }}"
